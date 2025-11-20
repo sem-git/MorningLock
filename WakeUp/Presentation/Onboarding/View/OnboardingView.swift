@@ -29,7 +29,7 @@ struct OnboardingView: View {
                 Image(.onboarding)
                 Spacer()
                 MainButton(title: "시작하기") {
-                    viewModel.navigate(to: .screenTimePermission)
+                    viewModel.navigate(to: .permissionGuide)
                 }
             }
             .padding(.horizontal, 16)
@@ -38,10 +38,10 @@ struct OnboardingView: View {
                 switch destination {
                 case .permissionGuide:
                     PermissionGuideView()
+                case .screenTimePermission:
+                    ScreenTimePermissionView()
                 case .appRecommendation:
                     AppRecommendationView()
-                case .screenTimePermission:
-                    PermissionGuideView()
                 }
             }
         }

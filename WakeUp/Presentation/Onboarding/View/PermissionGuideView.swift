@@ -27,7 +27,7 @@ struct PermissionGuideView: View {
             Spacer()
             
             MainButton(title: "다음으로") {
-//                viewModel.navigate(to: .screentimePermission)
+                viewModel.navigate(to: .screenTimePermission)
             }
         }
         .padding(.horizontal, 16)
