@@ -22,7 +22,7 @@ struct ScreenTimePermissionView: View {
                 Spacer()
             }
             
-            ZStack {
+            if viewModel.isRequestingPermission {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
                     .scaleEffect(2.0)
@@ -34,9 +34,7 @@ struct ScreenTimePermissionView: View {
         .background(.customBackground)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                viewModel.requestScreenTimePermission()
-            }
+            viewModel.requestScreenTimePermission()
         }
     }
 }

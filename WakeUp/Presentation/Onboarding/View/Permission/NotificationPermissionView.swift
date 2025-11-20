@@ -33,7 +33,8 @@ struct NotificationPermissionView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.customBackground)
         .navigationBarBackButtonHidden(true)
-//        .onAppear {
-//        }
+        .onAppear {
+            viewModel.requestNotificationPermission()
+        }
     }
 }

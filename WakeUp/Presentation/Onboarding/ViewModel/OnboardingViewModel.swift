@@ -34,5 +34,25 @@ class OnboardingViewModel: ObservableObject {
     
     func requestScreenTimePermission() {
         isRequestingPermission = true
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            
+            // 권한 요청
+            
+            self.isRequestingPermission = false
+            self.navigate(to: .notificationPermission)
+        }
+    }
+    
+    func requestNotificationPermission() {
+        isRequestingPermission = true
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            
+            // 권한 요청
+            
+            self.isRequestingPermission = false
+            self.navigate(to: .appRecommendation)
+        }
     }
 }
