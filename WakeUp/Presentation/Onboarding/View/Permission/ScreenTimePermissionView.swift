@@ -34,7 +34,11 @@ struct ScreenTimePermissionView: View {
         .background(.customBackground)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            viewModel.requestScreenTimePermission()
+            viewModel.isRequestingPermission = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                viewModel.requestScreenTimePermission()
+            }
         }
     }
 }

@@ -7,6 +7,7 @@
 
 import Combine
 import SwiftUI
+import FamilyControls
 
 enum OnboardingPath: Hashable {
     case permissionGuide
@@ -24,6 +25,8 @@ class OnboardingViewModel: ObservableObject {
         }
     }
     
+    private let center = AuthorizationCenter.shared
+    
     func navigate(to path: OnboardingPath) {
         navigationPath.append(path)
     }
@@ -33,14 +36,18 @@ class OnboardingViewModel: ObservableObject {
     }
     
     func requestScreenTimePermission() {
-        isRequestingPermission = true
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        Task {
+            do {
+                try await center.requestAuthorization(for: .individual)
+                print("스크린타임 권한 승인")
+            } catch {
+                print("스크린타임 권한 요청 실패: \(error.localizedDescription)")
+            }
             
-            // 권한 요청
-            
-            self.isRequestingPermission = false
-            self.navigate(to: .notificationPermission)
+            await MainActor.run {
+                self.isRequestingPermission = false
+                self.navigate(to: .notificationPermission)
+            }
         }
     }
     
