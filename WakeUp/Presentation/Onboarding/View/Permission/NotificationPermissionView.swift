@@ -34,7 +34,11 @@ struct NotificationPermissionView: View {
         .background(.customBackground)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            viewModel.requestNotificationPermission()
+            viewModel.isRequestingPermission = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                viewModel.requestNotificationPermission()
+            }
         }
     }
 }

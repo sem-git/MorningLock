@@ -70,7 +70,7 @@ struct MainView: View {
                         .foregroundStyle(.gray)
                 }
             }
-        })       
+        })
         .onTapGesture {
             withAnimation {
                 viewModel.deleteMode = false
@@ -111,7 +111,7 @@ struct MainView: View {
             )
         }
         .task {
-            await viewModel.requestPermission()
+            //            await viewModel.requestPermission()
             await viewModel.fetchAlarm()
         }
     }

@@ -25,8 +25,6 @@ class OnboardingViewModel: ObservableObject {
         }
     }
     
-    private let center = AuthorizationCenter.shared
-    
     func navigate(to path: OnboardingPath) {
         navigationPath.append(path)
     }
@@ -38,7 +36,7 @@ class OnboardingViewModel: ObservableObject {
     func requestScreenTimePermission() {
         Task {
             do {
-                try await center.requestAuthorization(for: .individual)
+                try await AuthorizationCenter.shared.requestAuthorization(for: .individual)
                 print("스크린타임 권한 승인")
             } catch {
                 print("스크린타임 권한 요청 실패: \(error.localizedDescription)")
@@ -52,14 +50,20 @@ class OnboardingViewModel: ObservableObject {
     }
     
     func requestNotificationPermission() {
-        isRequestingPermission = true
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        Task {
+            let center = UNUserNotificationCenter.current()
             
-            // 권한 요청
+            do {
+                let granted = try await center.requestAuthorization(options: [.alert, .sound, .badge])
+                print(granted ? "알림 권한 허용됨" : "알림 권한 거부됨")
+            } catch {
+                print("알림 권한 요청 실패: \(error.localizedDescription)")
+            }
             
-            self.isRequestingPermission = false
-            self.navigate(to: .appRecommendation)
+            await MainActor.run {
+                self.isRequestingPermission = false
+                self.navigate(to: .appRecommendation)
+            }
         }
     }
 }

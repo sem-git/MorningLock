@@ -47,21 +47,21 @@ class MainViewModel: ObservableObject {
         fullScreenCover = .alarmSetting(alarm)
     }
     
-    func requestPermission() async {
-        let center = UNUserNotificationCenter.current()
-        let settings = await center.notificationSettings()
-        
-        if settings.authorizationStatus == .notDetermined {
-            do {
-                if try await center.requestAuthorization(options: [.alert, .sound, .badge]) {
-                    print("허용함")
-                } else {
-                    isShowAlert = true
-                }
-            } catch {
-            }
-        }
-    }
+    //    func requestPermission() async {
+    //        let center = UNUserNotificationCenter.current()
+    //        let settings = await center.notificationSettings()
+    //
+    //        if settings.authorizationStatus == .notDetermined {
+    //            do {
+    //                if try await center.requestAuthorization(options: [.alert, .sound, .badge]) {
+    //                    print("허용함")
+    //                } else {
+    //                    isShowAlert = true
+    //                }
+    //            } catch {
+    //            }
+    //        }
+    //    }
     
     //     데이터를 가져왔을떄 -> isActive 상태에 따라서 초기값 바인딩
     func fetchAlarm() async {
