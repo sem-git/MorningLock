@@ -36,10 +36,12 @@ struct OnboardingView: View {
             .background(.customBackground)
             .navigationDestination(for: OnboardingPath.self) { destination in
                 switch destination {
-                case .screenTimePermission:
-                    ScreenTimePermissionView()
+                case .permissionGuide:
+                    PermissionGuideView()
                 case .appRecommendation:
                     AppRecommendationView()
+                case .screenTimePermission:
+                    PermissionGuideView()
                 }
             }
         }

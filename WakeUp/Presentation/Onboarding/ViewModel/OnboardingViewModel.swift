@@ -9,6 +9,7 @@ import Combine
 import SwiftUI
 
 enum OnboardingPath: Hashable {
+    case permissionGuide
     case screenTimePermission
     case appRecommendation
 }
