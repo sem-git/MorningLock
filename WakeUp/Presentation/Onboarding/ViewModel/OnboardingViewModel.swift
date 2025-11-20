@@ -18,12 +18,16 @@ enum OnboardingPath: Hashable {
 class OnboardingViewModel: ObservableObject {
     @Published var navigationPath: [OnboardingPath] = []
     @Published var isRequestingPermission = false
-    @Published var isOnboarding = UserDefaults.standard.bool(forKey: "isOnboarding")
+    @Published var isOnboarding: Bool = UserDefaults.standard.bool(forKey: UserDefaultKey.isOnboarding) {
+        didSet {
+            UserDefaults.standard.set(isOnboarding, forKey: UserDefaultKey.isOnboarding)
+        }
+    }
     
     func navigate(to path: OnboardingPath) {
         navigationPath.append(path)
     }
-        
+    
     func pop() {
         navigationPath.popLast()
     }

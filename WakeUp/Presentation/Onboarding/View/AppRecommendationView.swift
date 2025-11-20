@@ -9,8 +9,7 @@ import SwiftUI
 
 struct AppRecommendationView: View {
     @EnvironmentObject var viewModel: OnboardingViewModel
-    @AppStorage(UserDefaultKey.isOnboarding) private var isOnboarding = UserDefaults.standard.bool(forKey: UserDefaultKey.isOnboarding)
-    
+
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             
@@ -49,7 +48,7 @@ struct AppRecommendationView: View {
                     buttonStyle: .text
                 )
                 MainButton(title: "추가하기") {
-                    isOnboarding = true
+                    viewModel.isOnboarding = false
                 }
             }
         }
