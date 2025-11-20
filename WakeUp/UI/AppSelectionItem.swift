@@ -12,27 +12,29 @@ struct AppSelectionItem: View {
     let isSelected: Bool
     
     var body: some View {
-        HStack {
+        HStack(spacing: 16) {
             Image("")
                 .resizable()
                 .frame(width: 54, height: 54)
-                .background(.buttonDisasbled)
+                .background(.neutralTertiary)
                 .cornerRadius(16)
             
             Text(appName)
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(.neutral)
+            
             Spacer()
+            
             Image(.check)
                 .renderingMode(.template)
-                .foregroundStyle(isSelected ? .buttonDisasbled : .default)
+                .foregroundColor(isSelected ? .neutral : .neutralTertiary)
         }
         .padding(16)
-        .background(.black)
+        .background(.default)
         .cornerRadius(16)
     }
 }
 
 #Preview {
-    AppSelectionItem(appName: "", isSelected: false)
+    AppSelectionItem(appName: "카카오톡", isSelected: false)
 }

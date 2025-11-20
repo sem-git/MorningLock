@@ -24,29 +24,35 @@ struct AppRecommendationView: View {
                 .padding(.top, 12)
                 .multilineTextAlignment(.center)
             
-            HStack {
+            HStack(spacing: 8){
                 Spacer()
+                
                 Image(.check)
+                    .renderingMode(.template)
+                    .foregroundColor(.neutralTertiary)
+                
                 Text("전체 선택")
-                    .foregroundStyle(.neutralSecondary)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(.neutralSecondary)
             }
             .padding(.top, 24)
             .padding(.bottom, 16)
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 16) {
-                    ForEach(1...10, id: \.self) { _ in
+                    ForEach(1...5, id: \.self) { _ in
                         AppSelectionItem(appName: "카카오톡", isSelected: false)
                     }
                 }
             }
             
-            HStack {
+            HStack(spacing: 16) {
                 MainButton(
                     title: "건너뛰기",
                     disabled: true,
                     buttonStyle: .text
                 )
+                
                 MainButton(title: "추가하기") {
                     viewModel.isOnboarding = false
                 }
