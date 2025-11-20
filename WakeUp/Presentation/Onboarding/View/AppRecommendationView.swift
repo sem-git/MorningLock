@@ -9,10 +9,21 @@ import SwiftUI
 
 struct AppRecommendationView: View {
     @EnvironmentObject var viewModel: OnboardingViewModel
-
+    
+    @State private var apps: [AppItem] = [
+        AppItem(name: "카카오톡"),
+        AppItem(name: "인스타그램"),
+        AppItem(name: "유튜브"),
+        AppItem(name: "네이버"),
+        AppItem(name: "틱톡")
+    ]
+    
+    private var isAllSelected: Bool {
+        apps.allSatisfy { $0.isSelected }
+    }
+    
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            
             Text("많이 쓰는 앱을 모아봤어요")
                 .font(.system(size: 22, weight: .bold))
                 .foregroundColor(.neutral)
@@ -27,21 +38,28 @@ struct AppRecommendationView: View {
             HStack(spacing: 8){
                 Spacer()
                 
-                Image(.check)
-                    .renderingMode(.template)
-                    .foregroundColor(.neutralTertiary)
-                
-                Text("전체 선택")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(.neutralSecondary)
+                Button {
+                    let newValue = !isAllSelected
+                    for index in apps.indices {
+                        apps[index].isSelected = newValue
+                    }
+                } label: {
+                    Image(.check)
+                        .renderingMode(.template)
+                        .foregroundColor(isAllSelected ? .neutral : .neutralTertiary)
+                    
+                    Text("전체 선택")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(isAllSelected ? .neutral : .neutralSecondary)
+                }
             }
             .padding(.top, 24)
             .padding(.bottom, 16)
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 16) {
-                    ForEach(1...5, id: \.self) { _ in
-                        AppSelectionItem(appName: "카카오톡", isSelected: false)
+                    ForEach($apps) { $app in
+                        AppSelectionItem(appName: app.name, isSelected: $app.isSelected)
                     }
                 }
             }
