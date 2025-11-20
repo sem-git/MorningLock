@@ -26,8 +26,11 @@ struct OnboardingView: View {
                     .multilineTextAlignment(.center)
                 
                 Spacer()
+                
                 Image(.onboarding)
+                
                 Spacer()
+                
                 MainButton(title: "시작하기") {
                     viewModel.navigate(to: .permissionGuide)
                 }
@@ -40,6 +43,8 @@ struct OnboardingView: View {
                     PermissionGuideView()
                 case .screenTimePermission:
                     ScreenTimePermissionView()
+                case .notificationPermission:
+                    NotificationPermissionView()
                 case .appRecommendation:
                     AppRecommendationView()
                 }

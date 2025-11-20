@@ -11,6 +11,7 @@ import SwiftUI
 enum OnboardingPath: Hashable {
     case permissionGuide
     case screenTimePermission
+    case notificationPermission
     case appRecommendation
 }
 
