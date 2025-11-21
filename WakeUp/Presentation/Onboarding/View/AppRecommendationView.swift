@@ -75,10 +75,10 @@ struct AppRecommendationView: View {
             .padding(.top, 24)
             .padding(.bottom, 16)
             
-            //            DeviceActivityReport(.barChart, filter: filter)
-            //                .onAppear {
-            //                    print("DeviceActivityReport appeared")
-            //                }
+            DeviceActivityReport(.barChart, filter: filter)
+                .onAppear {
+                    print("DeviceActivityReport appeared")
+                }
             
             
             ScrollView(showsIndicators: false) {
