@@ -5,7 +5,18 @@
 //  Created by a on 11/14/25.
 //
 
+import FamilyControls
 import SwiftUI
+import DeviceActivity
+import ManagedSettings
+import ExtensionKit
+
+extension DeviceActivityFilter.SegmentInterval {
+    // 일일 데이터를 지정된 시간내의 기준으로 나눠서 보여준다
+    static let today: Self = .daily(during: DateInterval(start: Calendar.current.startOfDay(for: Date()), end: .now))
+    // 이번주 데이터를 지정된 시간 기준으로 나눠서 보여준다
+    static let thisWeek: Self = .weekly(during: Calendar.current.dateInterval(of: .weekOfYear, for: .now)!)
+}
 
 struct AppRecommendationView: View {
     @EnvironmentObject var viewModel: OnboardingViewModel
@@ -17,6 +28,12 @@ struct AppRecommendationView: View {
         AppItem(name: "네이버"),
         AppItem(name: "틱톡")
     ]
+    
+    @State private var filter = DeviceActivityFilter(
+        segment: .today,
+        users: .all,
+        devices: .init([.iPhone])
+    )
     
     private var isAllSelected: Bool {
         apps.allSatisfy { $0.isSelected }
@@ -56,13 +73,19 @@ struct AppRecommendationView: View {
             .padding(.top, 24)
             .padding(.bottom, 16)
             
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 16) {
-                    ForEach($apps) { $app in
-                        AppSelectionItem(appName: app.name, isSelected: $app.isSelected)
-                    }
+            DeviceActivityReport(.barChart, filter: filter)
+                .onAppear {
+                    print("DeviceActivityReport appeared")
                 }
-            }
+            
+            
+            //            ScrollView(showsIndicators: false) {
+            //                VStack(spacing: 16) {
+            //                    ForEach($apps) { $app in
+            //                        AppSelectionItem(appName: app.name, isSelected: $app.isSelected)
+            //                    }
+            //                }
+            //            }
             
             HStack(spacing: 16) {
                 MainButton(
