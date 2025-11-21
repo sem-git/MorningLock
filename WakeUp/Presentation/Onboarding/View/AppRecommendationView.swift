@@ -37,6 +37,10 @@ struct AppRecommendationView: View {
         apps.allSatisfy { $0.isSelected }
     }
     
+    private var isAddButtonDisabled: Bool {
+        !apps.contains(where: { $0.isSelected })
+    }
+    
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             Text("많이 쓰는 앱을 모아봤어요")
@@ -71,28 +75,30 @@ struct AppRecommendationView: View {
             .padding(.top, 24)
             .padding(.bottom, 16)
             
-            DeviceActivityReport(.barChart, filter: filter)
-                .onAppear {
-                    print("DeviceActivityReport appeared")
-                }
-            
-            
-            //            ScrollView(showsIndicators: false) {
-            //                VStack(spacing: 16) {
-            //                    ForEach($apps) { $app in
-            //                        AppSelectionItem(appName: app.name, isSelected: $app.isSelected)
-            //                    }
+            //            DeviceActivityReport(.barChart, filter: filter)
+            //                .onAppear {
+            //                    print("DeviceActivityReport appeared")
             //                }
-            //            }
+            
+            
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 16) {
+                    ForEach($apps) { $app in
+                        AppSelectionItem(appName: app.name, isSelected: $app.isSelected)
+                    }
+                }
+            }
             
             HStack(spacing: 16) {
                 MainButton(
                     title: "건너뛰기",
-                    disabled: true,
                     buttonStyle: .text
                 )
                 
-                MainButton(title: "추가하기") {
+                MainButton(
+                    title: "추가하기",
+                    disabled: isAddButtonDisabled
+                ) {
                     viewModel.isOnboarding = false
                 }
             }
