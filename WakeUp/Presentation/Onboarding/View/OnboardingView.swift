@@ -27,7 +27,7 @@ struct OnboardingView: View {
                 
                 Spacer()
                 
-                Image(.onboarding)
+                Image(.imgOnboarding)
                 
                 Spacer()
                 
