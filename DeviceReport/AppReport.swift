@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Charts
 
 struct AppReport: Hashable {
     let appName: String

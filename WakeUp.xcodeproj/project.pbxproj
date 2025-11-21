@@ -102,11 +102,10 @@
 		7699EFD42ED07554003BCA19 /* Exceptions for "DeviceReport" folder in "WakeUp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"Extensions/DeviceActivityReportContext+.swift",
-				"Extensions/DeviceActivityResults+.swift",
-				"Extensions/TimeInterval+.swift",
-				Model/AppReport.swift,
-				ReportsView/BarChartView.swift,
+				AppReport.swift,
+				"DeviceActivityReportContext+.swift",
+				"DeviceActivityResults+.swift",
+				Top5ReportView.swift,
 			);
 			target = 00CD949E2E9D3FD4001C47CD /* WakeUp */;
 		};

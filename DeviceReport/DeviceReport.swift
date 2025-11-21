@@ -12,8 +12,8 @@ import SwiftUI
 @main
 struct DeviceReport: DeviceActivityReportExtension {
     var body: some DeviceActivityReportScene {
-        BarChartReport { appReports in
-            BarChartView(appReports: appReports)
+        Top5Report { appReports in
+            Top5ReportView(appReports: appReports)
         }
     }
 }

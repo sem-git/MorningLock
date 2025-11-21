@@ -1,4 +1,3 @@
-//
 //  DeviceActivityReportContext+.swift
 //  WakeUp
 //
@@ -11,5 +10,5 @@ import SwiftUI
 import ManagedSettings
 
 extension DeviceActivityReport.Context {
-    static let barChart = DeviceActivityReport.Context("barChart")
+    static let top5 = DeviceActivityReport.Context("top5")
 }

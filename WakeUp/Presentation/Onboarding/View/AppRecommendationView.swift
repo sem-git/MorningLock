@@ -28,7 +28,7 @@ struct AppRecommendationView: View {
     ]
     
     @State private var filter = DeviceActivityFilter(
-        segment: .today,
+        segment: .thisWeek,
         users: .all,
         devices: .init([.iPhone])
     )
@@ -75,19 +75,7 @@ struct AppRecommendationView: View {
             .padding(.top, 24)
             .padding(.bottom, 16)
             
-            DeviceActivityReport(.barChart, filter: filter)
-                .onAppear {
-                    print("DeviceActivityReport appeared")
-                }
-            
-            
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 16) {
-                    ForEach($apps) { $app in
-                        AppSelectionItem(appName: app.name, isSelected: $app.isSelected)
-                    }
-                }
-            }
+            DeviceActivityReport(.top5, filter: filter)
             
             HStack(spacing: 16) {
                 MainButton(
