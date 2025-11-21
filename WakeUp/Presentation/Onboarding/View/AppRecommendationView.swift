@@ -12,9 +12,7 @@ import ManagedSettings
 import ExtensionKit
 
 extension DeviceActivityFilter.SegmentInterval {
-    // 일일 데이터를 지정된 시간내의 기준으로 나눠서 보여준다
     static let today: Self = .daily(during: DateInterval(start: Calendar.current.startOfDay(for: Date()), end: .now))
-    // 이번주 데이터를 지정된 시간 기준으로 나눠서 보여준다
     static let thisWeek: Self = .weekly(during: Calendar.current.dateInterval(of: .weekOfYear, for: .now)!)
 }
 

@@ -22,7 +22,7 @@ struct NotificationPermissionView: View {
                 Spacer()
             }
             
-            ZStack {
+            if viewModel.isRequestingPermission {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
                     .scaleEffect(2.0)
