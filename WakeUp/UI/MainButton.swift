@@ -14,7 +14,7 @@ enum ButtonStyle {
     var backgroundColor: Color {
         switch self {
         case .`default`:
-                .button
+                .gray600
         case .text:
                 .clear
         }
@@ -23,13 +23,13 @@ enum ButtonStyle {
     func textColor(disabled: Bool) -> Color {
         switch (self, disabled) {
         case (.default, false):
-                .brand
+                .gray50
         case (.default, true):
-                .neutralSecondary
+                .gray400
         case (.text, false):
-                .tertiary
+                .gray200
         case (.text, true):
-                .neutralTertiary
+                .gray300
         }
     }
 }

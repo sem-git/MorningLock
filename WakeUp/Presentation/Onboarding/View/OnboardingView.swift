@@ -16,12 +16,12 @@ struct OnboardingView: View {
                 
                 Text("의지가 깨어나는 시간")
                     .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(.neutral)
+                    .foregroundColor(.gray50)
                     .padding(.top, 48)
                 
                 Text("불필요한 앱을 아침에 잠궈드릴게요\n후다닥 외출 준비에 집중할 수 있어요")
                     .font(.system(size: 17, weight: .semibold))
-                    .foregroundColor(.tertiary)
+                    .foregroundColor(.gray200)
                     .padding(.top, 12)
                     .multilineTextAlignment(.center)
                 
@@ -36,7 +36,7 @@ struct OnboardingView: View {
                 }
             }
             .padding(.horizontal, 16)
-            .background(.customBackground)
+            .background(.gray800)
             .navigationDestination(for: OnboardingPath.self) { destination in
                 switch destination {
                 case .permissionGuide:

@@ -78,7 +78,7 @@ struct MainView: View {
         }
         .navigationBarItems(trailing: menuButton)
         .navigationBarItems(leading: completeButton)
-        .background(.customBackground)
+        .background(.gray800)
         .overlay(alignment: .bottomTrailing) {
             AddButton {
                 viewModel.showAlarmSettingView()

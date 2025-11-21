@@ -15,7 +15,7 @@ struct NotificationPermissionView: View {
             VStack(alignment: .center, spacing: 0) {
                 Text("알림 권한을 \n요청하고 있어요")
                     .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(.neutral)
+                    .foregroundColor(.gray50)
                     .padding(.top, 48)
                     .multilineTextAlignment(.center)
                 
@@ -31,7 +31,7 @@ struct NotificationPermissionView: View {
         }
         .padding(.horizontal, 16)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.customBackground)
+        .background(.gray800)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             viewModel.isRequestingPermission = true

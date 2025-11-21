@@ -25,7 +25,7 @@ struct AlarmSettingView: View {
                         VStack(alignment: .leading, spacing: 14) {
                             Text("반복")
                                 .font(.system(size: 17, weight: .semibold))
-                                .foregroundStyle(.neutral)
+                                .foregroundStyle(.gray50)
                             
                             GeometryReader { geometry in
                                 let itemSize = (geometry.size.width - 10 * 6) / 7
@@ -35,10 +35,10 @@ struct AlarmSettingView: View {
                                         Text(day.dayName)
                                             .font(.system(size: 16, weight: .semibold))
                                             .frame(width: itemSize, height: itemSize)
-                                            .background(daySelected ? .neutralHover : .clear)
-                                            .foregroundStyle(daySelected ? .white : .defaultSecondary)
+                                            .background(daySelected ? .gray600 : .clear)
+                                            .foregroundStyle(daySelected ? .white : .gray300)
                                             .clipShape(Circle())
-                                            .overlay(RoundedRectangle(cornerRadius: itemSize / 2).stroke(daySelected ? .clear : .neutralSecondary, lineWidth: 1))
+                                            .overlay(RoundedRectangle(cornerRadius: itemSize / 2).stroke(daySelected ? .clear : .gray600, lineWidth: 1))
                                             .onTapGesture {
                                                 viewModel.selecteDay(day)
                                             }
@@ -48,17 +48,17 @@ struct AlarmSettingView: View {
                             .frame(height: 50)
                         }
                         .padding(16)
-                        .background(.default)
+                        .background(.gray600)
                         .cornerRadius(16)
                         HStack {
                             Text("다시 알림")
                                 .font(.system(size: 17, weight: .semibold))
-                                .foregroundStyle(.neutral)
+                                .foregroundStyle(.gray50)
                             
                             Toggle("Repeat Alarm", isOn: .constant(false))
                         }
                         .padding(16)
-                        .background(.default)
+                        .background(.gray600)
                         .cornerRadius(16)
                     }
                     .padding(16)
@@ -78,7 +78,7 @@ struct AlarmSettingView: View {
                 }
                 .padding(.horizontal, 16)
             })
-            .background(.customBackground)
+            .background(.gray800)
         }
     }
     

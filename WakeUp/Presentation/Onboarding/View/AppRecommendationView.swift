@@ -43,12 +43,12 @@ struct AppRecommendationView: View {
         VStack(alignment: .center, spacing: 0) {
             Text("많이 쓰는 앱을 모아봤어요")
                 .font(.system(size: 22, weight: .bold))
-                .foregroundColor(.neutral)
+                .foregroundColor(.gray50)
                 .padding(.top, 48)
             
             Text("이 중에 아침에 잠그고 싶은 앱이 있다면 추가해주세요")
                 .font(.system(size: 17, weight: .semibold))
-                .foregroundColor(.tertiary)
+                .foregroundColor(.gray200)
                 .padding(.top, 12)
                 .multilineTextAlignment(.center)
             
@@ -63,11 +63,11 @@ struct AppRecommendationView: View {
                 } label: {
                     Image(.check)
                         .renderingMode(.template)
-                        .foregroundColor(isAllSelected ? .neutral : .neutralTertiary)
+                        .foregroundColor(isAllSelected ? .gray50 : .gray300)
                     
                     Text("전체 선택")
                         .font(.system(size: 15, weight: .semibold))
-                        .foregroundColor(isAllSelected ? .neutral : .neutralSecondary)
+                        .foregroundColor(isAllSelected ? .gray50 : .gray400)
                 }
             }
             .padding(.top, 24)
@@ -101,7 +101,7 @@ struct AppRecommendationView: View {
         }
         .navigationBarBackButtonHidden(true)
         .padding(.horizontal, 16)
-        .background(.customBackground)
+        .background(.gray800)
     }
 }
 

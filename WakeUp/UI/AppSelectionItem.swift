@@ -19,21 +19,21 @@ struct AppSelectionItem: View {
                 Image("")
                     .resizable()
                     .frame(width: 54, height: 54)
-                    .background(.neutralTertiary)
+                    .background(.gray300)
                     .cornerRadius(16)
                 
                 Text(appName)
                     .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.neutral)
+                    .foregroundStyle(.gray50)
                 
                 Spacer()
                 
                 Image(.check)
                     .renderingMode(.template)
-                    .foregroundColor(isSelected ? .neutral : .neutralTertiary)
+                    .foregroundColor(isSelected ? .gray50 : .gray300)
             }
             .padding(16)
-            .background(.default)
+            .background(.gray600)
             .cornerRadius(16)
         }
         .buttonStyle(.plain)
