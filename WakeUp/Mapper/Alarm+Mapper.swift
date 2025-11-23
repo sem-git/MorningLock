@@ -20,4 +20,3 @@ extension Array where Element == Alarm {
     }
 }
 
-
