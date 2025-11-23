@@ -36,7 +36,7 @@ final class AlarmManager {
             .toEntities()
             .filter{ $0.isActive }
             .forEach { alarmQueue.insert($0) }
-        scheduleAlarmTask()
+        scheduleAlarm()
     }
     
     /// 알람 추가
@@ -44,7 +44,7 @@ final class AlarmManager {
         do {
             try await dataManager.addAlarm(alarm: alarm)
             alarmQueue.insert(alarm)
-            scheduleAlarmTask()
+            scheduleAlarm()
         } catch {
             
         }
@@ -55,21 +55,21 @@ final class AlarmManager {
         do {
             try dataManager.updateAlarm(alarm: alarm)            
             buildQueue()
-            scheduleAlarmTask()
+            scheduleAlarm()
         } catch {
             print("Failure to update alarm: \(error)")
         }
     }
     
     /// 알람 삭제
-    func removeAlarm(_ alarm: AlarmEntity) {
-        dataManager.deleteAlarm(alarm: alarm)
+    func removeAlarm(_ id: UUID) {
+        dataManager.deleteAlarm(id: id)
         buildQueue()
-        scheduleAlarmTask()
+        scheduleAlarm()
     }
     
     /// 알람 스케줄링
-    private func scheduleAlarmTask() {
+    private func scheduleAlarm() {
         // 알람이 없다면 오디오를 종료한다
         guard let dequeAlarm = alarmQueue.peek() else {
             audioPlayer.stop()

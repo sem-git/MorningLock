@@ -75,9 +75,9 @@ class CoreDataManager {
         }
     }
     
-    func deleteAlarm(alarm: AlarmEntity) {
+    func deleteAlarm(id: UUID) {
         let request: NSFetchRequest<Alarm> = Alarm.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %@", alarm.id as CVarArg)
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         
         context.performAndWait {
             do {

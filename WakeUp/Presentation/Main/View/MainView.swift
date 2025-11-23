@@ -24,11 +24,11 @@ struct MainView: View {
             }
             
             LazyVStack(spacing: 14) {
-                ForEach(Array(viewModel.alarmList.enumerated()), id: \.self.element.id) { (index, alarmEntity) in
+                ForEach(Array(viewModel.alarmList.enumerated()), id: \.self.element.id) { (index, alarm) in
                     HStack {
                         if viewModel.deleteMode {
                             Button {
-                                viewModel.deleteAlarm(alarmEntity)
+                                viewModel.deleteAlarm(alarm.id)
                             } label: {
                                 Text("삭제")
                                     .foregroundStyle(.red)
@@ -39,16 +39,16 @@ struct MainView: View {
                         AlarmView(alarm: Binding(get: {
                             // 삭제시 인덱스 오류 방지
                             if index > viewModel.alarmList.count-1 {
-                                return AlarmEntity(id: "", time: .now, isActive: false, repeatDay: [])
+                                return AlarmEntity(id: UUID(), time: .now, isActive: false, repeatDay: [])
                             } else {
-                                return alarmEntity
+                                return alarm
                             }
                         }, set: {
                             viewModel.alarmList[index] = $0
                             viewModel.updateAlarm($0)
                         }))
                         .onTapGesture {
-                            viewModel.showAlarmSettingView(alarm: alarmEntity)
+                            viewModel.showAlarmSettingView(alarm: alarm)
                         }
                     }
                 }

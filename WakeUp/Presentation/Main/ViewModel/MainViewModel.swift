@@ -84,9 +84,9 @@ class MainViewModel: ObservableObject {
         alarmManager.updateAlarm(alarm)
     }
     
-    func deleteAlarm(_ alarm: AlarmEntity) {
+    func deleteAlarm(_ id: UUID) {
         
-        alarmManager.removeAlarm(alarm)
+        alarmManager.removeAlarm(id)
         Task {
             await self.fetchAlarm()
             if alarmList.isEmpty {

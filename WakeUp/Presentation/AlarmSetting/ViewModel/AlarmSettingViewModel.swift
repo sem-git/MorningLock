@@ -47,7 +47,7 @@ final class AlarmSettingViewModel: ObservableObject {
     
     func saveAlarm() {
         let alarmEntity = AlarmEntity(
-            id: UUID().uuidString,
+            id: UUID(),
             time: time,
             isActive: true,
             repeatDay: Array(weekDays)

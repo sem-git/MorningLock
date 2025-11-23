@@ -10,7 +10,7 @@ import UserNotifications
 import SwiftUI
 
 struct AlarmEntity: Hashable, Identifiable {
-    let id: String
+    var id: UUID
     var time: Date
     var isActive: Bool
     var repeatDay: [Weekday]
