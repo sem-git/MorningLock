@@ -18,7 +18,6 @@ class MainViewModel: ObservableObject {
     @Published var isShowAlert = false
     @Published var alarmList: [AlarmEntity] = []
     @Published var path: [MainRoute] = []
-    @Published var deleteMode = false
     @Published var alarmSheetPresented = false
     
     private let dataManager: CoreDataManager
@@ -29,7 +28,7 @@ class MainViewModel: ObservableObject {
     init(dataManager: CoreDataManager = .shared) {
         self.dataManager = dataManager
         alarmManager.$isAlarmPlaying
-            .receive(on: RunLoop.main)
+            .receive(on: RunLoop.main)            
             .assign(to: \.alarmSheetPresented, on: self)
             .store(in: &cancellables)
     }
@@ -75,14 +74,11 @@ class MainViewModel: ObservableObject {
     }
     
     func deleteAlarm(_ id: UUID) {
-        
         alarmManager.removeAlarm(id)
-        Task {
-            await self.fetchAlarm()
-            if alarmList.isEmpty {
-                deleteMode = false
-            }
-        }
+    }
+    
+    func deactiveAlarm() {
+        alarmManager.deactiveAlarm()
     }
 }
 

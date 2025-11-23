@@ -57,7 +57,6 @@ final class AlarmManager {
         do {
             try dataManager.updateAlarm(alarm: alarm)
             buildQueue()
-            scheduleAlarm()
         } catch {
             print("Failure to update alarm: \(error)")
         }
@@ -66,8 +65,18 @@ final class AlarmManager {
     /// 알람 삭제
     func removeAlarm(_ id: UUID) {
         dataManager.deleteAlarm(id: id)
-        buildQueue()
-        scheduleAlarm()
+        buildQueue()        
+    }
+    
+    /// 현재 활성화된 알람 종료
+    func deactiveAlarm() {
+        guard var currentAlarm = scheduledAlarm else { return }
+        scheduledAlarm = nil
+        timer?.invalidate()
+        isAlarmPlaying = false
+        audioPlayer.stop()
+        currentAlarm.isActive = false
+        updateAlarm(currentAlarm)
     }
     
     /// 알람 스케줄링
@@ -96,7 +105,7 @@ final class AlarmManager {
             fireAt: dequeAlarm.time.getTime,
             interval: 5,
             target: self,
-            selector: #selector(sendRequestNotification),
+            selector: #selector(activateAlarm),
             userInfo: nil,
             repeats: true
         )
@@ -104,9 +113,12 @@ final class AlarmManager {
         RunLoop.main.add(timer!, forMode: .common)
     }
     
+    /// 알람 활성화
     @objc
-    private func sendRequestNotification() {
-        isAlarmPlaying = true
+    private func activateAlarm() {
+        if !isAlarmPlaying {
+            isAlarmPlaying = true
+        }
         let center = UNUserNotificationCenter.current()
         center.removeAllPendingNotificationRequests()
         

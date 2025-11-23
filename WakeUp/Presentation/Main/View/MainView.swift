@@ -16,37 +16,31 @@ struct MainView: View {
             ScrollView {
                 LazyVStack(spacing: 14) {
                     ForEach(Array(viewModel.alarmList.enumerated()), id: \.self.element.id) { (index, alarm) in
-                        HStack {
-                            if viewModel.deleteMode {
-                                Button {
-                                    viewModel.deleteAlarm(alarm.id)
-                                } label: {
-                                    Text("삭제")
-                                        .foregroundStyle(.red)
-                                }
+                        // alarmList가 바뀔떄까지 업데이트 안됨
+                        AlarmView(alarm: Binding(get: {
+                            // 삭제시 인덱스 오류 방지
+                            if index > viewModel.alarmList.count-1 {
+                                return AlarmEntity(id: UUID(), time: .now, isActive: false, repeatDay: [])
+                            } else {
+                                return alarm
                             }
-                            // alarmList가 바뀔떄까지 업데이트 안됨
-                            AlarmView(alarm: Binding(get: {
-                                // 삭제시 인덱스 오류 방지
-                                if index > viewModel.alarmList.count-1 {
-                                    return AlarmEntity(id: UUID(), time: .now, isActive: false, repeatDay: [])
-                                } else {
-                                    return alarm
-                                }
-                            }, set: {
-                                viewModel.alarmList[index] = $0
-                                viewModel.updateAlarm($0)
-                            }))
-                            .onTapGesture {
-                                viewModel.navigateToAlarmSetting(alarm)
-                            }
+                        }, set: {
+                            viewModel.alarmList[index] = $0
+                            viewModel.updateAlarm($0)
+                        }))
+                        .onTapGesture {
+                            viewModel.navigateToAlarmSetting(alarm)
                         }
+                        
                     }
                 }
                 .padding(16)
             }
             .animation(.default, value: viewModel.alarmList.count)
-            .sheet(isPresented: $viewModel.alarmSheetPresented, content: {
+            
+            .sheet(isPresented: $viewModel.alarmSheetPresented, onDismiss: {
+                Task { await viewModel.fetchAlarm() }
+            }, content: {
                 VStack(spacing: 0) {
                     Text("알람이 울렸네요")
                         .font(.system(size: 20, weight: .semibold))
@@ -62,7 +56,9 @@ struct MainView: View {
                     
                     HStack(spacing: 16) {
                         MainButton(title: "5분 후 다시 알림", buttonStyle: .text)
-                        MainButton(title: "알람 끄기")
+                        MainButton(title: "알람 끄기") {
+                            viewModel.deactiveAlarm()
+                        }
                     }
                 }
                 .presentationDetents([.height(sheetHeight)])
@@ -77,13 +73,7 @@ struct MainView: View {
                     sheetHeight = newHeight
                 }
             })
-            .onTapGesture {
-                withAnimation {
-                    viewModel.deleteMode = false
-                }
-            }
-            .navigationBarItems(trailing: menuButton)
-            .navigationBarItems(leading: completeButton)
+            .navigationBarItems(trailing: contactButton)
             .background(.customBackground)
             .overlay(alignment: .bottomTrailing) {
                 AddButton {
@@ -126,35 +116,18 @@ struct InnerHeightPreferenceKey: PreferenceKey {
     }
 }
 
+// MARK: - SubViews
 extension MainView {
     private func removeRows(at offsets: IndexSet) {
         viewModel.alarmList.remove(atOffsets: offsets)
     }
     
-    private var menuButton: some View {
-        Menu {
-            Button {
-                withAnimation {
-                    viewModel.deleteMode = true
-                }
-            } label: {
-                Label("알람 삭제", systemImage: "trash")
-            }
+    private var contactButton: some View {
+        Button(action: {
             
-        } label: {
-            Image(systemName: "ellipsis")
-                .foregroundStyle(.white)
-        }
-    }
-    
-    private var completeButton: some View {
-        Button("완료") {
-            withAnimation {
-                viewModel.deleteMode = false
-            }
-        }
-        .opacity(viewModel.deleteMode ? 1 : 0)
-        .disabled(!viewModel.deleteMode)
+        }, label: {
+            Text("문의")
+        })
     }
 }
 
