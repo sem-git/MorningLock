@@ -7,6 +7,7 @@
 
 
 import UserNotifications
+import Combine
 
 final class AlarmManager {
     static let shared = AlarmManager()
@@ -18,6 +19,7 @@ final class AlarmManager {
         return $0.time.getTime < $1.time.getTime
     })
     private var scheduledAlarm: AlarmEntity?
+    private var timer: Timer?
     
     private init(dataManager: CoreDataManager = .shared, audioPlayer: AudioPlayerManager = .shared) {
         self.dataManager = dataManager
@@ -31,7 +33,7 @@ final class AlarmManager {
             alarmQueue.insert($0)
         }
         scheduleAlarmTask()
-    }
+    }        
     
     /// 알람 추가
     func addAlarm(_ alarm: AlarmEntity) async {
@@ -58,7 +60,7 @@ final class AlarmManager {
     }
     
     /// 알람 스케줄링
-    func scheduleAlarmTask() {
+    private func scheduleAlarmTask() {
         guard let dequeAlarm = alarmQueue.peek() else { return }
         
         // 새로운 알람이 없다면 이전 알람을 유지
@@ -75,22 +77,34 @@ final class AlarmManager {
         // 오디오 세션 활성화
         audioPlayer.play(atTime: interval, volume: 0.5)
         
+        // 타이머 등록 일정시간마다 알림 생성
+        timer = Timer(
+            fireAt: dequeAlarm.time.getTime,
+            interval: 5,
+            target: self,
+            selector: #selector(sendRequestNotification),
+            userInfo: nil,
+            repeats: true
+        )
+                
+        RunLoop.main.add(timer!, forMode: .common)
+    }
+    
+    @objc
+    private func sendRequestNotification() {
         let center = UNUserNotificationCenter.current()
         center.removeAllPendingNotificationRequests()
         
         let content = UNMutableNotificationContent()
-        content.title = "알람"
-        content.body = "알람테스트"
-        content.sound = .default
-        
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
-        
+        content.title = "앱에서 알람 끄기"
+        content.body = "상쾌한 아침을 보내세요!"
+        content.sound = nil
+                
         let request = UNNotificationRequest(
-            identifier: dequeAlarm.id,
+            identifier: UUID().uuidString,
             content: content,
-            trigger: trigger
+            trigger: nil
         )
-        
         center.add(request)
     }
 }

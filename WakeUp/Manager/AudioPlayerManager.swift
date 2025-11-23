@@ -7,13 +7,13 @@
 
 import AVFoundation
 
-final class AudioPlayerManager {
+final class AudioPlayerManager: NSObject {
     static let shared = AudioPlayerManager()
     
     private var audioPlayer: AVAudioPlayer?
     private let session = AVAudioSession.sharedInstance()
     
-    private init() {}
+    private override init() {}
     
     /// 일정시간 이후 음악 재생
     func play(atTime: TimeInterval, volume: Float) {
@@ -33,11 +33,9 @@ final class AudioPlayerManager {
             player.prepareToPlay()
             
             player.play(atTime: player.deviceCurrentTime + atTime)
-            
             self.audioPlayer = player
         } catch {
             print("Error loading audio: \(error)")
         }
     }
-    
 }
