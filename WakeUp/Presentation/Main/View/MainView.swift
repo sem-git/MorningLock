@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     @EnvironmentObject var viewModel: MainViewModel
+    @State private var sheetHeight: CGFloat = .zero
     
     var body: some View {
         NavigationStack(path: $viewModel.path) {
@@ -24,7 +25,6 @@ struct MainView: View {
                                         .foregroundStyle(.red)
                                 }
                             }
-                            
                             // alarmList가 바뀔떄까지 업데이트 안됨
                             AlarmView(alarm: Binding(get: {
                                 // 삭제시 인덱스 오류 방지
@@ -43,23 +43,38 @@ struct MainView: View {
                         }
                     }
                 }
-                .animation(.default, value: viewModel.isActiveAlarm)
                 .padding(16)
             }
             .animation(.default, value: viewModel.alarmList.count)
-            .overlay(content: {
-                if viewModel.alarmList.isEmpty {
-                    VStack(spacing: 12) {
-                        Image(.alarm)
-                            .renderingMode(.template)
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .foregroundStyle(.gray)
-                        
-                        Text("설정된 알람이 없습니다.")
-                            .fontWeight(.bold)
-                            .foregroundStyle(.gray)
+            .sheet(isPresented: $viewModel.alarmSheetPresented, content: {
+                VStack(spacing: 0) {
+                    Text("알람이 울렸네요")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(.primary)
+                        .padding(.top, 24)
+                    
+                    Text("지금부터 잠길거임")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                        .padding(.top, 8)
+                    
+                    Image(.imgNoadd)
+                    
+                    HStack(spacing: 16) {
+                        MainButton(title: "5분 후 다시 알림", buttonStyle: .text)
+                        MainButton(title: "알람 끄기")
                     }
+                }
+                .presentationDetents([.height(sheetHeight)])
+                .interactiveDismissDisabled(true)
+                .padding(.horizontal, 16)
+                .overlay {
+                    GeometryReader { geometry in
+                        Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
+                    }
+                }
+                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                    sheetHeight = newHeight
                 }
             })
             .onTapGesture {
@@ -101,6 +116,13 @@ struct MainView: View {
                 await viewModel.fetchAlarm()
             }
         }
+    }
+}
+
+struct InnerHeightPreferenceKey: PreferenceKey {
+    static let defaultValue: CGFloat = .zero
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
     }
 }
 

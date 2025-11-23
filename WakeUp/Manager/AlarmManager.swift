@@ -19,6 +19,8 @@ final class AlarmManager {
     private var scheduledAlarm: AlarmEntity?
     private var timer: Timer?
     
+    @Published private(set) var isAlarmPlaying: Bool = false
+    
     private init(dataManager: CoreDataManager = .shared, audioPlayer: AudioPlayerManager = .shared) {
         self.dataManager = dataManager
         self.audioPlayer = audioPlayer
@@ -104,6 +106,7 @@ final class AlarmManager {
     
     @objc
     private func sendRequestNotification() {
+        isAlarmPlaying = true
         let center = UNUserNotificationCenter.current()
         center.removeAllPendingNotificationRequests()
         
