@@ -53,7 +53,7 @@ final class AlarmManager {
     /// 알람 업데이트
     func updateAlarm(_ alarm: AlarmEntity) {
         do {
-            try dataManager.updateAlarm(alarm: alarm)            
+            try dataManager.updateAlarm(alarm: alarm)
             buildQueue()
             scheduleAlarm()
         } catch {

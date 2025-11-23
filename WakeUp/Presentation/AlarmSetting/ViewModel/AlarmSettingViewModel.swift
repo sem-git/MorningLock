@@ -8,13 +8,7 @@
 import Combine
 import SwiftUI
 
-enum AlarmSettingPath: Hashable {
-    case sound
-    case mission
-}
-
 final class AlarmSettingViewModel: ObservableObject {
-    @Published var path: [AlarmSettingPath] = []
     @Published var weekDays: Set<Weekday> = []
     @Published var time = Date()
     
@@ -27,14 +21,6 @@ final class AlarmSettingViewModel: ObservableObject {
         self.alarm = alarm
         self.time = alarm?.time ?? Date()
         self.weekDays = Set(alarm?.repeatDay ?? [])
-    }
-    
-    func goToSoundView() {
-        path.append(.sound)
-    }
-    
-    func goToMissionView() {
-        path.append(.mission)
     }
     
     func selecteDay(_ day: Weekday) {

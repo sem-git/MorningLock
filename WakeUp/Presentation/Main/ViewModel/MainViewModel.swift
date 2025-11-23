@@ -9,17 +9,15 @@ import Combine
 import UserNotifications
 import SwiftUI
 
-enum FullScreenCover: Hashable, Identifiable {
+enum MainRoute: Hashable {
     case alarmSetting(AlarmEntity?)
-    
-    var id: Self { self }
 }
 
 class MainViewModel: ObservableObject {
     @Published var isShowAddAlarm: Bool = false
     @Published var isShowAlert = false
     @Published var alarmList: [AlarmEntity] = []
-    @Published var fullScreenCover: FullScreenCover?
+    @Published var path: [MainRoute] = []
     @Published var deleteMode = false
     
     private let dataManager: CoreDataManager
@@ -44,8 +42,8 @@ class MainViewModel: ObservableObject {
         self.dataManager = dataManager
     }
     
-    func showAlarmSettingView(alarm: AlarmEntity? = nil) {
-        fullScreenCover = .alarmSetting(alarm)
+    func navigateToAlarmSetting(_ alarm: AlarmEntity? = nil) {
+        path.append(.alarmSetting(alarm))
     }
     
     func requestPermission() async {

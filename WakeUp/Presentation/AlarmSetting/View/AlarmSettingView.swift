@@ -12,7 +12,6 @@ struct AlarmSettingView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        NavigationStack(path: $viewModel.path) {
             VStack(spacing: 0) {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 1) {
@@ -67,6 +66,7 @@ struct AlarmSettingView: View {
             .navigationBarItems(leading: backButton)
             .navigationTitle("알람 설정")
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
             .overlay(alignment: .bottom, content: {
                 let isEditing = viewModel.alarm != nil
                 
@@ -81,7 +81,6 @@ struct AlarmSettingView: View {
                 .padding(.horizontal, 16)
             })
             .background(.customBackground)
-        }
     }
     
     private var backButton: some View {

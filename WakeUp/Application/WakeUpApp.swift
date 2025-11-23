@@ -17,28 +17,18 @@ struct WakeUpApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
-                .onReceive(NotificationCenter.default.publisher(for: .openMissionView)) { _ in
-                    isShowMissionView = true
-                }
-                .onReceive(NotificationCenter.default.publisher(for: .closeMissionView)) { _ in
-                    isShowMissionView = false
-                }
-                .onReceive(NotificationCenter.default.publisher(for: .openAlarmView)) { _ in
-                    isShowAlarmView = true
-                }
-                .onReceive(NotificationCenter.default.publisher(for: .closeAlarmView)) { _ in
-                    isShowAlarmView = false
-                }
-                .overlay {
-                    if isShowMissionView {
-                        MissionView()
-                    }
-                }
-                .overlay {
-                    if isShowAlarmView {
-                        AlarmCompleteView()
-                    }
-                }
+//                .onReceive(NotificationCenter.default.publisher(for: .openMissionView)) { _ in
+//                    isShowMissionView = true
+//                }
+//                .onReceive(NotificationCenter.default.publisher(for: .closeMissionView)) { _ in
+//                    isShowMissionView = false
+//                }
+//                .onReceive(NotificationCenter.default.publisher(for: .openAlarmView)) { _ in
+//                    isShowAlarmView = true
+//                }
+//                .onReceive(NotificationCenter.default.publisher(for: .closeAlarmView)) { _ in
+//                    isShowAlarmView = false
+//                }
         }
     }
 }
