@@ -14,10 +14,8 @@ final class AlarmManager {
     
     private let dataManager: CoreDataManager
     private let audioPlayer: AudioPlayerManager
-    private var alarmQueue = AlarmQueue(sort: {
-        if !$0.isActive { return false }
-        return $0.time.getTime < $1.time.getTime
-    })
+    
+    private var alarmQueue: AlarmQueue!
     private var scheduledAlarm: AlarmEntity?
     private var timer: Timer?
     
@@ -29,11 +27,17 @@ final class AlarmManager {
     
     /// 큐 구성
     private func buildQueue() {
-        dataManager.fetchAlarm().toEntities().forEach {
-            alarmQueue.insert($0)
-        }
+        alarmQueue = AlarmQueue(sort: {
+            if !$0.isActive { return false }
+            return $0.time.getTime < $1.time.getTime
+        })
+        dataManager
+            .fetchAlarm()
+            .toEntities()
+            .filter{ $0.isActive }
+            .forEach { alarmQueue.insert($0) }
         scheduleAlarmTask()
-    }        
+    }
     
     /// 알람 추가
     func addAlarm(_ alarm: AlarmEntity) async {
@@ -49,7 +53,9 @@ final class AlarmManager {
     /// 알람 업데이트
     func updateAlarm(_ alarm: AlarmEntity) {
         do {
-            try dataManager.updateAlarm(alarm: alarm)
+            try dataManager.updateAlarm(alarm: alarm)            
+            buildQueue()
+            scheduleAlarmTask()
         } catch {
             print("Failure to update alarm: \(error)")
         }
@@ -57,11 +63,18 @@ final class AlarmManager {
     
     /// 알람 삭제
     func removeAlarm(_ alarm: AlarmEntity) {
+        dataManager.deleteAlarm(alarm: alarm)
+        buildQueue()
+        scheduleAlarmTask()
     }
     
     /// 알람 스케줄링
     private func scheduleAlarmTask() {
-        guard let dequeAlarm = alarmQueue.peek() else { return }
+        // 알람이 없다면 오디오를 종료한다
+        guard let dequeAlarm = alarmQueue.peek() else {
+            audioPlayer.stop()
+            return
+        }
         
         // 새로운 알람이 없다면 이전 알람을 유지
         if let prev = scheduledAlarm {
@@ -71,7 +84,6 @@ final class AlarmManager {
         }
         
         scheduledAlarm = dequeAlarm
-        
         let interval = dequeAlarm.time.getTime.timeIntervalSinceNow
         
         // 오디오 세션 활성화
@@ -86,7 +98,7 @@ final class AlarmManager {
             userInfo: nil,
             repeats: true
         )
-                
+        
         RunLoop.main.add(timer!, forMode: .common)
     }
     
@@ -99,7 +111,7 @@ final class AlarmManager {
         content.title = "앱에서 알람 끄기"
         content.body = "상쾌한 아침을 보내세요!"
         content.sound = nil
-                
+        
         let request = UNNotificationRequest(
             identifier: UUID().uuidString,
             content: content,

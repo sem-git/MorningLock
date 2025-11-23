@@ -38,4 +38,13 @@ final class AudioPlayerManager: NSObject {
             print("Error loading audio: \(error)")
         }
     }
+    
+    func stop() {
+        do {
+            audioPlayer?.stop()
+            try session.setActive(false)
+        } catch {
+            
+        }
+    }
 }
