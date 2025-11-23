@@ -6,7 +6,6 @@
 //
 
 import Combine
-import UserNotifications
 import SwiftUI
 
 enum MainRoute: Hashable {
@@ -14,21 +13,24 @@ enum MainRoute: Hashable {
 }
 
 class MainViewModel: ObservableObject {
-    @Published var isShowAlert = false
     @Published var alarmList: [AlarmEntity] = []
     @Published var path: [MainRoute] = []
     @Published var alarmSheetPresented = false
     
     private let dataManager: CoreDataManager
-    private let alarmManager = AlarmManager.shared
+    private let alarmManager: AlarmManager
+    private let notificationManager: NotificationManager
     
     private var cancellables = Set<AnyCancellable>()
     
     init(
         dataManager: CoreDataManager = .shared,
-        alarmManager: AlarmManager = .shared
+        alarmManager: AlarmManager = .shared,
+        notificationManager: NotificationManager = .shared
     ) {
         self.dataManager = dataManager
+        self.alarmManager = alarmManager
+        self.notificationManager = notificationManager
         bind()
     }
     
@@ -43,25 +45,14 @@ class MainViewModel: ObservableObject {
         path.append(.alarmSetting(alarm))
     }
     
-    func requestPermission() async {
-        // TODO: 권한 관련도 한곳에서 관리하기
-        let center = UNUserNotificationCenter.current()
-        let settings = await center.notificationSettings()
-        
-        if settings.authorizationStatus == .notDetermined {
-            do {
-                if try await center.requestAuthorization(options: [.alert, .sound, .badge]) {
-                    print("허용함")
-                } else {
-                    isShowAlert = true
-                }
-            } catch {
-            }
+    func requestPermission() {
+        Task {
+            await notificationManager.requestAuthorization()
         }
     }
     
     //     데이터를 가져왔을떄 -> isActive 상태에 따라서 초기값 바인딩
-    func fetchAlarm() async {
+    func fetchAlarm() {
         alarmList = dataManager
             .fetchAlarm()
             .toEntities()

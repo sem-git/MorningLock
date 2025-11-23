@@ -14,6 +14,7 @@ final class AlarmManager {
     
     private let dataManager: CoreDataManager
     private let audioPlayer: AudioPlayerManager
+    private let notificationManager: NotificationManager
     
     private var alarmQueue: AlarmQueue!
     private var scheduledAlarm: AlarmEntity?
@@ -21,9 +22,14 @@ final class AlarmManager {
     
     @Published private(set) var isAlarmPlaying: Bool = false
     
-    private init(dataManager: CoreDataManager = .shared, audioPlayer: AudioPlayerManager = .shared) {
+    private init(
+        dataManager: CoreDataManager = .shared,
+        audioPlayer: AudioPlayerManager = .shared,
+        notificationManager: NotificationManager = .shared
+    ) {
         self.dataManager = dataManager
         self.audioPlayer = audioPlayer
+        self.notificationManager = notificationManager
         self.buildQueue()
     }
     
@@ -65,7 +71,7 @@ final class AlarmManager {
     /// 알람 삭제
     func removeAlarm(_ id: UUID) {
         dataManager.deleteAlarm(id: id)
-        buildQueue()        
+        buildQueue()
     }
     
     /// 현재 활성화된 알람 종료
@@ -119,19 +125,6 @@ final class AlarmManager {
         if !isAlarmPlaying {
             isAlarmPlaying = true
         }
-        let center = UNUserNotificationCenter.current()
-        center.removeAllPendingNotificationRequests()
-        
-        let content = UNMutableNotificationContent()
-        content.title = "앱에서 알람 끄기"
-        content.body = "상쾌한 아침을 보내세요!"
-        content.sound = nil
-        
-        let request = UNNotificationRequest(
-            identifier: UUID().uuidString,
-            content: content,
-            trigger: nil
-        )
-        center.add(request)
+        notificationManager.postImmediateNotification()
     }
 }

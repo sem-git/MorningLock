@@ -39,7 +39,7 @@ struct MainView: View {
             .animation(.default, value: viewModel.alarmList.count)
             
             .sheet(isPresented: $viewModel.alarmSheetPresented, onDismiss: {
-                Task { await viewModel.fetchAlarm() }
+                viewModel.fetchAlarm()
             }, content: {
                 VStack(spacing: 0) {
                     Text("알람이 울렸네요")
@@ -87,23 +87,9 @@ struct MainView: View {
                     AlarmSettingView(viewModel: AlarmSettingViewModel(alarm: alarm))
                 }
             })
-            .alert(isPresented: $viewModel.isShowAlert) {
-                Alert(
-                    title: Text("설정"),
-                    message: Text("알림 권한을 허용하지 않으면 알림이 울리지 않을 수 있습니다"),
-                    primaryButton: .default(Text("설정하기"), action: {
-                        if let appSettings = URL(string: UIApplication.openSettingsURLString) {
-                            if UIApplication.shared.canOpenURL(appSettings) {
-                                UIApplication.shared.open(appSettings)
-                            }
-                        }
-                    }),
-                    secondaryButton: .cancel(Text("취소"))
-                )
-            }
-            .task {
-                await viewModel.requestPermission()
-                await viewModel.fetchAlarm()
+            .onAppear {
+                viewModel.requestPermission()
+                viewModel.fetchAlarm()
             }
         }
     }
