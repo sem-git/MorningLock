@@ -14,7 +14,6 @@ enum MainRoute: Hashable {
 }
 
 class MainViewModel: ObservableObject {
-    @Published var isShowAddAlarm: Bool = false
     @Published var isShowAlert = false
     @Published var alarmList: [AlarmEntity] = []
     @Published var path: [MainRoute] = []
@@ -25,10 +24,17 @@ class MainViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(dataManager: CoreDataManager = .shared) {
+    init(
+        dataManager: CoreDataManager = .shared,
+        alarmManager: AlarmManager = .shared
+    ) {
         self.dataManager = dataManager
+        bind()
+    }
+    
+    func bind() {
         alarmManager.$isAlarmPlaying
-            .receive(on: RunLoop.main)            
+            .receive(on: RunLoop.main)
             .assign(to: \.alarmSheetPresented, on: self)
             .store(in: &cancellables)
     }
@@ -56,17 +62,10 @@ class MainViewModel: ObservableObject {
     
     //     데이터를 가져왔을떄 -> isActive 상태에 따라서 초기값 바인딩
     func fetchAlarm() async {
-        // TODO: 한곳에서 미리 데이터를 정렬하는게 좋을듯
-        let result = dataManager.fetchAlarm()
-        
-        alarmList = result.map { alarm in
-            return AlarmEntity(
-                id: alarm.id,
-                time: alarm.time,
-                isActive: alarm.isActive,
-                repeatDay: alarm.repeatDay.compactMap { Weekday(rawValue: $0) }
-            )
-        }.sorted { $0.time.getTime < $1.time.getTime }
+        alarmList = dataManager
+            .fetchAlarm()
+            .toEntities()
+            .sorted { $0.time.getTime < $1.time.getTime }
     }
     
     func updateAlarm(_ alarm: AlarmEntity) {
