@@ -5,17 +5,22 @@
 //  Created by a on 11/22/25.
 //
 
-extension AlarmEntity: Comparable {
-    static func < (lhs: AlarmEntity, rhs: AlarmEntity) -> Bool {
-        lhs.time < rhs.time
+enum QueueSortOption {
+    case upcoming
+    
+    var sortClosure: (AlarmEntity, AlarmEntity) -> Bool {
+        switch self {
+        case .upcoming:
+            return { $0.isActive && $0.time.getTime < $1.time.getTime }
+        }
     }
 }
 
 struct AlarmQueue {
     private var heap: Heap<AlarmEntity>!
     
-    init(sort: @escaping (AlarmEntity, AlarmEntity) -> Bool) {
-        self.heap = Heap(sort: sort)
+    init(sort option: QueueSortOption) {
+        self.heap = Heap(sort: option.sortClosure)
     }
     
     mutating func insert(_ alarm: AlarmEntity) {
