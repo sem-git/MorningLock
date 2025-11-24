@@ -84,16 +84,16 @@ struct MainView: View {
                 }
                 .offset(x: -16, y: -16)
             }
+            .onAppear {
+                viewModel.requestPermission()
+                viewModel.fetchAlarm()
+            }
             .navigationDestination(for: MainRoute.self, destination: { destination in
                 switch destination {
                 case .alarmSetting(let alarm):
                     AlarmSettingView(viewModel: AlarmSettingViewModel(alarm: alarm))
                 }
             })
-            .onAppear {
-                viewModel.requestPermission()
-                viewModel.fetchAlarm()
-            }
         }
     }
 }
