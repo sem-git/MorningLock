@@ -31,3 +31,9 @@ struct AlarmEntity: Hashable, Identifiable {
         return meridiem
     }
 }
+
+extension AlarmEntity: Comparable {
+    static func < (lhs: AlarmEntity, rhs: AlarmEntity) -> Bool {
+        lhs.time < rhs.time
+    }
+}

@@ -33,7 +33,7 @@ struct WakeUpApp: App {
     }
 }
 
-final class AppDelegate: NSObject, UIApplicationDelegate {
+final class AppDelegate: NSObject, UIApplicationDelegate {        
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self
         return true
