@@ -70,5 +70,9 @@ class MainViewModel: ObservableObject {
     func deactiveAlarm() {
         alarmManager.deactiveAlarm()
     }
+    
+    func snoozeAlarm(by interval: TimeInterval) {
+        alarmManager.snoozeAlarm(by: interval)
+    }
 }
 

@@ -44,7 +44,6 @@ final class AlarmManager {
             .toEntities()
             .filter{ $0.isActive }
             .forEach { alarmQueue.insert($0) }
-        scheduleAlarm()
     }
     
     /// 알람 추가
@@ -63,6 +62,7 @@ final class AlarmManager {
         do {
             try dataManager.updateAlarm(alarm: alarm)
             buildQueue()
+            scheduleAlarm()
         } catch {
             print("Failure to update alarm: \(error)")
         }
@@ -72,6 +72,7 @@ final class AlarmManager {
     func removeAlarm(_ id: UUID) {
         dataManager.deleteAlarm(id: id)
         buildQueue()
+        scheduleAlarm()
     }
     
     /// 현재 활성화된 알람 종료
@@ -83,6 +84,28 @@ final class AlarmManager {
         audioPlayer.stop()
         currentAlarm.isActive = false
         updateAlarm(currentAlarm)
+    }
+    
+    /// 일정 시간뒤에 알람 활성화
+    func snoozeAlarm(by interval: TimeInterval) {
+        guard let scheduledAlarm else { return }
+        // 현재 알람 중지
+        audioPlayer.stop()
+        timer?.invalidate()
+        
+        // 알람 예약
+        audioPlayer.play(atTime: interval, volume: 0.5)
+        
+        timer = Timer(
+            fireAt: scheduledAlarm.time.getTime + interval,
+            interval: 5,
+            target: self,
+            selector: #selector(activateAlarm),
+            userInfo: nil,
+            repeats: true
+        )
+        
+        RunLoop.main.add(timer!, forMode: .common)
     }
     
     /// 알람 스케줄링

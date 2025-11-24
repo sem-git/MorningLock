@@ -42,20 +42,23 @@ struct MainView: View {
                 viewModel.fetchAlarm()
             }, content: {
                 VStack(spacing: 0) {
-                    Text("알람이 울렸네요")
+                    Text("알림이 울렸습니다")
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundStyle(.primary)
                         .padding(.top, 24)
                     
-                    Text("지금부터 잠길거임")
+                    Text("지금부터 15분동안 설정한 앱들을 잠글게요")
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(.secondary)
                         .padding(.top, 8)
                     
-                    Image(.imgNoadd)
+                    Image(.imgLock)
+                        .padding(.top, 16)
                     
                     HStack(spacing: 16) {
-                        MainButton(title: "5분 후 다시 알림", buttonStyle: .text)
+                        MainButton(title: "5분 후 다시 알림", buttonStyle: .text) {
+                            viewModel.snoozeAlarm(by: .minutes(5))
+                        }
                         MainButton(title: "알람 끄기") {
                             viewModel.deactiveAlarm()
                         }
