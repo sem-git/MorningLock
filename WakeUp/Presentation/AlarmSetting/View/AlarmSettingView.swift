@@ -72,7 +72,7 @@ struct AlarmSettingView: View {
             
             MainButton(title: isEditing ? "수정 하기" : "저장 하기") {
                 if isEditing {
-                    viewModel.updateAlarm()
+                    updateAlarm()
                 } else {
                     saveAlarm()
                 }
@@ -95,6 +95,11 @@ struct AlarmSettingView: View {
             await viewModel.saveAlarm()
             dismiss()
         }
+    }
+    
+    private func updateAlarm() {
+        viewModel.updateAlarm()
+        dismiss()
     }
 }
 

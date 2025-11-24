@@ -51,7 +51,9 @@ final class AlarmManager {
     func addAlarm(_ alarm: AlarmEntity) async {
         do {
             try await dataManager.addAlarm(alarm: alarm)
-            alarmQueue.insert(alarm)
+            if alarm.repeatDay.hasToday {
+                alarmQueue.insert(alarm)
+            }
             scheduleAlarm()
         } catch {
             print("Failed to add alarm: \(error)")
