@@ -31,17 +31,15 @@ final class AlarmSettingViewModel: ObservableObject {
         }
     }
     
-    func saveAlarm() {
+    func saveAlarm() async {
         let alarmEntity = AlarmEntity(
             id: UUID(),
             time: time,
             isActive: true,
             repeatDay: Array(weekDays)
         )
-        
-        Task {
-            await alarmManager.addAlarm(alarmEntity)
-        }
+                
+        await alarmManager.addAlarm(alarmEntity)        
     }
     
     func updateAlarm() {
