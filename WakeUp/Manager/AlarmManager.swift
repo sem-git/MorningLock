@@ -7,6 +7,7 @@
 
 import UserNotifications
 import Combine
+import FirebaseAnalytics
 
 final class AlarmManager {
     static let shared = AlarmManager()
@@ -32,6 +33,10 @@ final class AlarmManager {
         self.dataManager = dataManager
         self.audioPlayer = audioPlayer
         self.notificationManager = notificationManager
+        updateAlarmSchedule()
+    }
+    
+    func updateAlarmSchedule() {
         buildQueue()
         scheduleAlarm()
     }
@@ -39,21 +44,29 @@ final class AlarmManager {
     // MARK: - 큐 구성
     private func buildQueue() {
         alarmQueue = AlarmQueue(sort: .upcoming)
-        
+        let today = Calendar.current.component(.weekday, from: Date())
         dataManager
             .fetchAlarm()
             .toEntities()
-            .filter { $0.isActive && $0.isDueToday }
+            .filter { alarm in
+                  guard alarm.isActive else { return false }
+                // 현재 날짜 기준 2일
+                  let validDays: [Int] = (0...2).map { offset in
+                      ((today - 1 + offset) % 7) + 1
+                  }
+                  return alarm.repeatDay.contains { weekDay in
+                      validDays.contains(weekDay.rawValue)
+                  }
+              }
             .forEach { alarmQueue.insert($0) }
+        Analytics.logEvent("UpdateQueue", parameters: nil)
     }
     
     // MARK: - 알람 관리
     func addAlarm(_ alarm: AlarmEntity) async {
         do {
             try await dataManager.addAlarm(alarm: alarm)
-            if alarm.isDueToday {
-                alarmQueue.insert(alarm)
-            }
+            alarmQueue.insert(alarm)
             scheduleAlarm()
         } catch {
             print("Failed to add alarm: \(error)")
@@ -138,6 +151,8 @@ final class AlarmManager {
         audioPlayer.play(atTime: interval, volume: 0.5)
         // 타이머 등록
         startTimer(dequeAlarm.time.getTime)
+        
+        Analytics.logEvent("ScheduleAlarm", parameters: nil)
     }
     
     // MARK: - 알람 활성화

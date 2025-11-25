@@ -30,8 +30,7 @@ struct MainView: View {
                         }))
                         .onTapGesture {
                             viewModel.navigateToAlarmSetting(alarm)
-                        }
-                        
+                        }                        
                     }
                 }
                 .padding(16)
@@ -84,7 +83,7 @@ struct MainView: View {
                 }
                 .offset(x: -16, y: -16)
             }
-            .onAppear {
+            .onAppear {                
                 viewModel.fetchAlarm()
             }
             .navigationDestination(for: MainRoute.self, destination: { destination in
