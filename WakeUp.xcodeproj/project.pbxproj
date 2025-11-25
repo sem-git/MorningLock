@@ -785,9 +785,11 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = DeviceReport/DeviceReport.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7UL55F8A57;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7UL55F8A57;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DeviceReport/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DeviceReport;
@@ -802,6 +804,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.awayke.DeviceReport;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AwaykeReport;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -817,9 +820,11 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = DeviceReport/DeviceReport.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7UL55F8A57;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7UL55F8A57;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DeviceReport/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DeviceReport;
@@ -834,6 +839,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.awayke.DeviceReport;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AwaykeReport;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -849,9 +855,11 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = DeviceMonitor/DeviceMonitor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7UL55F8A57;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7UL55F8A57;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DeviceMonitor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DeviceMonitor;
@@ -866,6 +874,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.awayke.DeviceMonitor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AwaykeMonitor;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -881,9 +890,11 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = DeviceMonitor/DeviceMonitor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7UL55F8A57;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7UL55F8A57;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DeviceMonitor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DeviceMonitor;
@@ -898,6 +909,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.awayke.DeviceMonitor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AwaykeMonitor;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;

@@ -31,16 +31,9 @@ struct AlarmSettingView: View {
                             HStack(alignment: .center, spacing: 10) {
                                 ForEach(Weekday.allCases, id: \.self) { day in
                                     let daySelected = viewModel.weekDays.contains(day)
-                                    Text(day.dayName)
-                                        .font(.system(size: 16, weight: .semibold))
-                                        .frame(width: itemSize, height: itemSize)
-                                        .background(daySelected ? .gray600 : .clear)
-                                        .foregroundStyle(daySelected ? .white : .gray300)
-                                        .clipShape(Circle())
-                                        .overlay(RoundedRectangle(cornerRadius: itemSize / 2).stroke(daySelected ? .clear : .gray600, lineWidth: 1))
-                                        .onTapGesture {
-                                            viewModel.selecteDay(day)
-                                        }
+                                    DayButton(title: day.dayName, isSelected: daySelected) {
+                                        viewModel.selecteDay(day)
+                                    }
                                 }
                             }
                         }
