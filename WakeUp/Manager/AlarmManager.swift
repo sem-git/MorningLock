@@ -43,7 +43,7 @@ final class AlarmManager {
         dataManager
             .fetchAlarm()
             .toEntities()
-            .filter { $0.isActive && ($0.repeatDay.hasToday || $0.repeatDay.isEmpty) }
+            .filter { $0.isActive && $0.isDueToday }
             .forEach { alarmQueue.insert($0) }
     }
     
@@ -51,8 +51,7 @@ final class AlarmManager {
     func addAlarm(_ alarm: AlarmEntity) async {
         do {
             try await dataManager.addAlarm(alarm: alarm)
-            let isDueToday = alarm.repeatDay.hasToday || alarm.repeatDay.isEmpty
-            if isDueToday {
+            if alarm.isDueToday {
                 alarmQueue.insert(alarm)
             }
             scheduleAlarm()

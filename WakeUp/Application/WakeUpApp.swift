@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import FirebaseCore
 
 @main
 struct WakeUpApp: App {
@@ -36,6 +37,7 @@ struct WakeUpApp: App {
 final class AppDelegate: NSObject, UIApplicationDelegate {        
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self
+        FirebaseApp.configure()        
         return true
     }
 }

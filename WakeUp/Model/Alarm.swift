@@ -30,6 +30,10 @@ struct AlarmEntity: Hashable, Identifiable {
         let meridiem = formatter.string(from: time)
         return meridiem
     }
+    
+    var isDueToday: Bool {
+        repeatDay.hasToday || repeatDay.isEmpty
+    }
 }
 
 extension AlarmEntity: Comparable {
