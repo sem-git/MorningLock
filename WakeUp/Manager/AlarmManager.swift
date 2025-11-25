@@ -36,30 +36,34 @@ final class AlarmManager {
         updateAlarmSchedule()
     }
     
-    func updateAlarmSchedule() {
+    func updateAlarmSchedule(_ completion: (() -> ())? = nil) {
         buildQueue()
         scheduleAlarm()
+        completion?()
     }
     
     // MARK: - 큐 구성
     private func buildQueue() {
         alarmQueue = AlarmQueue(sort: .upcoming)
+        
         let today = Calendar.current.component(.weekday, from: Date())
+        
+        // 큐에 추가될 알림들 미리 필터링
         dataManager
             .fetchAlarm()
             .toEntities()
             .filter { alarm in
-                  guard alarm.isActive else { return false }
+                guard alarm.isActive else { return false }
+                if alarm.repeatDay.isEmpty { return true }
                 // 현재 날짜 기준 2일
-                  let validDays: [Int] = (0...2).map { offset in
-                      ((today - 1 + offset) % 7) + 1
-                  }
-                  return alarm.repeatDay.contains { weekDay in
-                      validDays.contains(weekDay.rawValue)
-                  }
-              }
+                let validDays: [Int] = (0...2).map { offset in
+                    ((today - 1 + offset) % 7) + 1
+                }
+                return alarm.repeatDay.contains { weekDay in
+                    validDays.contains(weekDay.rawValue)
+                }
+            }
             .forEach { alarmQueue.insert($0) }
-        Analytics.logEvent("UpdateQueue", parameters: nil)
     }
     
     // MARK: - 알람 관리
@@ -76,8 +80,7 @@ final class AlarmManager {
     func updateAlarm(_ alarm: AlarmEntity) {
         do {
             try dataManager.updateAlarm(alarm: alarm)
-            buildQueue()
-            scheduleAlarm()
+            updateAlarmSchedule()
         } catch {
             print("Failure to update alarm: \(error)")
         }
@@ -135,24 +138,29 @@ final class AlarmManager {
     
     // MARK: - 알람 스케줄링
     private func scheduleAlarm() {
-        guard let dequeAlarm = alarmQueue.peek() else {
-            stopCurrentAlarm()
-            return
-        }
         
-        // 새로운 알람이 없다면 이전 알람을 유지
-        if let prev = scheduledAlarm, prev.id == dequeAlarm.id, prev.time == dequeAlarm.time {
-            return
-        }
-        
-        scheduledAlarm = dequeAlarm
-        let interval = dequeAlarm.time.getTime.timeIntervalSinceNow
-        // 오디오 세션 활성화
-        audioPlayer.play(atTime: interval, volume: 0.5)
-        // 타이머 등록
-        startTimer(dequeAlarm.time.getTime)
-        
-        Analytics.logEvent("ScheduleAlarm", parameters: nil)
+         guard let nextAlarm = alarmQueue.peek() else {
+             stopCurrentAlarm()
+             return
+         }
+                  
+         if let scheduled = scheduledAlarm,
+            scheduled.id == nextAlarm.id,
+            scheduled.time.getTime == nextAlarm.time.getTime {
+             return
+         }
+         
+        // 오늘 울리는 알림이거나 일회성 알림 여부 확인
+         guard nextAlarm.repeatDay.hasToday || nextAlarm.repeatDay.isEmpty else {
+             return
+         }
+                  
+        // 알람 등록
+         scheduledAlarm = nextAlarm
+         let interval = nextAlarm.time.getTime.timeIntervalSinceNow
+         audioPlayer.play(atTime: interval, volume: 0.5)
+                  
+         startTimer(nextAlarm.time.getTime)
     }
     
     // MARK: - 알람 활성화

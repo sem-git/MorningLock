@@ -61,7 +61,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             task.setTaskCompleted(success: false)
         }
         
-        alarmManager.updateAlarmSchedule()
+        alarmManager.updateAlarmSchedule() {
+            Analytics.logEvent("UpdateQueue", parameters: nil)
+        }
         
         task.setTaskCompleted(success: true)
     }
@@ -74,7 +76,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             task.setTaskCompleted(success: false)
         }
         
-        alarmManager.updateAlarmSchedule()
+        alarmManager.updateAlarmSchedule() {
+            Analytics.logEvent("UpdateQueue", parameters: nil)
+        }
         
         task.setTaskCompleted(success: true)
     }
