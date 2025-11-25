@@ -18,15 +18,12 @@ extension Alarm {
         return NSFetchRequest<Alarm>(entityName: "Alarm")
     }
 
-    @NSManaged public var id: String
+    @NSManaged public var id: UUID
     @NSManaged public var isActive: Bool
-    @NSManaged public var title: String?
     @NSManaged public var time: Date
-    @NSManaged public var requestIDs: [String]
     @NSManaged public var repeatDay: [Int]
 
 }
 
-extension Alarm : Identifiable {
-
+extension Alarm : Identifiable {    
 }

@@ -17,33 +17,23 @@ struct WakeUpApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
-                .onReceive(NotificationCenter.default.publisher(for: .openMissionView)) { _ in
-                    isShowMissionView = true
-                }
-                .onReceive(NotificationCenter.default.publisher(for: .closeMissionView)) { _ in
-                    isShowMissionView = false
-                }
-                .onReceive(NotificationCenter.default.publisher(for: .openAlarmView)) { _ in
-                    isShowAlarmView = true
-                }
-                .onReceive(NotificationCenter.default.publisher(for: .closeAlarmView)) { _ in
-                    isShowAlarmView = false
-                }
-                .overlay {
-                    if isShowMissionView {
-                        MissionView()
-                    }
-                }
-                .overlay {
-                    if isShowAlarmView {
-                        AlarmCompleteView()
-                    }
-                }
+//                .onReceive(NotificationCenter.default.publisher(for: .openMissionView)) { _ in
+//                    isShowMissionView = true
+//                }
+//                .onReceive(NotificationCenter.default.publisher(for: .closeMissionView)) { _ in
+//                    isShowMissionView = false
+//                }
+//                .onReceive(NotificationCenter.default.publisher(for: .openAlarmView)) { _ in
+//                    isShowAlarmView = true
+//                }
+//                .onReceive(NotificationCenter.default.publisher(for: .closeAlarmView)) { _ in
+//                    isShowAlarmView = false
+//                }
         }
     }
 }
 
-final class AppDelegate: NSObject, UIApplicationDelegate {
+final class AppDelegate: NSObject, UIApplicationDelegate {        
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self
         return true
@@ -52,11 +42,12 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
-        if response.notification.request.content.userInfo["type"] as? String == "mission" {
-            NotificationCenter.default.post(name: .openMissionView, object: response.notification.request.identifier)
-        } else {
-            NotificationCenter.default.post(name: .openAlarmView, object: response.notification.request.identifier)
-        }
+        
+//        if response.notification.request.content.userInfo["type"] as? String == "mission" {
+//            NotificationCenter.default.post(name: .openMissionView, object: response.notification.request.identifier)
+//        } else {
+//            NotificationCenter.default.post(name: .openAlarmView, object: response.notification.request.identifier)
+//        }
     }
 }
 

@@ -9,145 +9,117 @@ import SwiftUI
 
 struct MainView: View {
     @EnvironmentObject var viewModel: MainViewModel
+    @State private var sheetHeight: CGFloat = .zero
     
     var body: some View {
-        ScrollView {
-            if viewModel.isActiveAlarm {
-                Text("⏰ \(viewModel.nextAlarm) 뒤 알람")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(16)
-                    .background(.gray.opacity(0.3))
-                    .cornerRadius(12)
-                    .padding(.horizontal, 16)
-            }
-            
-            LazyVStack(spacing: 14) {
-                ForEach(Array(viewModel.alarmList.enumerated()), id: \.self.element.id) { (index, alarmEntity) in
-                    HStack {
-                        if viewModel.deleteMode {
-                            Button {
-                                viewModel.deleteAlarm(alarmEntity)
-                            } label: {
-                                Text("삭제")
-                                    .foregroundStyle(.red)
-                            }
-                        }
-                        
+        NavigationStack(path: $viewModel.path) {
+            ScrollView {
+                LazyVStack(spacing: 14) {
+                    ForEach(Array(viewModel.alarmList.enumerated()), id: \.self.element.id) { (index, alarm) in
                         // alarmList가 바뀔떄까지 업데이트 안됨
                         AlarmView(alarm: Binding(get: {
                             // 삭제시 인덱스 오류 방지
                             if index > viewModel.alarmList.count-1 {
-                                return AlarmEntity(id: "", title: "", time: .now, notiRequests: [], isActive: false, repeatDay: [])
+                                return AlarmEntity(id: UUID(), time: .now, isActive: false, repeatDay: [])
                             } else {
-                                return alarmEntity
+                                return alarm
                             }
                         }, set: {
                             viewModel.alarmList[index] = $0
                             viewModel.updateAlarm($0)
                         }))
                         .onTapGesture {
-                            viewModel.showAlarmSettingView(alarm: alarmEntity)
+                            viewModel.navigateToAlarmSetting(alarm)
                         }
+                        
                     }
                 }
+                .padding(16)
             }
-            .animation(.default, value: viewModel.isActiveAlarm)
-            .padding(16)
-        }
-        .animation(.default, value: viewModel.alarmList.count)
-        .overlay(content: {
-            if viewModel.alarmList.isEmpty {
-                VStack(spacing: 12) {
-                    Image(.alarm)
-                        .renderingMode(.template)
-                        .resizable()
-                        .frame(width: 50, height: 50)
-                        .foregroundStyle(.gray)
-                    
-                    Text("설정된 알람이 없습니다.")
-                        .fontWeight(.bold)
-                        .foregroundStyle(.gray)
-                }
-            }
-        })       
-        .onTapGesture {
-            withAnimation {
-                viewModel.deleteMode = false
-            }
-        }
-        .navigationBarItems(trailing: menuButton)
-        .navigationBarItems(leading: completeButton)
-        .background(.customBackground)
-        .overlay(alignment: .bottomTrailing) {
-            AddButton {
-                viewModel.showAlarmSettingView()
-            }
-            .offset(x: -16, y: -16)
-        }
-        .fullScreenCover(item: $viewModel.fullScreenCover, onDismiss: {
-            Task {
-                await viewModel.fetchAlarm()
-            }
-        }, content: { destination in
-            switch destination {
-            case .alarmSetting(let alarm):
-                AlarmSettingView(viewModel: AlarmSettingViewModel(alarm: alarm))
-            }
+            .animation(.default, value: viewModel.alarmList.count)
             
-        })
-        .alert(isPresented: $viewModel.isShowAlert) {
-            Alert(
-                title: Text("설정"),
-                message: Text("알림 권한을 허용하지 않으면 알림이 울리지 않을 수 있습니다"),
-                primaryButton: .default(Text("설정하기"), action: {
-                    if let appSettings = URL(string: UIApplication.openSettingsURLString) {
-                        if UIApplication.shared.canOpenURL(appSettings) {
-                            UIApplication.shared.open(appSettings)
+            .sheet(isPresented: $viewModel.alarmSheetPresented, onDismiss: {
+                viewModel.fetchAlarm()
+            }, content: {
+                VStack(spacing: 0) {
+                    Text("알림이 울렸습니다")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(.primary)
+                        .padding(.top, 24)
+                    
+                    Text("지금부터 15분동안 설정한 앱들을 잠글게요")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                        .padding(.top, 8)
+                    
+                    Image(.imgLock)
+                        .padding(.top, 16)
+                    
+                    HStack(spacing: 16) {
+                        MainButton(title: "5분 후 다시 알림", buttonStyle: .text) {
+                            viewModel.snoozeAlarm(by: .minutes(5))
+                        }
+                        MainButton(title: "알람 끄기") {
+                            viewModel.deactiveAlarm()
                         }
                     }
-                }),
-                secondaryButton: .cancel(Text("취소"))
-            )
-        }
-        .task {
-            await viewModel.requestPermission()
-            await viewModel.fetchAlarm()
+                }
+                .presentationDetents([.height(sheetHeight)])
+                .interactiveDismissDisabled(true)
+                .padding(.horizontal, 16)
+                .overlay {
+                    GeometryReader { geometry in
+                        Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
+                    }
+                }
+                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                    sheetHeight = newHeight
+                }
+            })
+            .navigationBarItems(trailing: contactButton)
+            .background(.customBackground)
+            .overlay(alignment: .bottomTrailing) {
+                AddButton {
+                    viewModel.navigateToAlarmSetting()
+                }
+                .offset(x: -16, y: -16)
+            }
+            .onAppear {
+                viewModel.requestPermission()
+                viewModel.fetchAlarm()
+            }
+            .navigationDestination(for: MainRoute.self, destination: { destination in
+                switch destination {
+                case .alarmSetting(let alarm):
+                    AlarmSettingView(viewModel: AlarmSettingViewModel(alarm: alarm))
+                }
+            })
         }
     }
-    
-    func removeRows(at offsets: IndexSet) {
+}
+
+struct InnerHeightPreferenceKey: PreferenceKey {
+    static let defaultValue: CGFloat = .zero
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
+// MARK: - SubViews
+extension MainView {
+    private func removeRows(at offsets: IndexSet) {
         viewModel.alarmList.remove(atOffsets: offsets)
     }
     
-    private var menuButton: some View {
-        Menu {
-            Button {
-                withAnimation {
-                    viewModel.deleteMode = true
-                }
-            } label: {
-                Label("알람 삭제", systemImage: "trash")
-            }
+    private var contactButton: some View {
+        Button(action: {
             
-        } label: {
-            Image(systemName: "ellipsis")
-                .foregroundStyle(.white)
-        }
-    }
-    
-    private var completeButton: some View {
-        Button("완료") {
-            withAnimation {
-                viewModel.deleteMode = false
-            }
-        }
-        .opacity(viewModel.deleteMode ? 1 : 0)
-        .disabled(!viewModel.deleteMode)
+        }, label: {
+            Text("문의")
+        })
     }
 }
 
 #Preview {
     MainView()
 }
-

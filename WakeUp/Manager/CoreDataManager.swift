@@ -26,20 +26,18 @@ class CoreDataManager {
     
     lazy var context = persistentContainer.viewContext
     
-    func addAlarm(alarm: AlarmEntity) {
+    func addAlarm(alarm: AlarmEntity) async throws {
         let newAlarm = Alarm(context: context)
         newAlarm.id = alarm.id
-        newAlarm.title = alarm.title
         newAlarm.isActive = true
         newAlarm.time = alarm.time
-        newAlarm.requestIDs = Array(alarm.notiRequests.map{$0.identifier})
         newAlarm.repeatDay = alarm.repeatDay.map { $0.rawValue }
         
         do {
             try context.save()
             print("데이터 추가 성공")
         } catch {
-            print("Core Data save error: \(error)")
+            throw error
         }
     }
     
@@ -67,10 +65,8 @@ class CoreDataManager {
                 
                 if var updateAlarm = data.first {
                     updateAlarm.isActive = alarm.isActive
-                    updateAlarm.title = alarm.title
                     updateAlarm.time = alarm.time
                     updateAlarm.repeatDay = alarm.repeatDay.map(\.rawValue)
-                    updateAlarm.requestIDs = Array(alarm.notiRequests.map(\.identifier))
                     try context.save()
                 }
             } catch {
@@ -79,9 +75,9 @@ class CoreDataManager {
         }
     }
     
-    func deleteAlarm(alarm: AlarmEntity) {
+    func deleteAlarm(id: UUID) {
         let request: NSFetchRequest<Alarm> = Alarm.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %@", alarm.id as CVarArg)
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         
         context.performAndWait {
             do {
