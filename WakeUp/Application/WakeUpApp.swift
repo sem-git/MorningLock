@@ -19,21 +19,22 @@ struct WakeUpApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
-//                .onChange(of: scenePhase) { newPhase in
-//                    switch newPhase {
-//                    case .background:
-//                        Analytics.logEvent("EnterBackground", parameters: [
-//                            AnalyticsParameterItemID: "id",
-//                            AnalyticsParameterItemName: "enter-background",
-//                            AnalyticsParameterContentType: "system",
-//                        ])
-//                        print("App entered background")
-//                        delegate.scheduleAppBackgroundRefresh()
-//                        delegate.scheduleAppBackgroundProcessing()
-//                    @unknown default:
-//                        break
-//                    }
-//                }
+                .onChange(of: scenePhase) { newPhase in
+                    switch newPhase {
+                    case .background:
+                        Analytics.logEvent("EnterBackground", parameters: [
+                            AnalyticsParameterItemID: "id",
+                            AnalyticsParameterItemName: "enter-background",
+                            AnalyticsParameterContentType: "system",
+                        ])
+                        print("App entered background")
+                        delegate.scheduleAppBackgroundRefresh()
+                        delegate.scheduleAppBackgroundProcessing()
+                        break
+                    @unknown default:
+                        break
+                    }
+                }
         }
     }
 }

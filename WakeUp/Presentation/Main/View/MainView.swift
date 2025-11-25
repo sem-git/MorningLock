@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MainView: View {
-    @EnvironmentObject var viewModel: MainViewModel
+    @StateObject var viewModel: MainViewModel = MainViewModel()
     @State private var sheetHeight: CGFloat = .zero
     
     var body: some View {
