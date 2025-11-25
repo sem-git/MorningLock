@@ -28,3 +28,10 @@ extension Weekday {
     }
 }
 
+extension Array where Element == Weekday {
+    var hasToday: Bool {
+        let today = Calendar.current.dateComponents([.weekday], from: Date()).weekday ?? 0
+           return self.map { $0.rawValue }.contains(today)
+    }
+}
+
