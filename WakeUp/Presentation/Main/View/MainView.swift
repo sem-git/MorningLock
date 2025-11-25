@@ -77,7 +77,7 @@ struct MainView: View {
                 }
             })
             .navigationBarItems(trailing: contactButton)
-            .background(.customBackground)
+            .background(.gray800)
             .overlay(alignment: .bottomTrailing) {
                 AddButton {
                     viewModel.navigateToAlarmSetting()
@@ -85,7 +85,6 @@ struct MainView: View {
                 .offset(x: -16, y: -16)
             }
             .onAppear {
-                viewModel.requestPermission()
                 viewModel.fetchAlarm()
             }
             .navigationDestination(for: MainRoute.self, destination: { destination in

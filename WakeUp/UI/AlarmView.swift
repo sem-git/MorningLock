@@ -16,11 +16,11 @@ struct AlarmView: View {
                 HStack(alignment: .bottom) {
                     Text("\(alarm.meridiem)")
                         .font(.system(size: 20, weight: .regular))
-                        .foregroundStyle(.neutral)
+                        .foregroundStyle(.gray50)
                     
                     Text("\(alarm.dateString)")
                         .font(.system(size: 48, weight: .bold))
-                        .foregroundStyle(.neutral)
+                        .foregroundStyle(.gray50)
                     Spacer()
                     
                     Toggle("", isOn: Binding(get: {
@@ -32,14 +32,14 @@ struct AlarmView: View {
                 HStack {
                     ForEach(Weekday.allCases, id: \.self) {
                         Text($0.dayName)
-                            .foregroundStyle(alarm.repeatDay.contains($0) ? .neutral : .defaultSecondary)
+                            .foregroundStyle(alarm.repeatDay.contains($0) ? .gray50 : .gray300)
                     }
                 }
                 .padding(.top, 8)
             }
             .padding(16)
         }
-        .background(.default)
+        .background(.gray600)
         .cornerRadius(16)
         .opacity(alarm.isActive ? 1 : 0.3)
     }

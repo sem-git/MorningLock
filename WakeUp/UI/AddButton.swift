@@ -21,7 +21,7 @@ struct AddButton: View {
         } label: {
             Circle()
                 .frame(width: 64, height: 64)
-                .foregroundStyle(.button)
+                .foregroundStyle(.gray600)
                 .overlay(Image(.plusIcon))
         }
     }

@@ -7,29 +7,25 @@
 
 import SwiftUI
 
-enum ButtonStyle {
+enum MainButtonStyle {
     case `default`
     case text
     
-    var backgroundColor: Color {
+    func backgroundColor(disabled: Bool) -> Color {
         switch self {
-        case .`default`:
-                .button
+        case .default:
+            return disabled ? .gray600 : .gray500
         case .text:
-                .clear
+            return .clear
         }
     }
     
     func textColor(disabled: Bool) -> Color {
-        switch (self, disabled) {
-        case (.default, false):
-                .brand
-        case (.default, true):
-                .neutralSecondary
-        case (.text, false):
-                .tertiary
-        case (.text, true):
-                .neutralTertiary
+        switch self {
+        case .default:
+            return disabled ? .gray400 : .gray50
+        case .text:
+            return .gray200
         }
     }
 }
@@ -37,7 +33,7 @@ enum ButtonStyle {
 struct MainButton: View {
     let title: String
     var disabled: Bool = false
-    var buttonStyle: ButtonStyle = .default
+    var buttonStyle: MainButtonStyle = .default
     var action: (() -> ())?
     
     var body: some View {
@@ -50,7 +46,7 @@ struct MainButton: View {
                 .frame(maxWidth: .infinity, minHeight: 62)
         }
         .disabled(disabled)
-        .background(buttonStyle.backgroundColor)
+        .background(buttonStyle.backgroundColor(disabled: disabled))
         .cornerRadius(16)
     }
 }
