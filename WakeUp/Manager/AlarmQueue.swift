@@ -5,13 +5,27 @@
 //  Created by a on 11/22/25.
 //
 
+import Foundation
+
 enum QueueSortOption {
     case upcoming
     
     var sortClosure: (AlarmEntity, AlarmEntity) -> Bool {
         switch self {
         case .upcoming:
-            return { $0.isActive && $0.time.getTime < $1.time.getTime }
+            return {
+                let today = Calendar.current.component(.weekday, from: Date())
+                
+                let prev = $0.repeatDay.map { (weekDay: Weekday) -> Int in (weekDay.rawValue - today + 7) % 7}.min() ?? 0
+                let next = $1.repeatDay.map { (weekDay: Weekday) -> Int in (weekDay.rawValue - today + 7) % 7 }.min() ?? 0
+                
+                // 오늘이랑 내일이 같지 않은 경우 오프셋 기준으로 정렬
+                if prev != next {
+                    return prev < next
+                }
+                // offset이 같으면 오늘 기준 시간 비교
+                return $0.time.getTime < $1.time.getTime
+            }
         }
     }
 }
@@ -71,7 +85,9 @@ struct Heap<T: Comparable> {
     }
     
     mutating func delete() -> T? {
-        
+        if elements.isEmpty {
+            return nil
+        }
         elements.swapAt(1, elements.count - 1)
         let maxElement = elements.removeLast()
         var currentIndex = 1

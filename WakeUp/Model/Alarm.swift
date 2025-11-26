@@ -29,7 +29,7 @@ struct AlarmEntity: Hashable, Identifiable {
         formatter.dateFormat = "a"
         let meridiem = formatter.string(from: time)
         return meridiem
-    }
+    }       
 }
 
 extension AlarmEntity: Comparable {

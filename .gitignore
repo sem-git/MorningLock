@@ -1,6 +1,8 @@
 # CocoaPods
 Pods/
 
+**/GoogleService-Info.plist
+
 # macOS
 .DS_Store
 .AppleDouble

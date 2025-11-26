@@ -12,15 +12,14 @@ struct UserDefaultKey {
 }
 
 struct RootView: View {
-    @AppStorage(UserDefaultKey.isOnboarding) private var isOnboarding = true
+    @AppStorage(UserDefaultKey.isOnboarding) private var isOnboarding = true        
     
     var body: some View {
         Group {
             if isOnboarding {
-                OnboardingView()
+                OnboardingView()                
             } else {
-                MainView()
-                    .environmentObject(MainViewModel())
+                MainView()                    
             }
         }
     }

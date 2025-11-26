@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		006E17FB2ED5FDF500BB576C /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 006E17FA2ED5FDF500BB576C /* FirebaseAnalytics */; };
+		006E17FD2ED5FDF500BB576C /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 006E17FC2ED5FDF500BB576C /* FirebaseAnalyticsCore */; };
+		006E17FF2ED5FDF500BB576C /* FirebaseAnalyticsIdentitySupport in Frameworks */ = {isa = PBXBuildFile; productRef = 006E17FE2ED5FDF500BB576C /* FirebaseAnalyticsIdentitySupport */; };
+		006E18012ED5FDF500BB576C /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 006E18002ED5FDF500BB576C /* FirebaseCore */; };
+		006E18032ED5FDF500BB576C /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 006E18022ED5FDF500BB576C /* FirebaseCrashlytics */; };
+		006E18052ED5FDF500BB576C /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 006E18042ED5FDF500BB576C /* FirebaseRemoteConfig */; };
 		7699EC922ECF7E78003BCA19 /* DeviceReport.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = 7699EC862ECF7E78003BCA19 /* DeviceReport.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7699EF912ED0677C003BCA19 /* DeviceActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7699EF902ED0677C003BCA19 /* DeviceActivity.framework */; };
 		7699EF992ED0677C003BCA19 /* DeviceMonitor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7699EF8E2ED0677C003BCA19 /* DeviceMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -154,6 +160,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				006E17FB2ED5FDF500BB576C /* FirebaseAnalytics in Frameworks */,
+				006E17FD2ED5FDF500BB576C /* FirebaseAnalyticsCore in Frameworks */,
+				006E18032ED5FDF500BB576C /* FirebaseCrashlytics in Frameworks */,
+				006E18052ED5FDF500BB576C /* FirebaseRemoteConfig in Frameworks */,
+				006E18012ED5FDF500BB576C /* FirebaseCore in Frameworks */,
+				006E17FF2ED5FDF500BB576C /* FirebaseAnalyticsIdentitySupport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,6 +258,12 @@
 			);
 			name = WakeUp;
 			packageProductDependencies = (
+				006E17FA2ED5FDF500BB576C /* FirebaseAnalytics */,
+				006E17FC2ED5FDF500BB576C /* FirebaseAnalyticsCore */,
+				006E17FE2ED5FDF500BB576C /* FirebaseAnalyticsIdentitySupport */,
+				006E18002ED5FDF500BB576C /* FirebaseCore */,
+				006E18022ED5FDF500BB576C /* FirebaseCrashlytics */,
+				006E18042ED5FDF500BB576C /* FirebaseRemoteConfig */,
 			);
 			productName = WakeUp;
 			productReference = 00CD949F2E9D3FD4001C47CD /* WakeUp.app */;
@@ -379,6 +397,9 @@
 			);
 			mainGroup = 00CD94962E9D3FD4001C47CD;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				006E17F92ED5FDF500BB576C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 00CD94A02E9D3FD4001C47CD /* Products */;
 			projectDirPath = "";
@@ -785,9 +806,11 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = DeviceReport/DeviceReport.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7UL55F8A57;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7UL55F8A57;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DeviceReport/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DeviceReport;
@@ -802,6 +825,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.awayke.DeviceReport;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AwaykeReport;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -817,9 +841,11 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = DeviceReport/DeviceReport.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7UL55F8A57;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7UL55F8A57;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DeviceReport/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DeviceReport;
@@ -834,6 +860,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.awayke.DeviceReport;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AwaykeReport;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -849,9 +876,11 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = DeviceMonitor/DeviceMonitor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7UL55F8A57;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7UL55F8A57;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DeviceMonitor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DeviceMonitor;
@@ -866,6 +895,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.awayke.DeviceMonitor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AwaykeMonitor;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -881,9 +911,11 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = DeviceMonitor/DeviceMonitor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7UL55F8A57;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7UL55F8A57;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DeviceMonitor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = DeviceMonitor;
@@ -898,6 +930,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.awayke.DeviceMonitor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AwaykeMonitor;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -966,6 +999,50 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		006E17F92ED5FDF500BB576C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.6.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		006E17FA2ED5FDF500BB576C /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 006E17F92ED5FDF500BB576C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		006E17FC2ED5FDF500BB576C /* FirebaseAnalyticsCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 006E17F92ED5FDF500BB576C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsCore;
+		};
+		006E17FE2ED5FDF500BB576C /* FirebaseAnalyticsIdentitySupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 006E17F92ED5FDF500BB576C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsIdentitySupport;
+		};
+		006E18002ED5FDF500BB576C /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 006E17F92ED5FDF500BB576C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		006E18022ED5FDF500BB576C /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 006E17F92ED5FDF500BB576C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		006E18042ED5FDF500BB576C /* FirebaseRemoteConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 006E17F92ED5FDF500BB576C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfig;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 00CD94972E9D3FD4001C47CD /* Project object */;
 }
