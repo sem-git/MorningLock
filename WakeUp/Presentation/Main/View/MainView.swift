@@ -6,19 +6,26 @@
 //
 
 import SwiftUI
+import FamilyControls
+import DeviceActivity
 
 struct MainView: View {
     @StateObject var viewModel: MainViewModel = MainViewModel()
     @State private var sheetHeight: CGFloat = .zero
+    
+    // 임시
+    @StateObject private var manager = DeviceActivityManager()
+    @State private var selection = FamilyActivitySelection()
+    @State private var isPickerPresented = false
     
     var body: some View {
         NavigationStack(path: $viewModel.path) {
             ScrollView {
                 LazyVStack(spacing: 14) {
                     ForEach(Array(viewModel.alarmList.enumerated()), id: \.self.element.id) { (index, alarm) in
-                        // alarmList가 바뀔떄까지 업데이트 안됨
+                        // alarmList가 바뀔 때까지 업데이트 안됨
                         AlarmView(alarm: Binding(get: {
-                            // 삭제시 인덱스 오류 방지
+                            // 삭제 시 인덱스 오류 방지
                             if index > viewModel.alarmList.count-1 {
                                 return AlarmEntity(id: UUID(), time: .now, isActive: false, repeatDay: [])
                             } else {
@@ -30,13 +37,40 @@ struct MainView: View {
                         }))
                         .onTapGesture {
                             viewModel.navigateToAlarmSetting(alarm)
-                        }                        
+                        }
+                        
+                        // 임시 버튼
+                        HStack(spacing: 12) {
+                            Button {
+                                isPickerPresented = true
+                            } label: {
+                                Text("앱 선택")
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.bordered)
+                            
+                            Button {
+                                manager.saveSelection(selection)
+                            } label: {
+                                Text("저장")
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.borderedProminent)
+                        }
+                        .padding(.horizontal, 8)
                     }
                 }
                 .padding(16)
             }
             .animation(.default, value: viewModel.alarmList.count)
-            
+            // 임시 FamilyActivityPicker 시트
+            .sheet(isPresented: $isPickerPresented) {
+                NavigationStack {
+                    FamilyActivityPicker(selection: $selection)
+                        .navigationTitle("앱 선택")
+                        .navigationBarTitleDisplayMode(.inline)
+                }
+            }
             .sheet(isPresented: $viewModel.alarmSheetPresented, onDismiss: {
                 viewModel.fetchAlarm()
             }, content: {
@@ -83,7 +117,7 @@ struct MainView: View {
                 }
                 .offset(x: -16, y: -16)
             }
-            .onAppear {                
+            .onAppear {
                 viewModel.fetchAlarm()
             }
             .navigationDestination(for: MainRoute.self, destination: { destination in
