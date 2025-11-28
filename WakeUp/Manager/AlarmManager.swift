@@ -169,6 +169,8 @@ final class AlarmManager {
         if !isAlarmPlaying {
             isAlarmPlaying = true
         }
+        
+        DeviceActivityManager().startMonitoring()
         notificationManager.postImmediateNotification()
     }
 }

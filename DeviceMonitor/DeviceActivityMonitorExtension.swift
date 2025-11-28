@@ -6,43 +6,62 @@
 //
 
 import DeviceActivity
+import FamilyControls
+import ManagedSettings
+import Foundation
 
-// Optionally override any of the functions below.
-// Make sure that your class name matches the NSExtensionPrincipalClass in your Info.plist.
 class DeviceActivityMonitorExtension: DeviceActivityMonitor {
+    let store = ManagedSettingsStore()
+
+    /// 장치 활동 간격이 시작되었음을 나타냅니다
     override func intervalDidStart(for activity: DeviceActivityName) {
         super.intervalDidStart(for: activity)
         
-        // Handle the start of the interval.
+        if let selection = loadSelectedApps() {
+            print("앱 목록 로드성공")
+            blockSelectedApps(selection)
+        }
+    }
+
+    private func loadSelectedApps() -> FamilyActivitySelection? {
+        let userDefaults = UserDefaults(suiteName: "group.com.awayke")
+        guard let data = userDefaults?.data(forKey: "testKey") else {
+            return nil
+        }
+        
+        do {
+            let model = try JSONDecoder().decode(AppModel.self, from: data)
+            return model.selection
+        } catch {
+            print("앱 목록 로드 실패: \(error)")
+            return nil
+        }
+    }
+    
+    private func blockSelectedApps(_ selection: FamilyActivitySelection) {
+        // 앱 차단 설정
+        store.shield.applications = selection.applicationTokens.isEmpty ?
+            nil : selection.applicationTokens
+        
+        // 카테고리 차단 설정
+        store.shield.applicationCategories = selection.categoryTokens.isEmpty
+        ? nil
+        : .specific(selection.categoryTokens)
+        
+        // 웹 도메인 차단 설정 (필요한 경우)
+        store.shield.webDomains = selection.webDomainTokens.isEmpty
+        ? nil
+        : selection.webDomainTokens
     }
     
     override func intervalDidEnd(for activity: DeviceActivityName) {
         super.intervalDidEnd(for: activity)
         
-        // Handle the end of the interval.
-    }
-    
-    override func eventDidReachThreshold(_ event: DeviceActivityEvent.Name, activity: DeviceActivityName) {
-        super.eventDidReachThreshold(event, activity: activity)
+        // 모든 차단 해제
+        store.shield.applications = nil
+        store.shield.applicationCategories = nil
+        store.shield.webDomains = nil
         
-        // Handle the event reaching its threshold.
-    }
-    
-    override func intervalWillStartWarning(for activity: DeviceActivityName) {
-        super.intervalWillStartWarning(for: activity)
-        
-        // Handle the warning before the interval starts.
-    }
-    
-    override func intervalWillEndWarning(for activity: DeviceActivityName) {
-        super.intervalWillEndWarning(for: activity)
-        
-        // Handle the warning before the interval ends.
-    }
-    
-    override func eventWillReachThresholdWarning(_ event: DeviceActivityEvent.Name, activity: DeviceActivityName) {
-        super.eventWillReachThresholdWarning(event, activity: activity)
-        
-        // Handle the warning before the event reaches its threshold.
+        print("⛔️ interval 종료 - 차단 해제")
     }
 }
