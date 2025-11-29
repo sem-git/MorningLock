@@ -16,7 +16,7 @@ final class AppLockSelectionStore: ObservableObject {
     @Published var selection: FamilyActivitySelection = .init()
     
     private let userDefaults = UserDefaults(suiteName: "group.com.awayke")
-    private let key = "testKey"
+    private let key = "appLockSelection"
     
     func save() {
         let model = AppModel(selection: selection)
