@@ -13,20 +13,6 @@ final class DeviceActivityManager: ObservableObject {
         )
     ]
     
-    // Extension에서 읽을 앱 선택 정보 저장
-    func saveSelection(_ selection: FamilyActivitySelection) {
-        let model = AppModel(selection: selection)
-        
-        do {
-            let data = try JSONEncoder().encode(model)
-            let defaults = UserDefaults(suiteName: "group.com.awayke")
-            defaults?.set(data, forKey: "testKey")
-            print("앱 선택 저장 완료")
-        } catch {
-            print("앱 선택 저장 실패", error)
-        }
-    }
-    
     // 모니터링 시작
     func startMonitoring() {
         let now = Date()
