@@ -51,8 +51,12 @@ struct AppLockSelectionView: View {
         .sheet(isPresented: $isPickerPresented) {
             NavigationStack {
                 FamilyActivityPicker(selection: $selectionStore.selection)
-                    .navigationTitle("앱 선택")
                     .toolbar {
+                        ToolbarItem(placement: .principal) {
+                            Text("앱 선택")
+                                .font(.system(size: 20, weight: .bold))
+                        }
+                        
                         ToolbarItem(placement: .confirmationAction) {
                             Button("완료") {
                                 selectionStore.save()
