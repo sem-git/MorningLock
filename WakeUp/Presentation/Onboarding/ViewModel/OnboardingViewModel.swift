@@ -13,7 +13,7 @@ enum OnboardingPath: Hashable {
     case permissionGuide
     case screenTimePermission
     case notificationPermission
-    case appRecommendation
+    case appLockSelection
 }
 
 class OnboardingViewModel: ObservableObject {
@@ -62,7 +62,7 @@ class OnboardingViewModel: ObservableObject {
             
             await MainActor.run {
                 self.isRequestingPermission = false
-                self.navigate(to: .appRecommendation)
+                self.navigate(to: .appLockSelection)
             }
         }
     }
