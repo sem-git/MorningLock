@@ -94,11 +94,11 @@ struct MainView: View {
                         
                         HStack(spacing: 16) {
                             MainButton(
-                                title: "5분 후 다시 알림",
+                                title: "\(Int(viewModel.snoozeTime / 60))분 후 다시 알림",
                                 disabled: viewModel.snoozeDisabled,
                                 buttonStyle: .text
                             ) {
-                            viewModel.snoozeAlarm(by: .minutes(1))
+                            viewModel.snoozeAlarm()
                         }
                         MainButton(title: "알람 끄기") {
                             viewModel.deactiveAlarm()

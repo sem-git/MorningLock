@@ -16,7 +16,8 @@ class MainViewModel: ObservableObject {
     @Published var alarmList: [AlarmEntity] = []
     @Published var path: [MainRoute] = []
     @Published var alarmSheetPresented = false
-    @Published var snoozeCount = 0
+    @Published var snoozeCount = 1
+    @Published var snoozeTime: TimeInterval = .minutes(5)
     
     private let dataManager: CoreDataManager
     private let alarmManager: AlarmManager
@@ -73,8 +74,8 @@ class MainViewModel: ObservableObject {
         alarmManager.deactiveAlarm()
     }
     
-    func snoozeAlarm(by interval: TimeInterval) {
-        alarmManager.snoozeAlarm(by: interval)
+    func snoozeAlarm() {
+        alarmManager.snoozeAlarm(by: snoozeTime)
     }
 }
 
