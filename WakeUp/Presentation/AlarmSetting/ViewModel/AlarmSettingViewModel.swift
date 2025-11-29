@@ -10,8 +10,8 @@ import SwiftUI
 
 final class AlarmSettingViewModel: ObservableObject {
     @Published private(set) var weekDays: Set<Weekday> = []
+    @Published private(set) var isEditing: Bool = false
     @Published var alarm: AlarmEntity
-    @Published var isEditing: Bool = false
     
     private let alarmManager: AlarmManager
     
