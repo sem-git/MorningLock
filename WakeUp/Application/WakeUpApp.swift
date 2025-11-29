@@ -16,6 +16,8 @@ struct WakeUpApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var delegate
     @Environment(\.scenePhase) var scenePhase
     
+    @StateObject private var selectionStore = AppLockSelectionStore.shared
+    
     var body: some Scene {
         WindowGroup {
             RootView()
@@ -35,6 +37,7 @@ struct WakeUpApp: App {
                         break
                     }
                 }
+                .environmentObject(selectionStore)
         }
     }
 }
