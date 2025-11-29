@@ -19,9 +19,12 @@ struct RootView: View {
             if isOnboarding {
                 OnboardingView()                
             } else {
-                MainView()                    
+                MainView()
+                    .transition(.move(edge: .trailing))
             }
         }
+        .background(Color.gray800)
+        .animation(.easeInOut, value: isOnboarding)
     }
 }
 

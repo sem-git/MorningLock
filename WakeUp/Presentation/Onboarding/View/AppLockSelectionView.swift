@@ -36,7 +36,9 @@ struct AppLockSelectionView: View {
                 MainButton(
                     title: "건너뛰기",
                     buttonStyle: .text
-                )
+                ) {
+                    viewModel.isOnboarding = false
+                }
                 
                 MainButton(
                     title: "추가하기"
@@ -59,9 +61,16 @@ struct AppLockSelectionView: View {
                         
                         ToolbarItem(placement: .confirmationAction) {
                             Button("완료") {
-                                selectionStore.save()
-                                isPickerPresented = false
-                                viewModel.isOnboarding = false
+                                withAnimation {
+                                    selectionStore.save()
+                                    isPickerPresented = false
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    withAnimation {
+                                        viewModel.isOnboarding = false
+                                    }
+                                }
                             }
                         }
                     }
