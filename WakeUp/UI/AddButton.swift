@@ -22,7 +22,7 @@ struct AddButton: View {
             Circle()
                 .frame(width: 64, height: 64)
                 .foregroundStyle(.gray600)
-                .overlay(Image(.plusIcon))
+                .overlay(Image(.icPlus))
         }
     }
 }

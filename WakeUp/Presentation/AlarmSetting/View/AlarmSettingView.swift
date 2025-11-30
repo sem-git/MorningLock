@@ -77,7 +77,7 @@ struct AlarmSettingView: View {
     
     private var backButton: some View {
         Button(action: { dismiss() }) {
-            Image(.backbutton)
+            Image(.icBack)
                 .font(.system(size: 16, weight: .bold))
                 .foregroundStyle(.white)
         }
@@ -113,7 +113,7 @@ struct SettingOption: View {
                         .foregroundStyle(.gray)
                 }
                 Spacer()
-                Image(.rightIcon)
+                Image(.icRight)
             }
             .padding()
             .background(Color.white.opacity(0.1))
