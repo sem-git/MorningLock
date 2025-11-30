@@ -81,19 +81,28 @@ struct AppRecommendationView: View {
                 MainButton(
                     title: "건너뛰기",
                     buttonStyle: .text
-                )
+                ) {
+                    addDefaultAlarm()
+                }
                 
                 MainButton(
                     title: "추가하기",
                     disabled: isAddButtonDisabled
                 ) {
-                    viewModel.isOnboarding = false
+                    addDefaultAlarm()
                 }
             }
         }
         .navigationBarBackButtonHidden(true)
         .padding(.horizontal, 16)
         .background(.gray800)
+    }
+    
+    func addDefaultAlarm() {
+        Task {
+            await AlarmManager.shared.addAlarm(.init())
+            viewModel.isOnboarding = false
+        }
     }
 }
 
