@@ -23,6 +23,7 @@ final class AlarmManager {
     private var timer: Timer?
     
     @Published private(set) var isAlarmPlaying: Bool = false
+    @Published private(set) var snoozeCount: Int = 1
     
     // MARK: - Initializer
     private init(
@@ -97,6 +98,10 @@ final class AlarmManager {
         stopCurrentAlarm()
         audioPlayer.play(atTime: interval, volume: 0.5)
         startTimer(scheduledAlarm.time.getTime + interval)
+        let timer = Timer(timeInterval: interval, repeats: false) { _ in
+            self.snoozeCount += 1
+        }
+        RunLoop.main.add(timer, forMode: .common)
     }
     
     // MARK: - 알람 활성화/비활성화
@@ -108,7 +113,7 @@ final class AlarmManager {
     
     func deactiveAlarm() {
         guard var currentAlarm = scheduledAlarm else { return }
-        
+        snoozeCount = 1
         scheduledAlarm = nil
         timer?.invalidate()
         isAlarmPlaying = false
