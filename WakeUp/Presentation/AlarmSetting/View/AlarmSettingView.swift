@@ -16,7 +16,7 @@ struct AlarmSettingView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 1) {
                     // 시간 설정
-                    DatePicker("", selection: $viewModel.time, displayedComponents: .hourAndMinute)
+                    DatePicker("", selection: $viewModel.alarm.time, displayedComponents: .hourAndMinute)
                         .datePickerStyle(.wheel)
                         .labelsHidden()
                     
@@ -42,16 +42,17 @@ struct AlarmSettingView: View {
                     .padding(16)
                     .background(.gray600)
                     .cornerRadius(16)
-                    HStack {
-                        Text("다시 알림")
-                            .font(.system(size: 17, weight: .semibold))
-                            .foregroundStyle(.gray50)
-                        
-                        Toggle("Repeat Alarm", isOn: .constant(false))
-                    }
-                    .padding(16)
-                    .background(.gray600)
-                    .cornerRadius(16)
+                        HStack {
+                            Text("5분 후 다시 알림")
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundStyle(.gray50)
+                            
+                            Toggle("", isOn: $viewModel.alarm.isActive)
+                        }
+                        .padding(16)
+                        .background(.gray600)
+                        .cornerRadius(16)
+                    
                 }
                 .padding(16)
             }
@@ -61,10 +62,9 @@ struct AlarmSettingView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .overlay(alignment: .bottom, content: {
-            let isEditing = viewModel.alarm != nil
-            
-            MainButton(title: isEditing ? "수정 하기" : "저장 하기") {
-                if isEditing {
+                        
+            MainButton(title: viewModel.isEditing ? "수정 하기" : "저장 하기") {
+                if viewModel.isEditing {
                     updateAlarm()
                 } else {
                     saveAlarm()
