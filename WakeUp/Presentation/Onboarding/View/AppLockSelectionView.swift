@@ -37,7 +37,6 @@ struct AppLockSelectionView: View {
                     title: "건너뛰기",
                     buttonStyle: .text
                 ) {
-                    viewModel.isOnboarding = false
                     addDefaultAlarm()
                 }
                 
@@ -64,14 +63,8 @@ struct AppLockSelectionView: View {
                             Button("완료") {
                                 withAnimation {
                                     selectionStore.save()
+                                    addDefaultAlarm()
                                     isPickerPresented = false
-                                }
-                                
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    withAnimation {
-                                        addDefaultAlarm()
-                                        viewModel.isOnboarding = false
-                                    }
                                 }
                             }
                         }
@@ -83,6 +76,7 @@ struct AppLockSelectionView: View {
     func addDefaultAlarm() {
         Task {
             await AlarmManager.shared.addAlarm(.init())
+            viewModel.isOnboarding = false
         }
     }
 }
