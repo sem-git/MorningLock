@@ -25,7 +25,7 @@ enum MainButtonStyle {
         case .default:
             return disabled ? .gray400 : .gray50
         case .text:
-            return .gray200
+            return disabled ? .gray400 : .gray200
         }
     }
 }

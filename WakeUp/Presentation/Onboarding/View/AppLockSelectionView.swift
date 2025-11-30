@@ -38,6 +38,7 @@ struct AppLockSelectionView: View {
                     buttonStyle: .text
                 ) {
                     viewModel.isOnboarding = false
+                    addDefaultAlarm()
                 }
                 
                 MainButton(
@@ -68,6 +69,7 @@ struct AppLockSelectionView: View {
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                     withAnimation {
+                                        addDefaultAlarm()
                                         viewModel.isOnboarding = false
                                     }
                                 }
@@ -75,6 +77,12 @@ struct AppLockSelectionView: View {
                         }
                     }
             }
+        }
+    }
+    
+    func addDefaultAlarm() {
+        Task {
+            await AlarmManager.shared.addAlarm(.init())
         }
     }
 }

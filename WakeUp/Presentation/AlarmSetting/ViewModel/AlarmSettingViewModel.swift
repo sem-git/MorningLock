@@ -9,18 +9,22 @@ import Combine
 import SwiftUI
 
 final class AlarmSettingViewModel: ObservableObject {
-    @Published var weekDays: Set<Weekday> = []
-    @Published var time = Date()
+    @Published private(set) var weekDays: Set<Weekday> = []
+    @Published private(set) var isEditing: Bool = false
+    @Published var alarm: AlarmEntity
     
-    var alarm: AlarmEntity?
-        
     private let alarmManager: AlarmManager
     
-    init(alarm: AlarmEntity? = nil, alarmManager: AlarmManager = AlarmManager.shared) {
+    init(
+        alarm: AlarmEntity? = nil,
+        alarmManager: AlarmManager = .shared
+    ) {
         self.alarmManager = alarmManager
+        self.isEditing = alarm != nil
+        let alarm = alarm ?? .init()
         self.alarm = alarm
-        self.time = alarm?.time ?? Date()
-        self.weekDays = Set(alarm?.repeatDay ?? [])
+        self.weekDays = Set(alarm.repeatDay)
+
     }
     
     func selecteDay(_ day: Weekday) {
@@ -32,29 +36,18 @@ final class AlarmSettingViewModel: ObservableObject {
     }
     
     func saveAlarm() async {
-        let alarmEntity = AlarmEntity(
-            id: UUID(),
-            time: time,
-            isActive: true,
-            repeatDay: Array(weekDays)
-        )
-                
-        await alarmManager.addAlarm(alarmEntity)        
+        alarm.repeatDay = Array(weekDays)
+        await alarmManager.addAlarm(alarm)
     }
     
     func updateAlarm() {
-        if let alarm {
-            var updateAlarm = alarm
-            updateAlarm.time = time
-            
-            // 날짜를 수정한경우
-            let oldWeekDays = Set(updateAlarm.repeatDay)
-            let removedWeekDay = oldWeekDays.subtracting(weekDays)
-            let addWeekDay = weekDays.union(oldWeekDays).subtracting(removedWeekDay)
-            
-            updateAlarm.repeatDay = Array(addWeekDay)
-                       
-            alarmManager.updateAlarm(updateAlarm)
-        }
+        // 날짜를 수정한경우
+        let oldWeekDays = Set(alarm.repeatDay)
+        let removedWeekDay = oldWeekDays.subtracting(weekDays)
+        let addWeekDay = weekDays.union(oldWeekDays).subtracting(removedWeekDay)
+        
+        alarm.repeatDay = Array(addWeekDay)
+        alarmManager.updateAlarm(alarm)
+        
     }
 }

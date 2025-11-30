@@ -29,7 +29,7 @@ class CoreDataManager {
     func addAlarm(alarm: AlarmEntity) async throws {
         let newAlarm = Alarm(context: context)
         newAlarm.id = alarm.id
-        newAlarm.isActive = true
+        newAlarm.isActive = alarm.isActive
         newAlarm.time = alarm.time
         newAlarm.repeatDay = alarm.repeatDay.map { $0.rawValue }
         

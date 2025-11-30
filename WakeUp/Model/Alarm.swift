@@ -29,7 +29,19 @@ struct AlarmEntity: Hashable, Identifiable {
         formatter.dateFormat = "a"
         let meridiem = formatter.string(from: time)
         return meridiem
-    }       
+    }
+    
+    init(
+        id: UUID = .init(),
+        time: Date = .now,
+        isActive: Bool = true,
+        repeatDay: [Weekday] = []
+    ) {
+        self.id = id
+        self.time = time
+        self.isActive = isActive
+        self.repeatDay = repeatDay
+    }
 }
 
 extension AlarmEntity: Comparable {
