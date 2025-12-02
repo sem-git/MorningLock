@@ -15,7 +15,7 @@ struct MainView: View {
     
     // 임시
     @StateObject private var manager = DeviceActivityManager()
-    @State private var selection = FamilyActivitySelection()
+    
     @State private var isPickerPresented = false
     
     var body: some View {
@@ -98,11 +98,11 @@ struct MainView: View {
             // 임시 FamilyActivityPicker 시트
             .sheet(isPresented: $isPickerPresented) {
                 NavigationStack {
-                    FamilyActivityPicker(selection: $selection)
+                    FamilyActivityPicker(selection: $manager.selection)
                         .navigationTitle("앱 선택")
                         .navigationBarTitleDisplayMode(.inline)
                         .navigationBarItems(trailing: Button("완료") {
-                            manager.saveSelection(selection)
+                            manager.saveSelection()
                             isPickerPresented = false
                         })
                 }

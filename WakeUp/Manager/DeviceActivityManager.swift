@@ -17,6 +17,7 @@ final class DeviceActivityManager: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     @Published var selectedApp: [ApplicationToken]? = nil
+    @Published var selection = FamilyActivitySelection()
     
     init() {
         dataBind()
@@ -39,14 +40,14 @@ final class DeviceActivityManager: ObservableObject {
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { _ in }, receiveValue: { value in
                     self.selectedApp = value.isEmpty ? nil : value
+                    self.selection.applicationTokens = Set(value)
                 })
                 .store(in: &cancellables)
         }
-
     }
     
     // Extension에서 읽을 앱 선택 정보 저장
-    func saveSelection(_ selection: FamilyActivitySelection) {
+    func saveSelection() {
         let model = AppModel(selection: selection)
         
         do {
