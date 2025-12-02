@@ -52,20 +52,15 @@ struct MainView: View {
                                     .padding(.top, 8)
                                 
                                 HStack(spacing: 12) {
-                                    if Array(selection.applicationTokens).isEmpty {
-                                        Image(.imgNoitem)
-                                            .onTapGesture {
-                                                isPickerPresented = true
-                                        }
-                                    } else {
-                                        ForEach(Array(Array(selection.applicationTokens).enumerated()).prefix(5), id: \.self.element) { index, token in
-                                            if index >= 4 && Array(selection.applicationTokens).count > 5 {
+                                    if let selection = manager.selectedApp {
+                                        ForEach(Array(selection.enumerated()).prefix(5), id: \.self.element) { index, token in
+                                            if index >= 4 && selection.count > 5 {
                                                 Rectangle()
                                                     .frame(width: 56, height: 56)
                                                     .foregroundStyle(.gray700)
                                                     .cornerRadius(16)
                                                     .overlay(
-                                                        Text("+\(Array(selection.applicationTokens).count - 4)")
+                                                        Text("+\(selection.count - 4)")
                                                             .font(.system(size: 17, weight: .semibold))
                                                             .foregroundStyle(.gray50)
                                                     )
@@ -79,9 +74,13 @@ struct MainView: View {
                                                     .onTapGesture {
                                                         isPickerPresented = true
                                                     }
-                                            }
-                                            
+                                            }                                            
                                         }
+                                    } else {
+                                        Image(.imgNoitem)
+                                            .onTapGesture {
+                                                isPickerPresented = true
+                                            }
                                     }
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -102,6 +101,10 @@ struct MainView: View {
                     FamilyActivityPicker(selection: $selection)
                         .navigationTitle("앱 선택")
                         .navigationBarTitleDisplayMode(.inline)
+                        .navigationBarItems(trailing: Button("완료") {
+                            manager.saveSelection(selection)
+                            isPickerPresented = false
+                        })
                 }
             }
             .sheet(
