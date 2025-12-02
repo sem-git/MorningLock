@@ -23,16 +23,26 @@ final class DeviceActivityManager: ObservableObject {
     }
     
     func dataBind() {
-        sharedContainer?
-            .publisher(for: \.testKey)
-            .decode(type: AppModel.self, decoder: JSONDecoder())            
-            .map { Array($0.selection.applicationTokens) }
-            .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { _ in
-            }, receiveValue: {
-                self.selectedApp = $0.isEmpty ? nil : $0
-            })
-            .store(in: &cancellables)
+        if let container = sharedContainer {
+            if container.value(forKey: "testKey") == nil {
+                // 처음에 저장소가 존재하지 않는경우 초기화
+                let defaultAppModel = AppModel(selection: .init())
+                if let data = try? JSONEncoder().encode(defaultAppModel) {
+                    container.set(data, forKey: "testKey")
+                }
+            }
+
+            container
+                .publisher(for: \.testKey)
+                .decode(type: AppModel.self, decoder: JSONDecoder())
+                .map { Array($0.selection.applicationTokens) }
+                .receive(on: RunLoop.main)
+                .sink(receiveCompletion: { _ in }, receiveValue: { value in
+                    self.selectedApp = value.isEmpty ? nil : value
+                })
+                .store(in: &cancellables)
+        }
+
     }
     
     // Extension에서 읽을 앱 선택 정보 저장
