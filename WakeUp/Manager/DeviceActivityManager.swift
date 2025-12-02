@@ -25,13 +25,12 @@ final class DeviceActivityManager: ObservableObject {
     func dataBind() {
         sharedContainer?
             .publisher(for: \.testKey)
-            .decode(type: AppModel.self, decoder: JSONDecoder())
+            .decode(type: AppModel.self, decoder: JSONDecoder())            
             .map { Array($0.selection.applicationTokens) }
-            .replaceNil(with: [])
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { _ in
             }, receiveValue: {
-                self.selectedApp = $0
+                self.selectedApp = $0.isEmpty ? nil : $0
             })
             .store(in: &cancellables)
     }
