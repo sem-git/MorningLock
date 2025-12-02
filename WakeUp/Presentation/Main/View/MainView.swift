@@ -66,7 +66,9 @@ struct MainView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(.gray600)
                             .cornerRadius(16)
+                            .disabled(!alarm.isActive)
                         }
+                        .opacity(alarm.isActive ? 1 : 0.3)
                     }
                 }
                 .padding(16)

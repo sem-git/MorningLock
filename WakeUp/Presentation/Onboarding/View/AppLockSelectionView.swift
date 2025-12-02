@@ -75,7 +75,13 @@ struct AppLockSelectionView: View {
     
     func addDefaultAlarm() {
         Task {
-            await AlarmManager.shared.addAlarm(.init())
+            let alarm = AlarmEntity(
+                time: Date().addingTimeInterval(3 * 60),
+                isActive: true,
+                repeatDay: []
+            )
+            
+            await AlarmManager.shared.addAlarm(alarm)
             viewModel.isOnboarding = false
         }
     }
