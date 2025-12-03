@@ -10,7 +10,7 @@ import UserNotifications
 final class NotificationManager {
     static let shared = NotificationManager()
     
-    private let center = UNUserNotificationCenter.current()
+    private let center = UNUserNotificationCenter.current()    
     
     private init() {}
     

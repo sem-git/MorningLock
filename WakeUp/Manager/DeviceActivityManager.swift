@@ -77,12 +77,7 @@ final class DeviceActivityManager: ObservableObject {
                     repeats: false
                 ),
                 events: events
-            )
-            
-            print("DeviceActivity 모니터링 시작")
-            print("start:", startComponents)
-            print("end:", endComponents)
-            
+            )               
         } catch {
             print("DeviceActivity 모니터링 실패:", error)
         }
