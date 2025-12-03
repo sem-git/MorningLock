@@ -50,8 +50,11 @@ struct MainView: View {
                                     .font(.system(size: 15, weight: .regular))
                                     .foregroundStyle(.gray200)
                                     .padding(.top, 8)
+                                    .onChange(of: manager.selection) { old, new in
+                                        print(new)
+                                    }
                                 
-                                HStack(spacing: 12) {
+                                HStack {
                                     if let selection = manager.selectedApp {
                                         ForEach(Array(selection.enumerated()).prefix(5), id: \.self.element) { index, token in
                                             if index >= 4 && selection.count > 5 {
@@ -74,7 +77,8 @@ struct MainView: View {
                                                     .onTapGesture {
                                                         isPickerPresented = true
                                                     }
-                                            }                                            
+                                            }
+                                       
                                         }
                                     } else {
                                         Image(.imgNoitem)
@@ -85,6 +89,7 @@ struct MainView: View {
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.top, 16)
+                                                              
                             }
                             .padding(16)
                         }

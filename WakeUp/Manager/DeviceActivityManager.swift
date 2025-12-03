@@ -17,7 +17,7 @@ final class DeviceActivityManager: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     @Published var selectedApp: [ApplicationToken]? = nil
-    @Published var selection = FamilyActivitySelection()
+    @Published var selection = FamilyActivitySelection(includeEntireCategory: true)
     
     init() {
         dataBind()
@@ -32,10 +32,10 @@ final class DeviceActivityManager: ObservableObject {
                     container.set(data, forKey: "testKey")
                 }
             }
-
+                   
             container
                 .publisher(for: \.testKey)
-                .decode(type: AppModel.self, decoder: JSONDecoder())
+                .decode(type: AppModel.self, decoder: JSONDecoder())                
                 .map { Array($0.selection.applicationTokens) }
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { _ in }, receiveValue: { value in
@@ -43,6 +43,7 @@ final class DeviceActivityManager: ObservableObject {
                     self.selection.applicationTokens = Set(value)
                 })
                 .store(in: &cancellables)
+            
         }
     }
     
