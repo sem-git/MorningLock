@@ -10,6 +10,13 @@ import Combine
 import FirebaseAnalytics
 
 final class AlarmManager {
+    /// 알람 반복 여부
+    enum AlarmMode {
+        case once
+        case repeating
+        case inactive
+    }
+    
     static let shared = AlarmManager()
     
     // MARK: - Managers
@@ -21,6 +28,7 @@ final class AlarmManager {
     private var alarmQueue: AlarmQueue!
     private var scheduledAlarm: AlarmEntity?
     private var timer: Timer?
+    private var alarmMode: AlarmMode = .repeating
     
     @Published private(set) var isAlarmPlaying: Bool = false
     @Published private(set) var snoozeCount: Int = 1
@@ -35,6 +43,10 @@ final class AlarmManager {
         self.audioPlayer = audioPlayer
         self.notificationManager = notificationManager
         updateAlarmSchedule()
+    }
+    
+    func setAlarmMode(_ mode: AlarmMode) {
+        self.alarmMode = mode
     }
     
     func updateAlarmSchedule(_ completion: (() -> ())? = nil) {
@@ -175,7 +187,15 @@ final class AlarmManager {
             isAlarmPlaying = true
         }
         
+        switch alarmMode {
+        case .once:
+            notificationManager.postImmediateNotification()
+            alarmMode = .inactive
+        case .repeating:
+            notificationManager.postImmediateNotification()
+        case .inactive:            
+            break
+        }
         DeviceActivityManager().startMonitoring()
-        notificationManager.postImmediateNotification()
     }
 }

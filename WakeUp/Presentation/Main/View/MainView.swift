@@ -15,6 +15,8 @@ struct MainView: View {
     
     @EnvironmentObject var selectionStore: AppLockSelectionStore
     
+    @StateObject private var manager = DeviceActivityManager()
+    
     @State private var isPickerPresented = false
     
     var body: some View {
@@ -23,7 +25,7 @@ struct MainView: View {
                 LazyVStack(spacing: 16) {
                     ForEach(Array(viewModel.alarmList.enumerated()), id: \.self.element.id) { (index, alarm) in
                         VStack(spacing: 1) {
-                            // alarmList가 바뀔 때까지 업데이트 안됨
+                            // alarmList가 바뀔 때까지 업데이트 안 됨
                             AlarmView(alarm: Binding(get: {
                                 // 삭제 시 인덱스 오류 방지
                                 if index > viewModel.alarmList.count-1 {
@@ -49,17 +51,49 @@ struct MainView: View {
                                     .font(.system(size: 15, weight: .regular))
                                     .foregroundStyle(.gray200)
                                     .padding(.bottom, 16)
+                                    .onChange(of: manager.selection) { old, new in
+                                        print(new)
+                                    }
                                 
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .stroke(style: StrokeStyle(lineWidth: 1, dash: [2]))
-                                        .foregroundColor(.white)
-                                        .frame(width: 56, height: 56)
-                                    
-                                    Image(.icPlus)
-                                }
-                                .onTapGesture {
-                                    isPickerPresented = true
+                                HStack {
+                                    if let selection = manager.selectedApp {
+                                        ForEach(Array(selection.enumerated()).prefix(5), id: \.self.element) { index, token in
+                                            if index >= 4 && selection.count > 5 {
+                                                Rectangle()
+                                                    .frame(width: 56, height: 56)
+                                                    .foregroundStyle(.gray700)
+                                                    .cornerRadius(16)
+                                                    .overlay(
+                                                        Text("+\(selection.count - 4)")
+                                                            .font(.system(size: 17, weight: .semibold))
+                                                            .foregroundStyle(.gray50)
+                                                    )
+                                                    .onTapGesture {
+                                                        isPickerPresented = true
+                                                    }
+                                            } else {
+                                                Label(token)
+                                                    .labelStyle(AppIconLabelStyle())
+                                                    .frame(width: 56, height: 56)
+                                                    .onTapGesture {
+                                                        isPickerPresented = true
+                                                    }
+                                            }
+                                            
+                                        }
+                                    } else {
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 16)
+                                                .stroke(style: StrokeStyle(lineWidth: 1, dash: [2]))
+                                                .foregroundColor(.white)
+                                                .frame(width: 56, height: 56)
+                                            
+                                            Image(.icPlus)
+                                        }
+                                        .onTapGesture {
+                                            isPickerPresented = true
+                                        }
+                                    }
                                 }
                             }
                             .padding(16)
@@ -120,25 +154,25 @@ struct MainView: View {
                                 disabled: viewModel.snoozeDisabled,
                                 buttonStyle: .text
                             ) {
-                            viewModel.snoozeAlarm()
-                        }
-                        MainButton(title: "알람 끄기") {
-                            viewModel.deactiveAlarm()
+                                viewModel.snoozeAlarm()
+                            }
+                            MainButton(title: "알람 끄기") {
+                                viewModel.deactiveAlarm()
+                            }
                         }
                     }
-                }
-                .presentationDetents([.height(sheetHeight)])
-                .interactiveDismissDisabled(true)
-                .padding(.horizontal, 16)
-                .overlay {
-                    GeometryReader { geometry in
-                        Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
+                    .presentationDetents([.height(sheetHeight)])
+                    .interactiveDismissDisabled(true)
+                    .padding(.horizontal, 16)
+                    .overlay {
+                        GeometryReader { geometry in
+                            Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
+                        }
                     }
-                }
-                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-                    sheetHeight = newHeight
-                }
-            })
+                    .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                        sheetHeight = newHeight
+                    }
+                })
             .navigationBarItems(trailing: contactButton)
             .background(.gray800)
             .onAppear {
@@ -179,3 +213,4 @@ extension MainView {
 #Preview {
     MainView()
 }
+
