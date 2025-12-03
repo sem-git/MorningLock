@@ -41,7 +41,6 @@ struct AlarmView: View {
         }
         .background(.gray600)
         .cornerRadius(16)
-        .opacity(alarm.isActive ? 1 : 0.3)
     }
 }
 

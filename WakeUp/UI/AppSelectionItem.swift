@@ -28,7 +28,7 @@ struct AppSelectionItem: View {
                 
                 Spacer()
                 
-                Image(.check)
+                Image(.icCheck)
                     .renderingMode(.template)
                     .foregroundColor(isSelected ? .gray50 : .gray300)
             }

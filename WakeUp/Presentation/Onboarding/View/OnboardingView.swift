@@ -45,8 +45,8 @@ struct OnboardingView: View {
                     ScreenTimePermissionView()
                 case .notificationPermission:
                     NotificationPermissionView()
-                case .appRecommendation:
-                    AppRecommendationView()
+                case .appLockSelection:
+                    AppLockSelectionView()
                 }
             }
         }

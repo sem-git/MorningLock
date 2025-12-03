@@ -11,27 +11,35 @@ struct PermissionGuideView: View {
     @EnvironmentObject var viewModel: OnboardingViewModel
     
     var body: some View {
-        VStack(alignment: .center, spacing: 0) {
-            Text("스크린타임과 알람 권한을\n꼭 허용해주세요")
-                .font(.system(size: 22, weight: .bold))
-                .foregroundColor(.gray50)
+        ZStack {
+            Color.gray800
+                .ignoresSafeArea()
+            
+            Image(.imgScreentime)
+            
+            
+            VStack(spacing: 0) {
+                VStack(spacing: 12) {
+                    Text("스크린타임과 알람 권한을\n꼭 허용해주세요")
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundColor(.gray50)
+                        .multilineTextAlignment(.center)
+                    
+                    Text("아침 잠금을 사용하기 위해서 꼭 필요해요\n아래의 화면이 뜨면 계속을 눌러주세요")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(.gray200)
+                        .multilineTextAlignment(.center)
+                }
                 .padding(.top, 48)
-                .multilineTextAlignment(.center)
-            
-            Text("아침 잠금을 사용하기 위해서 꼭 필요해요\n아래의 화면이 뜨면 계속을 눌러주세요")
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundColor(.gray200)
-                .padding(.top, 12)
-                .multilineTextAlignment(.center)
-            
-            Spacer()
-            
-            MainButton(title: "다음으로") {
-                viewModel.navigate(to: .screenTimePermission)
+                
+                Spacer()
+                
+                MainButton(title: "다음으로") {
+                    viewModel.navigate(to: .screenTimePermission)
+                }
             }
+            .padding(.horizontal, 16)
         }
-        .padding(.horizontal, 16)
-        .background(.gray800)
         .navigationBarBackButtonHidden(true)
     }
 }
@@ -39,4 +47,3 @@ struct PermissionGuideView: View {
 #Preview {
     PermissionGuideView()
 }
-

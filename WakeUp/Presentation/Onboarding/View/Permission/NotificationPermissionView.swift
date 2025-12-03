@@ -36,7 +36,7 @@ struct NotificationPermissionView: View {
         .onAppear {
             viewModel.isRequestingPermission = true
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 viewModel.requestNotificationPermission()
             }
         }

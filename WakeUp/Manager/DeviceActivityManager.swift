@@ -26,16 +26,16 @@ final class DeviceActivityManager: ObservableObject {
     func dataBind() {
         if let container = sharedContainer {
             if container.value(forKey: "testKey") == nil {
-                // 처음에 저장소가 존재하지 않는경우 초기화
+                // 처음에 저장소가 존재하지 않는 경우 초기화
                 let defaultAppModel = AppModel(selection: .init())
                 if let data = try? JSONEncoder().encode(defaultAppModel) {
                     container.set(data, forKey: "testKey")
                 }
             }
-                   
+            
             container
                 .publisher(for: \.testKey)
-                .decode(type: AppModel.self, decoder: JSONDecoder())                
+                .decode(type: AppModel.self, decoder: JSONDecoder())
                 .map { Array($0.selection.applicationTokens) }
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { _ in }, receiveValue: { value in
@@ -44,19 +44,6 @@ final class DeviceActivityManager: ObservableObject {
                 })
                 .store(in: &cancellables)
             
-        }
-    }
-    
-    // Extension에서 읽을 앱 선택 정보 저장
-    func saveSelection() {
-        let model = AppModel(selection: selection)
-        
-        do {
-            let data = try JSONEncoder().encode(model)
-            sharedContainer?.set(data, forKey: "testKey")
-            print("앱 선택 저장 완료")
-        } catch {
-            print("앱 선택 저장 실패", error)
         }
     }
     
@@ -77,7 +64,7 @@ final class DeviceActivityManager: ObservableObject {
                     repeats: false
                 ),
                 events: events
-            )               
+            )
         } catch {
             print("DeviceActivity 모니터링 실패:", error)
         }

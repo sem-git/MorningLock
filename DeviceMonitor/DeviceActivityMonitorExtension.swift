@@ -13,12 +13,11 @@ import Foundation
 class DeviceActivityMonitorExtension: DeviceActivityMonitor {
     let store = ManagedSettingsStore()
 
-    /// 장치 활동 간격이 시작되었음을 나타냅니다
     override func intervalDidStart(for activity: DeviceActivityName) {
         super.intervalDidStart(for: activity)
         
         if let selection = loadSelectedApps() {
-            print("앱 목록 로드성공")
+            print("앱 목록 로드 성공")
             blockSelectedApps(selection)
         }
     }
@@ -62,6 +61,6 @@ class DeviceActivityMonitorExtension: DeviceActivityMonitor {
         store.shield.applicationCategories = nil
         store.shield.webDomains = nil
         
-        print("⛔️ interval 종료 - 차단 해제")
+        print("interval 종료 - 차단 해제")
     }
 }

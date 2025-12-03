@@ -13,7 +13,8 @@ struct MainView: View {
     @StateObject var viewModel: MainViewModel = MainViewModel()
     @State private var sheetHeight: CGFloat = .zero
     
-    // 임시
+    @EnvironmentObject var selectionStore: AppLockSelectionStore
+    
     @StateObject private var manager = DeviceActivityManager()
     
     @State private var isPickerPresented = false
@@ -21,35 +22,35 @@ struct MainView: View {
     var body: some View {
         NavigationStack(path: $viewModel.path) {
             ScrollView {
-                LazyVStack(spacing: 1) {
+                LazyVStack(spacing: 16) {
                     ForEach(Array(viewModel.alarmList.enumerated()), id: \.self.element.id) { (index, alarm) in
-                        // alarmList가 바뀔 때까지 업데이트 안됨
-                        AlarmView(alarm: Binding(get: {
-                            // 삭제 시 인덱스 오류 방지
-                            if index > viewModel.alarmList.count-1 {
-                                return AlarmEntity(id: UUID(), time: .now, isActive: false, repeatDay: [])
-                            } else {
-                                return alarm
+                        VStack(spacing: 1) {
+                            // alarmList가 바뀔 때까지 업데이트 안 됨
+                            AlarmView(alarm: Binding(get: {
+                                // 삭제 시 인덱스 오류 방지
+                                if index > viewModel.alarmList.count-1 {
+                                    return AlarmEntity(id: UUID(), time: .now, isActive: false, repeatDay: [])
+                                } else {
+                                    return alarm
+                                }
+                            }, set: {
+                                viewModel.alarmList[index] = $0
+                                viewModel.updateAlarm($0)
+                            }))
+                            .onTapGesture {
+                                viewModel.navigateToAlarmSetting(alarm)
                             }
-                        }, set: {
-                            viewModel.alarmList[index] = $0
-                            viewModel.updateAlarm($0)
-                        }))
-                        .onTapGesture {
-                            viewModel.navigateToAlarmSetting(alarm)
-                        }
-                        
-                        // TODO: 컴포넌트로 만들기
-                        VStack(alignment: .leading, spacing: 0) {
+                            
                             VStack(alignment: .leading, spacing: 0) {
                                 Text("잠글 앱")
                                     .font(.system(size: 17, weight: .semibold))
                                     .foregroundStyle(.gray50)
+                                    .padding(.bottom, 8)
                                 
-                                Text("알람 후 15분동안 잠궈둘게요")
+                                Text("알람 후 15분 동안 잠글게요")
                                     .font(.system(size: 15, weight: .regular))
                                     .foregroundStyle(.gray200)
-                                    .padding(.top, 8)
+                                    .padding(.bottom, 16)
                                     .onChange(of: manager.selection) { old, new in
                                         print(new)
                                     }
@@ -78,23 +79,30 @@ struct MainView: View {
                                                         isPickerPresented = true
                                                     }
                                             }
-                                       
+                                            
                                         }
                                     } else {
-                                        Image(.imgNoitem)
-                                            .onTapGesture {
-                                                isPickerPresented = true
-                                            }
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 16)
+                                                .stroke(style: StrokeStyle(lineWidth: 1, dash: [2]))
+                                                .foregroundColor(.white)
+                                                .frame(width: 56, height: 56)
+                                            
+                                            Image(.icPlus)
+                                        }
+                                        .onTapGesture {
+                                            isPickerPresented = true
+                                        }
                                     }
                                 }
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.top, 16)
-                                                              
                             }
                             .padding(16)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(.gray600)
+                            .cornerRadius(16)
+                            .disabled(!alarm.isActive)
                         }
-                        .background(.gray600)
-                        .cornerRadius(16)
+                        .opacity(alarm.isActive ? 1 : 0.3)
                     }
                 }
                 .padding(16)
@@ -103,13 +111,20 @@ struct MainView: View {
             // 임시 FamilyActivityPicker 시트
             .sheet(isPresented: $isPickerPresented) {
                 NavigationStack {
-                    FamilyActivityPicker(selection: $manager.selection)
-                        .navigationTitle("앱 선택")
-                        .navigationBarTitleDisplayMode(.inline)
-                        .navigationBarItems(trailing: Button("완료") {
-                            manager.saveSelection()
-                            isPickerPresented = false
-                        })
+                    FamilyActivityPicker(selection: $selectionStore.selection)
+                        .toolbar {
+                            ToolbarItem(placement: .principal) {
+                                Text("앱 선택")
+                                    .font(.system(size: 20, weight: .bold))
+                            }
+                            
+                            ToolbarItem(placement: .confirmationAction) {
+                                Button("완료") {
+                                    selectionStore.save()
+                                    isPickerPresented = false
+                                }
+                            }
+                        }
                 }
             }
             .sheet(
