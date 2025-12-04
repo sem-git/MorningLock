@@ -17,6 +17,7 @@ struct WakeUpApp: App {
     @Environment(\.scenePhase) var scenePhase
     
     @StateObject private var selectionStore = AppLockSelectionStore.shared
+    @StateObject private var permissionManager = PermissionManager.shared
     
     var body: some Scene {
         WindowGroup {
@@ -38,6 +39,7 @@ struct WakeUpApp: App {
                     }
                 }
                 .environmentObject(selectionStore)
+                .environmentObject(permissionManager)
         }
     }
 }

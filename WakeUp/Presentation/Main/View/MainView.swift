@@ -14,6 +14,7 @@ struct MainView: View {
     @State private var sheetHeight: CGFloat = .zero
     
     @EnvironmentObject var selectionStore: AppLockSelectionStore
+    @EnvironmentObject var permissionManager: PermissionManager
     
     @StateObject private var manager = DeviceActivityManager()
     
@@ -91,7 +92,20 @@ struct MainView: View {
                                             Image(.icPlus)
                                         }
                                         .onTapGesture {
-                                            isPickerPresented = true
+                                            Task {
+                                                switch permissionManager.screenTimeStatus {
+                                                    
+                                                case .authorized:
+                                                    isPickerPresented = true
+                                                    
+                                                case .unknown, .denied:
+                                                    await permissionManager.requestScreenTime()
+                                                    
+                                                    if permissionManager.screenTimeStatus == .authorized {
+                                                        isPickerPresented = true
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }

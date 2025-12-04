@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ScreenTimePermissionView: View {
     @EnvironmentObject var viewModel: OnboardingViewModel
+    @EnvironmentObject var permissionManager: PermissionManager
     
     var body: some View {
         ZStack {
@@ -36,8 +37,10 @@ struct ScreenTimePermissionView: View {
         .onAppear {
             viewModel.isRequestingPermission = true
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                viewModel.requestScreenTimePermission()
+            Task {
+                await permissionManager.requestScreenTime()
+                viewModel.isRequestingPermission = false
+                viewModel.navigate(to: .notificationPermission)
             }
         }
     }
