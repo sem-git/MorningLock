@@ -88,9 +88,11 @@ struct AppLockSelectionView: View {
     
     func addDefaultAlarm() {
         Task {
+            let isActive = permissionManager.notificationStatus == .authorized
+            
             let alarm = AlarmEntity(
                 time: Date().addingTimeInterval(3 * 60),
-                isActive: true,
+                isActive: isActive,
                 repeatDay: []
             )
             

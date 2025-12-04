@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NotificationPermissionView: View {
     @EnvironmentObject var viewModel: OnboardingViewModel
+    @EnvironmentObject var permissionManager: PermissionManager
     
     var body: some View {
         ZStack {
@@ -36,8 +37,10 @@ struct NotificationPermissionView: View {
         .onAppear {
             viewModel.isRequestingPermission = true
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                viewModel.requestNotificationPermission()
+            Task {
+                await permissionManager.requestNotification()
+                viewModel.isRequestingPermission = false
+                viewModel.navigate(to: .appLockSelection)
             }
         }
     }
