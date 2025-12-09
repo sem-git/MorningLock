@@ -16,7 +16,17 @@ class ShieldActionExtension: ShieldActionDelegate {
         // Handle the action as needed.
         switch action {
         case .primaryButtonPressed:
-//            completionHandler(.close)
+            let content = UNMutableNotificationContent()
+            content.title = "남은 시간 확인하기"
+            content.body = "남은 시간을 앱에서 확인해보세요!"
+            content.sound = nil
+            content.userInfo = ["action": "openTimer"]
+            let request = UNNotificationRequest(
+                identifier: UUID().uuidString,
+                content: content,
+                trigger: nil
+            )
+            UNUserNotificationCenter.current().add(request)
             completionHandler(.defer)
         case .secondaryButtonPressed:
             completionHandler(.defer)

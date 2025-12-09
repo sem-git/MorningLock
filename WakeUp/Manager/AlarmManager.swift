@@ -32,7 +32,7 @@ final class AlarmManager {
     private var alarmMode: AlarmMode = .repeating
     
     @Published private(set) var isAlarmPlaying: Bool = false
-    @Published private(set) var snoozeCount: Int = 1
+    @Published private(set) var snoozeCount: Int = 1    
     
     // MARK: - Initializer
     private init(
@@ -196,7 +196,7 @@ final class AlarmManager {
             alarmMode = .inactive
         case .repeating:
             notificationManager.postImmediateNotification()
-        case .inactive:            
+        case .inactive:
             break
         }
     }

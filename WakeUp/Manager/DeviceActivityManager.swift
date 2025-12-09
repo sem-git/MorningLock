@@ -44,8 +44,7 @@ final class DeviceActivityManager: ObservableObject {
                     self.selectedApp = value.isEmpty ? nil : value
                     self.selection.applicationTokens = Set(value)
                 })
-                .store(in: &cancellables)
-            
+                .store(in: &cancellables)            
         }
     }
     

@@ -17,10 +17,17 @@ struct WakeUpApp: App {
     @Environment(\.scenePhase) var scenePhase
     
     @StateObject private var selectionStore = AppLockSelectionStore.shared
+    @State private var timerPresented = true
     
     var body: some Scene {
         WindowGroup {
             RootView()
+                .onReceive(NotificationCenter.default.publisher(for: .openTimer)) { _ in
+                    timerPresented = true
+                }
+                .fullScreenCover(isPresented: $timerPresented, content: {
+                    TimerView()
+                })
                 .onChange(of: scenePhase) { newPhase in
                     switch newPhase {
                     case .background:
@@ -46,7 +53,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     private let alarmManager: AlarmManager = .shared
     
     // 앱의 잠금이 해제되었을떄
-    func applicationProtectedDataDidBecomeAvailable(_ application: UIApplication) {        
+    func applicationProtectedDataDidBecomeAvailable(_ application: UIApplication) {
         alarmManager.setAlarmMode(.repeating)
     }
     
@@ -128,12 +135,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
-        
-        //        if response.notification.request.content.userInfo["type"] as? String == "mission" {
-        //            NotificationCenter.default.post(name: .openMissionView, object: response.notification.request.identifier)
-        //        } else {
-        //            NotificationCenter.default.post(name: .openAlarmView, object: response.notification.request.identifier)
-        //        }
+        if response.notification.request.content.userInfo["action"] as? String == "openTimer" {
+            NotificationCenter.default.post(name: .openTimer, object: response.notification.request.identifier)
+        }
     }
 }
 
@@ -142,4 +146,5 @@ extension Notification.Name {
     static let closeMissionView = Notification.Name("closeMissionView")
     static let openAlarmView = Notification.Name("openAlarmView")
     static let closeAlarmView = Notification.Name("closeAlarmView")
+    static let openTimer = Notification.Name("openTimer")
 }
