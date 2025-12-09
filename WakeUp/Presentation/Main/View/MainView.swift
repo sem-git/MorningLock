@@ -15,7 +15,7 @@ struct MainView: View {
     
     @EnvironmentObject var selectionStore: AppLockSelectionStore
     
-    @StateObject private var manager = DeviceActivityManager()
+    @StateObject private var manager = DeviceActivityManager.shared
     
     @State private var isPickerPresented = false
     

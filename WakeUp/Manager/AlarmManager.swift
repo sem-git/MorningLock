@@ -23,6 +23,7 @@ final class AlarmManager {
     private let dataManager: CoreDataManager
     private let audioPlayer: AudioPlayerManager
     private let notificationManager: NotificationManager
+    private let deviceActivityManager: DeviceActivityManager
     
     // MARK: - Properties
     private var alarmQueue: AlarmQueue!
@@ -37,11 +38,13 @@ final class AlarmManager {
     private init(
         dataManager: CoreDataManager = .shared,
         audioPlayer: AudioPlayerManager = .shared,
-        notificationManager: NotificationManager = .shared
+        notificationManager: NotificationManager = .shared,
+        deviceActivityManager: DeviceActivityManager = .shared
     ) {
         self.dataManager = dataManager
         self.audioPlayer = audioPlayer
         self.notificationManager = notificationManager
+        self.deviceActivityManager = deviceActivityManager
         updateAlarmSchedule()
     }
     
@@ -176,7 +179,7 @@ final class AlarmManager {
          scheduledAlarm = nextAlarm
          let interval = nextAlarm.time.getTime.timeIntervalSinceNow
          audioPlayer.play(atTime: interval, volume: 0.5)
-                  
+         deviceActivityManager.startMonitoring(startAt: nextAlarm.time.getTime)
          startTimer(nextAlarm.time.getTime)
     }
     
@@ -196,6 +199,5 @@ final class AlarmManager {
         case .inactive:            
             break
         }
-        DeviceActivityManager().startMonitoring()
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import ManagedSettings
+import UserNotifications
 
 // Override the functions below to customize the shield actions used in various situations.
 // The system provides a default response for any functions that your subclass doesn't override.
@@ -15,7 +16,8 @@ class ShieldActionExtension: ShieldActionDelegate {
         // Handle the action as needed.
         switch action {
         case .primaryButtonPressed:
-            completionHandler(.close)            
+//            completionHandler(.close)
+            completionHandler(.defer)
         case .secondaryButtonPressed:
             completionHandler(.defer)
         @unknown default:

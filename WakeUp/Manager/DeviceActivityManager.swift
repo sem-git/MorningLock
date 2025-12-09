@@ -6,6 +6,8 @@ import Combine
 
 @MainActor
 final class DeviceActivityManager: ObservableObject {
+    static let shared = DeviceActivityManager()
+    
     private let center = DeviceActivityCenter()
     private let events: [DeviceActivityEvent.Name: DeviceActivityEvent] = [
         .encouraged: DeviceActivityEvent(
@@ -19,7 +21,7 @@ final class DeviceActivityManager: ObservableObject {
     @Published var selectedApp: [ApplicationToken]? = nil
     @Published var selection = FamilyActivitySelection(includeEntireCategory: true)
     
-    init() {
+    private init() {
         dataBind()
     }
     
@@ -48,9 +50,9 @@ final class DeviceActivityManager: ObservableObject {
     }
     
     // 모니터링 시작
-    func startMonitoring() {
+    func startMonitoring(startAt date: Date) {
         let now = Date()
-        let end = Calendar.current.date(byAdding: .minute, value: 15, to: now)!
+        let end = Calendar.current.date(byAdding: .minute, value: 15, to: date)!
         
         let startComponents = fullDateComponents(from: now)
         let endComponents = fullDateComponents(from: end)
