@@ -14,22 +14,62 @@ final class DeviceActivityManager: ObservableObject {
             threshold: DateComponents(minute: 1)
         )
     ]
+    // MARK: - AppGruop Store
+    /// 앱그룹 저장소
     private let sharedContainer = UserDefaults(suiteName: "group.com.awayke")
-        
+    /// 앱그룹 저장소 Key
+    private let keyName = "testKey"
+    
+    // MARK: - Properties
     /// 앱잠금 종료 시간 기록
     private var endTime = Date()
     private var cancellables = Set<AnyCancellable>()
     private var timer: AnyCancellable?
     
+    // MARK: - State
+    /// 잠금 앱
     @Published var selectedApp: [ApplicationToken]? = nil
     @Published var selection = FamilyActivitySelection(includeEntireCategory: true)
+    /// 앱잠금 남은시간
     @Published var remainingTime: TimeInterval = .zero
+    /// 앱잠금 남은시간 표시용
     @Published var percent: Double = 0
     
     private init() {
         dataBind()
     }
     
+    /// 앱그룹 저장소에 잠금앱 저장
+    func save() {
+        let model = AppModel(selection: selection)
+        do {
+            let data = try JSONEncoder().encode(model)
+            sharedContainer?.set(data, forKey: keyName)
+            print("앱 잠금 선택 저장 완료")
+        } catch {
+            print("선택 저장 실패:", error)
+        }
+    }
+    
+    /// 잠금앱 불러오기
+    func load() {
+        guard let data = sharedContainer?.data(forKey: keyName) else { return }
+        do {
+            let model = try JSONDecoder().decode(AppModel.self, from: data)
+            selection = model.selection
+            print("앱 잠금 선택 로드 완료")
+        } catch {
+            print("선택 로드 실패:", error)
+        }
+    }
+    
+    /// 잠금앱 초기화
+    func clear() {
+        sharedContainer?.removeObject(forKey: keyName)
+        selection = .init()
+    }
+    
+    /// 잠금앱 불러오기
     func dataBind() {
         if let container = sharedContainer {
             if container.value(forKey: "testKey") == nil {
@@ -49,15 +89,15 @@ final class DeviceActivityManager: ObservableObject {
                     self.selectedApp = value.isEmpty ? nil : value
                     self.selection.applicationTokens = Set(value)
                 })
-                .store(in: &cancellables)            
+                .store(in: &cancellables)
         }
     }
     
-    // 모니터링 시작
+    /// 모니터링 시작
     func startMonitoring(startAt date: Date) {
         let now = Date()
         let end = Calendar.current.date(byAdding: .minute, value: 15, to: date)!
-      
+        
         let startComponents = fullDateComponents(from: now)
         let endComponents = fullDateComponents(from: end)
         
@@ -77,7 +117,7 @@ final class DeviceActivityManager: ObservableObject {
         }
     }
     
-    // 모니터링 중지
+    /// 모니터링 중지
     func stopMonitoring() {
         center.stopMonitoring([.testName])
         timer = nil

@@ -13,9 +13,7 @@ struct MainView: View {
     @StateObject var viewModel: MainViewModel = MainViewModel()
     @State private var sheetHeight: CGFloat = .zero
     
-    @EnvironmentObject var selectionStore: AppLockSelectionStore
-    
-    @StateObject private var manager = DeviceActivityManager.shared
+    @EnvironmentObject var deviceManager: DeviceActivityManager
     
     @State private var isPickerPresented = false
     
@@ -51,12 +49,9 @@ struct MainView: View {
                                     .font(.system(size: 15, weight: .regular))
                                     .foregroundStyle(.gray200)
                                     .padding(.bottom, 16)
-                                    .onChange(of: manager.selection) { old, new in
-                                        print(new)
-                                    }
                                 
                                 HStack {
-                                    if let selection = manager.selectedApp {
+                                    if let selection = deviceManager.selectedApp {
                                         ForEach(Array(selection.enumerated()).prefix(5), id: \.self.element) { index, token in
                                             if index >= 4 && selection.count > 5 {
                                                 Rectangle()
@@ -111,7 +106,7 @@ struct MainView: View {
             // 임시 FamilyActivityPicker 시트
             .sheet(isPresented: $isPickerPresented) {
                 NavigationStack {
-                    FamilyActivityPicker(selection: $selectionStore.selection)
+                    FamilyActivityPicker(selection: $deviceManager.selection)
                         .toolbar {
                             ToolbarItem(placement: .principal) {
                                 Text("앱 선택")
@@ -120,7 +115,7 @@ struct MainView: View {
                             
                             ToolbarItem(placement: .confirmationAction) {
                                 Button("완료") {
-                                    selectionStore.save()
+                                    deviceManager.save()
                                     isPickerPresented = false
                                 }
                             }

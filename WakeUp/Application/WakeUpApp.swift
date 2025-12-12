@@ -16,7 +16,7 @@ struct WakeUpApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var delegate
     @Environment(\.scenePhase) var scenePhase
     
-    @StateObject private var selectionStore = AppLockSelectionStore.shared
+    @StateObject private var deviceManager = DeviceActivityManager.shared
     @State private var timerPresented = false
     
     var body: some Scene {
@@ -47,7 +47,7 @@ struct WakeUpApp: App {
                         break
                     }
                 }
-                .environmentObject(selectionStore)
+                .environmentObject(deviceManager)
         }
     }
 }
