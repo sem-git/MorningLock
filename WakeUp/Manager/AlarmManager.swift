@@ -29,7 +29,7 @@ final class AlarmManager {
     private var alarmQueue: AlarmQueue!
     private var scheduledAlarm: AlarmEntity?
     private var timer: Timer?
-    private var alarmMode: AlarmMode = .repeating
+    private var alarmMode: AlarmMode = .once
     
     @Published private(set) var isAlarmPlaying: Bool = false
     @Published private(set) var snoozeCount: Int = 1    
@@ -111,6 +111,7 @@ final class AlarmManager {
     func snoozeAlarm(by interval: TimeInterval) {
         guard let scheduledAlarm else { return }
         stopCurrentAlarm()
+        alarmMode = .once
         audioPlayer.play(atTime: interval, volume: 0.5)
         startTimer(scheduledAlarm.time.getTime + interval)
         let timer = Timer(timeInterval: interval, repeats: false) { _ in
@@ -129,6 +130,7 @@ final class AlarmManager {
     func deactiveAlarm() {
         guard var currentAlarm = scheduledAlarm else { return }
         snoozeCount = 1
+        alarmMode = .once
         scheduledAlarm = nil
         timer?.invalidate()
         isAlarmPlaying = false
