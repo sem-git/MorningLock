@@ -15,11 +15,16 @@ final class DeviceActivityManager: ObservableObject {
         )
     ]
     private let sharedContainer = UserDefaults(suiteName: "group.com.awayke")
-    
+        
+    /// 앱잠금 종료 시간 기록
+    private var endTime = Date()
     private var cancellables = Set<AnyCancellable>()
+    private var timer: AnyCancellable?
     
     @Published var selectedApp: [ApplicationToken]? = nil
     @Published var selection = FamilyActivitySelection(includeEntireCategory: true)
+    @Published var remainingTime: TimeInterval = .zero
+    @Published var percent: Double = 0
     
     private init() {
         dataBind()
@@ -52,7 +57,7 @@ final class DeviceActivityManager: ObservableObject {
     func startMonitoring(startAt date: Date) {
         let now = Date()
         let end = Calendar.current.date(byAdding: .minute, value: 15, to: date)!
-        
+      
         let startComponents = fullDateComponents(from: now)
         let endComponents = fullDateComponents(from: end)
         
@@ -66,6 +71,7 @@ final class DeviceActivityManager: ObservableObject {
                 ),
                 events: events
             )
+            endTime = end
         } catch {
             print("DeviceActivity 모니터링 실패:", error)
         }
@@ -74,7 +80,27 @@ final class DeviceActivityManager: ObservableObject {
     // 모니터링 중지
     func stopMonitoring() {
         center.stopMonitoring([.testName])
+        timer = nil
         print("DeviceActivity 모니터링 중단")
+    }
+    
+    /// 타이머 시작
+    func startTimer() {
+        let totalTime = TimeInterval(minutes: 15)
+        remainingTime = endTime.timeIntervalSince(.now)
+        percent = (remainingTime / totalTime) * 100
+        
+        timer = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink(receiveValue: { _ in
+                self.remainingTime -= 1
+                self.percent = (self.remainingTime / totalTime) * 100
+            })
+    }
+    
+    /// 타이머 종료
+    func stopTimer() {
+        timer = nil
     }
     
     private func fullDateComponents(from date: Date) -> DateComponents {
