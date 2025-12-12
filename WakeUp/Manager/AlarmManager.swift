@@ -32,7 +32,8 @@ final class AlarmManager {
     private var alarmMode: AlarmMode = .once
     
     @Published private(set) var isAlarmPlaying: Bool = false
-    @Published private(set) var snoozeCount: Int = 1    
+    @Published private(set) var isOpenSheet: Bool = false
+    @Published private(set) var snoozeCount: Int = 1
     
     // MARK: - Initializer
     private init(
@@ -56,6 +57,14 @@ final class AlarmManager {
         buildQueue()
         scheduleAlarm()
         completion?()
+    }
+    
+    func openSheet() {
+        isOpenSheet = true
+    }
+    
+    func dismissSheet() {
+        isOpenSheet = false
     }
     
     // MARK: - 큐 구성
@@ -134,6 +143,7 @@ final class AlarmManager {
         scheduledAlarm = nil
         timer?.invalidate()
         isAlarmPlaying = false
+        isOpenSheet = false
         audioPlayer.stop()
         
         // 반복 알람 여부에 따라 상태 결정
@@ -190,6 +200,7 @@ final class AlarmManager {
     private func activateAlarm() {
         if !isAlarmPlaying {
             isAlarmPlaying = true
+            isOpenSheet = true
         }
         
         switch alarmMode {
