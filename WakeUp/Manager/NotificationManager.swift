@@ -14,20 +14,6 @@ final class NotificationManager {
     
     private init() {}
     
-    func requestAuthorization() async {
-        let settings = await center.notificationSettings()
-        
-        if settings.authorizationStatus == .notDetermined {
-            do {
-                if try await center.requestAuthorization(options: [.alert, .sound, .badge]) {
-                    print("허용함")
-                } else {
-                }
-            } catch {
-            }
-        }
-    }
-    
     func postImmediateNotification() {
         let content = UNMutableNotificationContent()
         content.title = "앱에서 알람 끄기"
