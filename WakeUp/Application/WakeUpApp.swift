@@ -17,7 +17,7 @@ struct WakeUpApp: App {
     @Environment(\.scenePhase) var scenePhase
     
     @StateObject private var selectionStore = AppLockSelectionStore.shared
-    @State private var timerPresented = true
+    @State private var timerPresented = false
     
     var body: some Scene {
         WindowGroup {
