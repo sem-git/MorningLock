@@ -55,6 +55,9 @@ struct TimerView: View {
                 Spacer()
             }
         }
+        .onAppear {
+            deviceManager.startTimer()
+        }
         .onChange(of: scenePhase) { newPhase in
             switch newPhase {
             case .active:
