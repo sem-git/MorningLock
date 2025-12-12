@@ -23,9 +23,12 @@ struct WakeUpApp: App {
         WindowGroup {
             RootView()
                 .onReceive(NotificationCenter.default.publisher(for: .openTimer)) { _ in
+                    AlarmManager.shared.dismissSheet()
                     timerPresented = true
                 }
-                .fullScreenCover(isPresented: $timerPresented, content: {
+                .fullScreenCover(isPresented: $timerPresented, onDismiss: {
+                    AlarmManager.shared.openSheet()
+                }, content: {
                     TimerView()
                 })
                 .onChange(of: scenePhase) { newPhase in
