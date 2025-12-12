@@ -128,25 +128,25 @@ struct MainView: View {
                 }
             }
             // TODO: 타이머뷰가 나타날떄 sheet 비활성화
-//            .sheet(
-//                isPresented: $viewModel.alarmSheetPresented,
-//                onDismiss: {
-//                    viewModel.fetchAlarm()
-//                },
-//                content: {
-//                    alarmSheetView
-//                        .presentationDetents([.height(sheetHeight)])
-//                        .interactiveDismissDisabled(true)
-//                        .padding(.horizontal, 16)
-//                        .overlay {
-//                            GeometryReader { geometry in
-//                                Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
-//                            }
-//                        }
-//                        .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-//                            sheetHeight = newHeight
-//                        }
-//                })
+            .sheet(
+                isPresented: $viewModel.alarmSheetPresented,
+                onDismiss: {
+                    viewModel.fetchAlarm()
+                },
+                content: {
+                    alarmSheetView
+                        .presentationDetents([.height(sheetHeight)])
+                        .interactiveDismissDisabled(true)
+                        .padding(.horizontal, 16)
+                        .overlay {
+                            GeometryReader { geometry in
+                                Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
+                            }
+                        }
+                        .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                            sheetHeight = newHeight
+                        }
+                })
             .navigationBarItems(trailing: contactButton)
             .background(.gray800)
             .onAppear {
