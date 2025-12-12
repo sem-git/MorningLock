@@ -220,6 +220,8 @@ extension MainView {
             
         }, label: {
             Text("문의")
+                .foregroundStyle(.gray50)
+                .font(Font.system(size: 15, weight: .regular))
         })
     }
 }
