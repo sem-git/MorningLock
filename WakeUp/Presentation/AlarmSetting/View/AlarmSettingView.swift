@@ -42,17 +42,6 @@ struct AlarmSettingView: View {
                     .padding(16)
                     .background(.gray600)
                     .cornerRadius(16)
-                        HStack {
-                            Text("5분 후 다시 알림")
-                                .font(.system(size: 17, weight: .semibold))
-                                .foregroundStyle(.gray50)
-                            
-                            Toggle("", isOn: $viewModel.alarm.isActive)
-                        }
-                        .padding(16)
-                        .background(.gray600)
-                        .cornerRadius(16)
-                    
                 }
                 .padding(16)
             }
@@ -62,7 +51,7 @@ struct AlarmSettingView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .overlay(alignment: .bottom, content: {
-                        
+            
             MainButton(title: viewModel.isEditing ? "수정 하기" : "저장 하기") {
                 if viewModel.isEditing {
                     updateAlarm()

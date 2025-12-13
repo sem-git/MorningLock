@@ -36,7 +36,7 @@ final class AlarmManager {
     
     private var alarmQueue: AlarmQueue!
     private var scheduledAlarm: AlarmEntity?
-    private var alarmtimer: Timer?
+    private var alarmTimer: Timer?
     
     // MARK: - Alarm Execution
     
@@ -60,17 +60,17 @@ final class AlarmManager {
     func setAlarmMode(_ mode: AlarmMode) {
         self.alarmMode = mode
     }
-
+    
     func updateAlarmSchedule(_ completion: (() -> ())? = nil) {
         buildQueue()
         scheduleAlarm()
         completion?()
     }
- 
+    
     func openSheet() {
         isOpenSheet = true
     }
-
+    
     func dismissSheet() {
         isOpenSheet = false
     }
@@ -136,17 +136,14 @@ final class AlarmManager {
     // 울리고 있는 알람 일시 중지하고 지정 시간 후 다시 울리도록 설정
     func snoozeAlarm(by interval: TimeInterval) {
         guard let scheduledAlarm else { return }
-        
+       
+        snoozeCount += 1
         
         stopCurrentAlarm()
         alarmMode = .once
         
         audioPlayer.play(atTime: interval, volume: 0.5)
-        startTimer(scheduledAlarm.time.getTime + interval)
-        let timer = Timer(timeInterval: interval, repeats: false) { _ in
-            self.snoozeCount += 1
-        }
-        RunLoop.main.add(timer, forMode: .common)
+        startAlarmTimer(scheduledAlarm.time.getTime + interval)
     }
     
     // 알람 끄기
@@ -158,7 +155,7 @@ final class AlarmManager {
         scheduledAlarm = nil
         
         // 타이머 종료
-        alarmtimer?.invalidate()
+        alarmTimer?.invalidate()
         
         // UI 및 사운드 종료
         isAlarmPlaying = false
@@ -167,29 +164,21 @@ final class AlarmManager {
         
         // 잠금 시작
         deviceActivityManager.startMonitoring(startAt: Date())
-        deviceActivityManager.startTimer()
-
+        
         // 반복 알람 여부 반영
         currentAlarm.isActive = !currentAlarm.repeatDay.isEmpty
         updateAlarm(currentAlarm)
-    }
-
-    // 테스트용?
-    private func activeAlarmImmediately() {
-        stopCurrentAlarm()
-        audioPlayer.play(atTime: 0, volume: 0.5)
-        startTimer(.now)
     }
     
     // 현재 울리고 있는 알람의 사운드 및 타이머 중지
     private func stopCurrentAlarm() {
         audioPlayer.stop()
-        alarmtimer?.invalidate()
+        alarmTimer?.invalidate()
     }
     
     // 지정된 시점에 알람이 활성화되도록 타이머 설정
-    private func startTimer(_ date: Date) {
-        alarmtimer = Timer(
+    private func startAlarmTimer(_ date: Date) {
+        alarmTimer = Timer(
             fireAt: date,
             interval: 5,
             target: self,
@@ -197,35 +186,34 @@ final class AlarmManager {
             userInfo: nil,
             repeats: true
         )
-        RunLoop.main.add(alarmtimer!, forMode: .common)
+        RunLoop.main.add(alarmTimer!, forMode: .common)
     }
     
     // MARK: - 알람 스케줄링
     
     // 알람 예약
     private func scheduleAlarm() {
+        guard let nextAlarm = alarmQueue.peek() else {
+            stopCurrentAlarm()
+            return
+        }
         
-         guard let nextAlarm = alarmQueue.peek() else {
-             stopCurrentAlarm()
-             return
-         }
-                  
-         if let scheduled = scheduledAlarm,
-            scheduled.id == nextAlarm.id,
-            scheduled.time.getTime == nextAlarm.time.getTime {
-             return
-         }
-         
+        if let scheduled = scheduledAlarm,
+           scheduled.id == nextAlarm.id,
+           scheduled.time.getTime == nextAlarm.time.getTime {
+            return
+        }
+        
         // 오늘 울리는 알림이거나 일회성 알림 여부 확인
-         guard nextAlarm.repeatDay.hasToday || nextAlarm.repeatDay.isEmpty else {
-             return
-         }
-                  
+        guard nextAlarm.repeatDay.hasToday || nextAlarm.repeatDay.isEmpty else {
+            return
+        }
+        
         // 알람 등록
-         scheduledAlarm = nextAlarm
-         let interval = nextAlarm.time.getTime.timeIntervalSinceNow
-         audioPlayer.play(atTime: interval, volume: 0.5)
-         startTimer(nextAlarm.time.getTime)
+        scheduledAlarm = nextAlarm
+        let interval = nextAlarm.time.getTime.timeIntervalSinceNow
+        audioPlayer.play(atTime: interval, volume: 0.5)
+        startAlarmTimer(nextAlarm.time.getTime)
     }
     
     // MARK: - 알람 활성화
