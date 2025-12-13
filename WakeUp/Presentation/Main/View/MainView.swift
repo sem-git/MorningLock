@@ -14,6 +14,7 @@ struct MainView: View {
     @State private var sheetHeight: CGFloat = .zero
     
     @EnvironmentObject var deviceManager: DeviceActivityManager
+    @EnvironmentObject var permissionManager: PermissionManager
     
     @State private var isPickerPresented = false
     
@@ -86,7 +87,20 @@ struct MainView: View {
                                             Image(.icPlus)
                                         }
                                         .onTapGesture {
-                                            isPickerPresented = true
+                                            Task {
+                                                switch permissionManager.screenTimeStatus {
+                                                    
+                                                case .authorized:
+                                                    isPickerPresented = true
+                                                    
+                                                case .unknown, .denied:
+                                                    await permissionManager.requestScreenTime()
+                                                    
+                                                    if permissionManager.screenTimeStatus == .authorized {
+                                                        isPickerPresented = true
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -95,7 +109,6 @@ struct MainView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(.gray600)
                             .cornerRadius(16)
-                            .disabled(!alarm.isActive)
                         }
                         .opacity(alarm.isActive ? 1 : 0.3)
                     }
@@ -103,7 +116,6 @@ struct MainView: View {
                 .padding(16)
             }
             .animation(.default, value: viewModel.alarmList.count)
-            // 임시 FamilyActivityPicker 시트
             .sheet(isPresented: $isPickerPresented) {
                 NavigationStack {
                     FamilyActivityPicker(selection: $deviceManager.selection)
@@ -122,7 +134,7 @@ struct MainView: View {
                         }
                 }
             }
-            // TODO: 타이머뷰가 나타날떄 sheet 비활성화
+            // TODO: 타이머 뷰가 나타날 때 sheet 비활성화
             .sheet(
                 isPresented: $viewModel.alarmSheetPresented,
                 onDismiss: {
@@ -165,6 +177,7 @@ struct InnerHeightPreferenceKey: PreferenceKey {
 }
 
 // MARK: - SubViews
+
 extension MainView {
     private func removeRows(at offsets: IndexSet) {
         viewModel.alarmList.remove(atOffsets: offsets)
@@ -175,6 +188,8 @@ extension MainView {
             
         }, label: {
             Text("문의")
+                .foregroundStyle(.gray50)
+                .font(Font.system(size: 15, weight: .regular))
         })
     }
     

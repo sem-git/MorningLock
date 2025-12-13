@@ -9,33 +9,41 @@ import UserNotifications
 import Combine
 import FirebaseAnalytics
 
+// 알람 반복 여부
+enum AlarmMode {
+    case once
+    case repeating
+    case inactive
+}
+
 final class AlarmManager {
-    /// 알람 반복 여부
-    enum AlarmMode {
-        case once
-        case repeating
-        case inactive
-    }
-    
     static let shared = AlarmManager()
     
     // MARK: - Managers
+    
     private let dataManager: CoreDataManager
     private let audioPlayer: AudioPlayerManager
     private let notificationManager: NotificationManager
     private let deviceActivityManager: DeviceActivityManager
     
-    // MARK: - Properties
-    private var alarmQueue: AlarmQueue!
-    private var scheduledAlarm: AlarmEntity?
-    private var timer: Timer?
-    private var alarmMode: AlarmMode = .once
+    // MARK: - Alarm State
     
     @Published private(set) var isAlarmPlaying: Bool = false
     @Published private(set) var isOpenSheet: Bool = false
     @Published private(set) var snoozeCount: Int = 1
     
+    // MARK: - Alarm Scheduling
+    
+    private var alarmQueue: AlarmQueue!
+    private var scheduledAlarm: AlarmEntity?
+    private var alarmTimer: Timer?
+    
+    // MARK: - Alarm Execution
+    
+    private var alarmMode: AlarmMode = .once
+    
     // MARK: - Initializer
+    
     private init(
         dataManager: CoreDataManager = .shared,
         audioPlayer: AudioPlayerManager = .shared,
@@ -67,7 +75,39 @@ final class AlarmManager {
         isOpenSheet = false
     }
     
-    // MARK: - 큐 구성
+    // MARK: - 알람 데이터 관리
+    
+    // 새로운 알람을 CoreData에 저장하고 알람 큐에 추가한 뒤 스케줄 설정
+    func addAlarm(_ alarm: AlarmEntity) async {
+        do {
+            try await dataManager.addAlarm(alarm: alarm)
+            alarmQueue.insert(alarm)
+            scheduleAlarm()
+        } catch {
+            print("Failed to add alarm: \(error)")
+        }
+    }
+    
+    // 기존 알람 정보 수정하여 스케줄 갱신
+    func updateAlarm(_ alarm: AlarmEntity) {
+        do {
+            try dataManager.updateAlarm(alarm: alarm)
+            updateAlarmSchedule()
+        } catch {
+            print("Failure to update alarm: \(error)")
+        }
+    }
+    
+    // 알람 삭제하고 다시 스케줄링
+    func removeAlarm(_ id: UUID) {
+        dataManager.deleteAlarm(id: id)
+        buildQueue()
+        scheduleAlarm()
+    }
+    
+    // MARK: - 알람 큐 관리
+    
+    // CoreData에 저장된 알람 중 현재 시점에서 울릴 알람만 필터링하여 우선순위 큐 생성
     private func buildQueue() {
         alarmQueue = AlarmQueue(sort: .upcoming)
         
@@ -91,73 +131,54 @@ final class AlarmManager {
             .forEach { alarmQueue.insert($0) }
     }
     
-    // MARK: - 알람 관리
-    func addAlarm(_ alarm: AlarmEntity) async {
-        do {
-            try await dataManager.addAlarm(alarm: alarm)
-            alarmQueue.insert(alarm)
-            scheduleAlarm()
-        } catch {
-            print("Failed to add alarm: \(error)")
-        }
-    }
+    // MARK: - 알람 동작 제어
     
-    func updateAlarm(_ alarm: AlarmEntity) {
-        do {
-            try dataManager.updateAlarm(alarm: alarm)
-            updateAlarmSchedule()
-        } catch {
-            print("Failure to update alarm: \(error)")
-        }
-    }
-    
-    func removeAlarm(_ id: UUID) {
-        dataManager.deleteAlarm(id: id)
-        buildQueue()
-        scheduleAlarm()
-    }
-    
+    // 울리고 있는 알람 일시 중지하고 지정 시간 후 다시 울리도록 설정
     func snoozeAlarm(by interval: TimeInterval) {
         guard let scheduledAlarm else { return }
+       
+        snoozeCount += 1
+        
         stopCurrentAlarm()
         alarmMode = .once
+        
         audioPlayer.play(atTime: interval, volume: 0.5)
-        startTimer(scheduledAlarm.time.getTime + interval)
-        let timer = Timer(timeInterval: interval, repeats: false) { _ in
-            self.snoozeCount += 1
-        }
-        RunLoop.main.add(timer, forMode: .common)
+        startAlarmTimer(scheduledAlarm.time.getTime + interval)
     }
     
-    // MARK: - 알람 활성화/비활성화
-    private func activeAlarmImmediately() {
-        stopCurrentAlarm()
-        audioPlayer.play(atTime: 0, volume: 0.5)
-        startTimer(.now)
-    }
-    
+    // 알람 끄기
     func deactiveAlarm() {
         guard var currentAlarm = scheduledAlarm else { return }
-        snoozeCount = 1
+        
+        // 알람 종료
         alarmMode = .once
         scheduledAlarm = nil
-        timer?.invalidate()
+        
+        // 타이머 종료
+        alarmTimer?.invalidate()
+        
+        // UI 및 사운드 종료
         isAlarmPlaying = false
         isOpenSheet = false
         audioPlayer.stop()
         
-        // 반복 알람 여부에 따라 상태 결정
+        // 잠금 시작
+        deviceActivityManager.startMonitoring(startAt: Date())
+        
+        // 반복 알람 여부 반영
         currentAlarm.isActive = !currentAlarm.repeatDay.isEmpty
         updateAlarm(currentAlarm)
     }
     
+    // 현재 울리고 있는 알람의 사운드 및 타이머 중지
     private func stopCurrentAlarm() {
         audioPlayer.stop()
-        timer?.invalidate()
+        alarmTimer?.invalidate()
     }
     
-    private func startTimer(_ date: Date) {
-        timer = Timer(
+    // 지정된 시점에 알람이 활성화되도록 타이머 설정
+    private func startAlarmTimer(_ date: Date) {
+        alarmTimer = Timer(
             fireAt: date,
             interval: 5,
             target: self,
@@ -165,39 +186,43 @@ final class AlarmManager {
             userInfo: nil,
             repeats: true
         )
-        RunLoop.main.add(timer!, forMode: .common)
+        RunLoop.main.add(alarmTimer!, forMode: .common)
     }
     
     // MARK: - 알람 스케줄링
+    
+    // 알람 예약
     private func scheduleAlarm() {
+        guard let nextAlarm = alarmQueue.peek() else {
+            stopCurrentAlarm()
+            return
+        }
         
-         guard let nextAlarm = alarmQueue.peek() else {
-             stopCurrentAlarm()
-             return
-         }
-                  
-         if let scheduled = scheduledAlarm,
-            scheduled.id == nextAlarm.id,
-            scheduled.time.getTime == nextAlarm.time.getTime {
-             return
-         }
-         
+        if let scheduled = scheduledAlarm,
+           scheduled.id == nextAlarm.id,
+           scheduled.time.getTime == nextAlarm.time.getTime {
+            return
+        }
+        
         // 오늘 울리는 알림이거나 일회성 알림 여부 확인
-         guard nextAlarm.repeatDay.hasToday || nextAlarm.repeatDay.isEmpty else {
-             return
-         }
-                  
+        guard nextAlarm.repeatDay.hasToday || nextAlarm.repeatDay.isEmpty else {
+            return
+        }
+        
         // 알람 등록
-         scheduledAlarm = nextAlarm
-         let interval = nextAlarm.time.getTime.timeIntervalSinceNow
-         audioPlayer.play(atTime: interval, volume: 0.5)
-         deviceActivityManager.startMonitoring(startAt: nextAlarm.time.getTime)
-         startTimer(nextAlarm.time.getTime)
+        scheduledAlarm = nextAlarm
+        let interval = nextAlarm.time.getTime.timeIntervalSinceNow
+        audioPlayer.play(atTime: interval, volume: 0.5)
+        startAlarmTimer(nextAlarm.time.getTime)
     }
     
     // MARK: - 알람 활성화
+    
+    // 알람 예약 시간이 됐을 때 호출, 노티 발송
     @objc
     private func activateAlarm() {
+        guard scheduledAlarm != nil else { return }
+        
         if !isAlarmPlaying {
             isAlarmPlaying = true
             isOpenSheet = true

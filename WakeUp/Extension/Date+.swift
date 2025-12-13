@@ -18,7 +18,7 @@ extension Date {
         let today = calendar.date(from: todayComponents)!
         let now = Date()
         
-        // 시간이 지난경우 다음날짜로 설정
+        // 시간이 지난 경우 다음 날짜로 설정
         if today <= now {
             return calendar.date(byAdding: .day, value: 1, to: today)!
         } else {

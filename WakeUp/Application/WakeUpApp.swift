@@ -17,6 +17,8 @@ struct WakeUpApp: App {
     @Environment(\.scenePhase) var scenePhase
     
     @StateObject private var deviceManager = DeviceActivityManager.shared
+    @StateObject private var permissionManager = PermissionManager.shared
+    
     @State private var timerPresented = false
     
     var body: some Scene {
@@ -48,6 +50,7 @@ struct WakeUpApp: App {
                     }
                 }
                 .environmentObject(deviceManager)
+                .environmentObject(permissionManager)
         }
     }
 }
@@ -55,12 +58,12 @@ struct WakeUpApp: App {
 final class AppDelegate: NSObject, UIApplicationDelegate {
     private let alarmManager: AlarmManager = .shared
     
-    // 앱의 잠금이 해제되었을떄
+    // 앱의 잠금이 해제된 경우
     func applicationProtectedDataDidBecomeAvailable(_ application: UIApplication) {
         alarmManager.setAlarmMode(.repeating)
     }
     
-    // 잠금이 해제되지 않은 경우
+    // 앱의 잠금이 해제되지 않은 경우
     func applicationProtectedDataWillBecomeUnavailable(_ application: UIApplication) {
         alarmManager.setAlarmMode(.once)
     }

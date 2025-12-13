@@ -14,6 +14,7 @@ import ExtensionKit
 struct AppLockSelectionView: View {
     @EnvironmentObject var viewModel: OnboardingViewModel
     @EnvironmentObject var deviceManager: DeviceActivityManager
+    @EnvironmentObject var permissionManager: PermissionManager
     
     @State private var isPickerPresented = false
     
@@ -40,11 +41,23 @@ struct AppLockSelectionView: View {
                     addDefaultAlarm()
                 }
                 
-                MainButton(
-                    title: "추가하기"
-                ) {
-                    isPickerPresented = true
+                MainButton(title: "추가하기") {
+                    Task {
+                        switch permissionManager.screenTimeStatus {
+                            
+                        case .authorized:
+                            isPickerPresented = true
+                            
+                        case .unknown, .denied:
+                            await permissionManager.requestScreenTime()
+                            
+                            if permissionManager.screenTimeStatus == .authorized {
+                                isPickerPresented = true
+                            }
+                        }
+                    }
                 }
+                
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -75,9 +88,11 @@ struct AppLockSelectionView: View {
     
     func addDefaultAlarm() {
         Task {
+            let isActive = permissionManager.notificationStatus == .authorized
+            
             let alarm = AlarmEntity(
                 time: Date().addingTimeInterval(3 * 60),
-                isActive: true,
+                isActive: isActive,
                 repeatDay: []
             )
             

@@ -15,31 +15,34 @@ final class DeviceActivityManager: ObservableObject {
         )
     ]
     // MARK: - AppGruop Store
+    
     /// 앱그룹 저장소
     private let sharedContainer = UserDefaults(suiteName: "group.com.awayke")
     /// 앱그룹 저장소 Key
     private let keyName = "testKey"
     
     // MARK: - Properties
-    /// 앱잠금 종료 시간 기록
+    
+    /// 앱 잠금 종료 시간 기록
     private var endTime = Date()
     private var cancellables = Set<AnyCancellable>()
     private var timer: AnyCancellable?
     
     // MARK: - State
+    
     /// 잠금 앱
     @Published var selectedApp: [ApplicationToken]? = nil
     @Published var selection = FamilyActivitySelection(includeEntireCategory: true)
-    /// 앱잠금 남은시간
+    /// 앱 잠금 남은 시간
     @Published var remainingTime: TimeInterval = .zero
-    /// 앱잠금 남은시간 표시용
+    /// 앱 잠금 남은 시간 표시용
     @Published var percent: Double = 0
     
     private init() {
         dataBind()
     }
     
-    /// 앱그룹 저장소에 잠금앱 저장
+    /// 앱그룹 저장소에 잠금 앱 저장
     func save() {
         let model = AppModel(selection: selection)
         do {
@@ -51,7 +54,7 @@ final class DeviceActivityManager: ObservableObject {
         }
     }
     
-    /// 잠금앱 불러오기
+    /// 잠금 앱 불러오기
     func load() {
         guard let data = sharedContainer?.data(forKey: keyName) else { return }
         do {
@@ -63,13 +66,13 @@ final class DeviceActivityManager: ObservableObject {
         }
     }
     
-    /// 잠금앱 초기화
+    /// 잠금 앱 초기화
     func clear() {
         sharedContainer?.removeObject(forKey: keyName)
         selection = .init()
     }
     
-    /// 잠금앱 불러오기
+    /// 잠금 앱 불러오기
     func dataBind() {
         if let container = sharedContainer {
             if container.value(forKey: "testKey") == nil {
@@ -98,7 +101,7 @@ final class DeviceActivityManager: ObservableObject {
         let now = Date()
         let end = Calendar.current.date(byAdding: .minute, value: 15, to: date)!
         
-        let startComponents = fullDateComponents(from: now)
+        let startComponents = fullDateComponents(from: date)
         let endComponents = fullDateComponents(from: end)
         
         do {
