@@ -13,7 +13,7 @@ import ExtensionKit
 
 struct AppLockSelectionView: View {
     @EnvironmentObject var viewModel: OnboardingViewModel
-    @EnvironmentObject var selectionStore: AppLockSelectionStore
+    @EnvironmentObject var deviceManager: DeviceActivityManager
     @EnvironmentObject var permissionManager: PermissionManager
     
     @State private var isPickerPresented = false
@@ -65,7 +65,7 @@ struct AppLockSelectionView: View {
         .background(.gray800)
         .sheet(isPresented: $isPickerPresented) {
             NavigationStack {
-                FamilyActivityPicker(selection: $selectionStore.selection)
+                FamilyActivityPicker(selection: $deviceManager.selection)
                     .toolbar {
                         ToolbarItem(placement: .principal) {
                             Text("앱 선택")
@@ -75,7 +75,7 @@ struct AppLockSelectionView: View {
                         ToolbarItem(placement: .confirmationAction) {
                             Button("완료") {
                                 withAnimation {
-                                    selectionStore.save()
+                                    deviceManager.save()
                                     addDefaultAlarm()
                                     isPickerPresented = false
                                 }
