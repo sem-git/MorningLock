@@ -17,7 +17,6 @@ struct AddButton: View {
             } label: {
                 Label("알람 추가", systemImage: "clock")
             }
-
         } label: {
             Circle()
                 .frame(width: 64, height: 64)

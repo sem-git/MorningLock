@@ -40,4 +40,10 @@ extension TimeInterval {
     static func hours(_ hours: Int) -> Self {
         .init(hours: hours)
     }
+        
+    var formatToHourMinute: String {
+        let minute = (Int(self) / 60) % 60
+        let seconds = Int(self) % 60
+        return String(format: "%02d:%02d", minute, seconds)
+    }
 }

@@ -13,9 +13,7 @@ struct MainView: View {
     @StateObject var viewModel: MainViewModel = MainViewModel()
     @State private var sheetHeight: CGFloat = .zero
     
-    @EnvironmentObject var selectionStore: AppLockSelectionStore
-    
-    @StateObject private var manager = DeviceActivityManager()
+    @EnvironmentObject var deviceManager: DeviceActivityManager
     
     @State private var isPickerPresented = false
     
@@ -51,12 +49,9 @@ struct MainView: View {
                                     .font(.system(size: 15, weight: .regular))
                                     .foregroundStyle(.gray200)
                                     .padding(.bottom, 16)
-                                    .onChange(of: manager.selection) { old, new in
-                                        print(new)
-                                    }
                                 
                                 HStack {
-                                    if let selection = manager.selectedApp {
+                                    if let selection = deviceManager.selectedApp {
                                         ForEach(Array(selection.enumerated()).prefix(5), id: \.self.element) { index, token in
                                             if index >= 4 && selection.count > 5 {
                                                 Rectangle()
@@ -111,7 +106,7 @@ struct MainView: View {
             // 임시 FamilyActivityPicker 시트
             .sheet(isPresented: $isPickerPresented) {
                 NavigationStack {
-                    FamilyActivityPicker(selection: $selectionStore.selection)
+                    FamilyActivityPicker(selection: $deviceManager.selection)
                         .toolbar {
                             ToolbarItem(placement: .principal) {
                                 Text("앱 선택")
@@ -120,58 +115,32 @@ struct MainView: View {
                             
                             ToolbarItem(placement: .confirmationAction) {
                                 Button("완료") {
-                                    selectionStore.save()
+                                    deviceManager.save()
                                     isPickerPresented = false
                                 }
                             }
                         }
                 }
             }
+            // TODO: 타이머뷰가 나타날떄 sheet 비활성화
             .sheet(
                 isPresented: $viewModel.alarmSheetPresented,
                 onDismiss: {
                     viewModel.fetchAlarm()
                 },
                 content: {
-                    VStack(spacing: 0) {
-                        Text("알림이 울렸습니다")
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundStyle(.primary)
-                            .padding(.top, 24)
-                        
-                        Text("지금부터 15분동안 설정한 앱들을 잠글게요\n*3회 중 \(viewModel.snoozeCount)회 울림")
-                            .font(.system(size: 17, weight: .semibold))
-                            .foregroundStyle(.secondary)
-                            .padding(.top, 8)
-                            .multilineTextAlignment(.center)
-                        
-                        Image(.imgLock)
-                            .padding(.top, 16)
-                        
-                        HStack(spacing: 16) {
-                            MainButton(
-                                title: "\(Int(viewModel.snoozeTime / 60))분 후 다시 알림",
-                                disabled: viewModel.snoozeDisabled,
-                                buttonStyle: .text
-                            ) {
-                                viewModel.snoozeAlarm()
-                            }
-                            MainButton(title: "알람 끄기") {
-                                viewModel.deactiveAlarm()
+                    alarmSheetView
+                        .presentationDetents([.height(sheetHeight)])
+                        .interactiveDismissDisabled(true)
+                        .padding(.horizontal, 16)
+                        .overlay {
+                            GeometryReader { geometry in
+                                Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
                             }
                         }
-                    }
-                    .presentationDetents([.height(sheetHeight)])
-                    .interactiveDismissDisabled(true)
-                    .padding(.horizontal, 16)
-                    .overlay {
-                        GeometryReader { geometry in
-                            Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
+                        .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                            sheetHeight = newHeight
                         }
-                    }
-                    .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-                        sheetHeight = newHeight
-                    }
                 })
             .navigationBarItems(trailing: contactButton)
             .background(.gray800)
@@ -207,6 +176,37 @@ extension MainView {
         }, label: {
             Text("문의")
         })
+    }
+    
+    private var alarmSheetView: some View {
+        VStack(spacing: 0) {
+            Text("알림이 울렸습니다")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundStyle(.primary)
+                .padding(.top, 24)
+            
+            Text("지금부터 15분동안 설정한 앱들을 잠글게요\n*3회 중 \(viewModel.snoozeCount)회 울림")
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(.secondary)
+                .padding(.top, 8)
+                .multilineTextAlignment(.center)
+            
+            Image(.imgLock)
+                .padding(.top, 16)
+            
+            HStack(spacing: 16) {
+                MainButton(
+                    title: "\(Int(viewModel.snoozeTime / 60))분 후 다시 알림",
+                    disabled: viewModel.snoozeDisabled,
+                    buttonStyle: .text
+                ) {
+                    viewModel.snoozeAlarm()
+                }
+                MainButton(title: "알람 끄기") {
+                    viewModel.deactiveAlarm()
+                }
+            }
+        }
     }
 }
 

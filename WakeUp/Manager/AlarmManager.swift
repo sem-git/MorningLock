@@ -23,25 +23,29 @@ final class AlarmManager {
     private let dataManager: CoreDataManager
     private let audioPlayer: AudioPlayerManager
     private let notificationManager: NotificationManager
+    private let deviceActivityManager: DeviceActivityManager
     
     // MARK: - Properties
     private var alarmQueue: AlarmQueue!
     private var scheduledAlarm: AlarmEntity?
     private var timer: Timer?
-    private var alarmMode: AlarmMode = .repeating
+    private var alarmMode: AlarmMode = .once
     
     @Published private(set) var isAlarmPlaying: Bool = false
+    @Published private(set) var isOpenSheet: Bool = false
     @Published private(set) var snoozeCount: Int = 1
     
     // MARK: - Initializer
     private init(
         dataManager: CoreDataManager = .shared,
         audioPlayer: AudioPlayerManager = .shared,
-        notificationManager: NotificationManager = .shared
+        notificationManager: NotificationManager = .shared,
+        deviceActivityManager: DeviceActivityManager = .shared
     ) {
         self.dataManager = dataManager
         self.audioPlayer = audioPlayer
         self.notificationManager = notificationManager
+        self.deviceActivityManager = deviceActivityManager
         updateAlarmSchedule()
     }
     
@@ -53,6 +57,14 @@ final class AlarmManager {
         buildQueue()
         scheduleAlarm()
         completion?()
+    }
+    
+    func openSheet() {
+        isOpenSheet = true
+    }
+    
+    func dismissSheet() {
+        isOpenSheet = false
     }
     
     // MARK: - 큐 구성
@@ -108,6 +120,7 @@ final class AlarmManager {
     func snoozeAlarm(by interval: TimeInterval) {
         guard let scheduledAlarm else { return }
         stopCurrentAlarm()
+        alarmMode = .once
         audioPlayer.play(atTime: interval, volume: 0.5)
         startTimer(scheduledAlarm.time.getTime + interval)
         let timer = Timer(timeInterval: interval, repeats: false) { _ in
@@ -126,9 +139,11 @@ final class AlarmManager {
     func deactiveAlarm() {
         guard var currentAlarm = scheduledAlarm else { return }
         snoozeCount = 1
+        alarmMode = .once
         scheduledAlarm = nil
         timer?.invalidate()
         isAlarmPlaying = false
+        isOpenSheet = false
         audioPlayer.stop()
         
         // 반복 알람 여부에 따라 상태 결정
@@ -176,7 +191,7 @@ final class AlarmManager {
          scheduledAlarm = nextAlarm
          let interval = nextAlarm.time.getTime.timeIntervalSinceNow
          audioPlayer.play(atTime: interval, volume: 0.5)
-                  
+         deviceActivityManager.startMonitoring(startAt: nextAlarm.time.getTime)
          startTimer(nextAlarm.time.getTime)
     }
     
@@ -185,6 +200,7 @@ final class AlarmManager {
     private func activateAlarm() {
         if !isAlarmPlaying {
             isAlarmPlaying = true
+            isOpenSheet = true
         }
         
         switch alarmMode {
@@ -193,9 +209,8 @@ final class AlarmManager {
             alarmMode = .inactive
         case .repeating:
             notificationManager.postImmediateNotification()
-        case .inactive:            
+        case .inactive:
             break
         }
-        DeviceActivityManager().startMonitoring()
     }
 }

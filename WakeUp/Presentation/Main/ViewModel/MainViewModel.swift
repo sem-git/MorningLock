@@ -39,10 +39,14 @@ class MainViewModel: ObservableObject {
     }
     
     func bind() {
-        alarmManager.$isAlarmPlaying
-            .receive(on: RunLoop.main)
-            .assign(to: \.alarmSheetPresented, on: self)
-            .store(in: &cancellables)
+        Publishers.CombineLatest(
+            alarmManager.$isAlarmPlaying,
+            alarmManager.$isOpenSheet
+        )
+        .receive(on: RunLoop.main)
+        .map { $0 && $1 }
+        .assign(to: \.alarmSheetPresented, on: self)
+        .store(in: &cancellables)
         
         alarmManager.$snoozeCount
             .receive(on: RunLoop.main)

@@ -1,0 +1,47 @@
+//
+//  ShieldActionExtension.swift
+//  ShieldAction
+//
+//  Created by a on 12/9/25.
+//
+
+import ManagedSettings
+import UserNotifications
+
+// Override the functions below to customize the shield actions used in various situations.
+// The system provides a default response for any functions that your subclass doesn't override.
+// Make sure that your class name matches the NSExtensionPrincipalClass in your Info.plist.
+class ShieldActionExtension: ShieldActionDelegate {
+    override func handle(action: ShieldAction, for application: ApplicationToken, completionHandler: @escaping (ShieldActionResponse) -> Void) {
+        // Handle the action as needed.
+        switch action {
+        case .primaryButtonPressed:
+            let content = UNMutableNotificationContent()
+            content.title = "남은 시간 확인하기"
+            content.body = "남은 시간을 앱에서 확인해보세요!"
+            content.sound = nil
+            content.userInfo = ["action": "openTimer"]
+            let request = UNNotificationRequest(
+                identifier: UUID().uuidString,
+                content: content,
+                trigger: nil
+            )
+            UNUserNotificationCenter.current().add(request)
+            completionHandler(.defer)
+        case .secondaryButtonPressed:
+            completionHandler(.defer)
+        @unknown default:
+            fatalError()
+        }
+    }
+    
+    override func handle(action: ShieldAction, for webDomain: WebDomainToken, completionHandler: @escaping (ShieldActionResponse) -> Void) {
+        // Handle the action as needed.
+        completionHandler(.close)
+    }
+    
+    override func handle(action: ShieldAction, for category: ActivityCategoryToken, completionHandler: @escaping (ShieldActionResponse) -> Void) {
+        // Handle the action as needed.
+        completionHandler(.close)
+    }
+}

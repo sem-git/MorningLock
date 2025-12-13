@@ -16,11 +16,21 @@ struct WakeUpApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var delegate
     @Environment(\.scenePhase) var scenePhase
     
-    @StateObject private var selectionStore = AppLockSelectionStore.shared
+    @StateObject private var deviceManager = DeviceActivityManager.shared
+    @State private var timerPresented = false
     
     var body: some Scene {
         WindowGroup {
             RootView()
+                .onReceive(NotificationCenter.default.publisher(for: .openTimer)) { _ in
+                    AlarmManager.shared.dismissSheet()
+                    timerPresented = true
+                }
+                .fullScreenCover(isPresented: $timerPresented, onDismiss: {
+                    AlarmManager.shared.openSheet()
+                }, content: {
+                    TimerView()
+                })
                 .onChange(of: scenePhase) { newPhase in
                     switch newPhase {
                     case .background:
@@ -37,7 +47,7 @@ struct WakeUpApp: App {
                         break
                     }
                 }
-                .environmentObject(selectionStore)
+                .environmentObject(deviceManager)
         }
     }
 }
@@ -46,7 +56,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     private let alarmManager: AlarmManager = .shared
     
     // 앱의 잠금이 해제되었을떄
-    func applicationProtectedDataDidBecomeAvailable(_ application: UIApplication) {        
+    func applicationProtectedDataDidBecomeAvailable(_ application: UIApplication) {
         alarmManager.setAlarmMode(.repeating)
     }
     
@@ -128,12 +138,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
-        
-        //        if response.notification.request.content.userInfo["type"] as? String == "mission" {
-        //            NotificationCenter.default.post(name: .openMissionView, object: response.notification.request.identifier)
-        //        } else {
-        //            NotificationCenter.default.post(name: .openAlarmView, object: response.notification.request.identifier)
-        //        }
+        if response.notification.request.content.userInfo["action"] as? String == "openTimer" {
+            NotificationCenter.default.post(name: .openTimer, object: response.notification.request.identifier)
+        }
     }
 }
 
@@ -142,4 +149,5 @@ extension Notification.Name {
     static let closeMissionView = Notification.Name("closeMissionView")
     static let openAlarmView = Notification.Name("openAlarmView")
     static let closeAlarmView = Notification.Name("closeAlarmView")
+    static let openTimer = Notification.Name("openTimer")
 }
