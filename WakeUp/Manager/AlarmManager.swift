@@ -20,12 +20,14 @@ final class AlarmManager {
     static let shared = AlarmManager()
     
     // MARK: - Managers
+    
     private let dataManager: CoreDataManager
     private let audioPlayer: AudioPlayerManager
     private let notificationManager: NotificationManager
     private let deviceActivityManager: DeviceActivityManager
     
     // MARK: - Properties
+    
     private var alarmQueue: AlarmQueue!
     private var scheduledAlarm: AlarmEntity?
     private var timer: Timer?
@@ -36,6 +38,7 @@ final class AlarmManager {
     @Published private(set) var snoozeCount: Int = 1
     
     // MARK: - Initializer
+    
     private init(
         dataManager: CoreDataManager = .shared,
         audioPlayer: AudioPlayerManager = .shared,
@@ -68,6 +71,7 @@ final class AlarmManager {
     }
     
     // MARK: - 큐 구성
+    
     private func buildQueue() {
         alarmQueue = AlarmQueue(sort: .upcoming)
         
@@ -92,6 +96,7 @@ final class AlarmManager {
     }
     
     // MARK: - 알람 관리
+    
     func addAlarm(_ alarm: AlarmEntity) async {
         do {
             try await dataManager.addAlarm(alarm: alarm)
@@ -130,6 +135,7 @@ final class AlarmManager {
     }
     
     // MARK: - 알람 활성화/비활성화
+    
     private func activeAlarmImmediately() {
         stopCurrentAlarm()
         audioPlayer.play(atTime: 0, volume: 0.5)
@@ -169,6 +175,7 @@ final class AlarmManager {
     }
     
     // MARK: - 알람 스케줄링
+    
     private func scheduleAlarm() {
         
          guard let nextAlarm = alarmQueue.peek() else {
@@ -196,6 +203,7 @@ final class AlarmManager {
     }
     
     // MARK: - 알람 활성화
+    
     @objc
     private func activateAlarm() {
         if !isAlarmPlaying {

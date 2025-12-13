@@ -58,7 +58,7 @@ class MainViewModel: ObservableObject {
         path.append(.alarmSetting(alarm))
     }
     
-    // 데이터를 가져왔을떄 -> isActive 상태에 따라서 초기값 바인딩
+    // 데이터를 가져왔을 때 isActive 상태에 따라서 초기값 바인딩
     func fetchAlarm() {
         alarmList = dataManager
             .fetchAlarm()

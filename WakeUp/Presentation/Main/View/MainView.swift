@@ -109,7 +109,6 @@ struct MainView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(.gray600)
                             .cornerRadius(16)
-                            .disabled(!alarm.isActive)
                         }
                         .opacity(alarm.isActive ? 1 : 0.3)
                     }
@@ -117,7 +116,6 @@ struct MainView: View {
                 .padding(16)
             }
             .animation(.default, value: viewModel.alarmList.count)
-            // 임시 FamilyActivityPicker 시트
             .sheet(isPresented: $isPickerPresented) {
                 NavigationStack {
                     FamilyActivityPicker(selection: $deviceManager.selection)
@@ -136,7 +134,7 @@ struct MainView: View {
                         }
                 }
             }
-            // TODO: 타이머뷰가 나타날떄 sheet 비활성화
+            // TODO: 타이머 뷰가 나타날 때 sheet 비활성화
             .sheet(
                 isPresented: $viewModel.alarmSheetPresented,
                 onDismiss: {
@@ -179,6 +177,7 @@ struct InnerHeightPreferenceKey: PreferenceKey {
 }
 
 // MARK: - SubViews
+
 extension MainView {
     private func removeRows(at offsets: IndexSet) {
         viewModel.alarmList.remove(atOffsets: offsets)

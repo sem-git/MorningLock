@@ -41,7 +41,7 @@ final class AlarmSettingViewModel: ObservableObject {
     }
     
     func updateAlarm() {
-        // 날짜를 수정한경우
+        // 날짜를 수정한 경우
         let oldWeekDays = Set(alarm.repeatDay)
         let removedWeekDay = oldWeekDays.subtracting(weekDays)
         let addWeekDay = weekDays.union(oldWeekDays).subtracting(removedWeekDay)
