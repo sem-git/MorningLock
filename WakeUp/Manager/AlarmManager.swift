@@ -144,6 +144,10 @@ final class AlarmManager {
     
     func deactiveAlarm() {
         guard var currentAlarm = scheduledAlarm else { return }
+        
+        deviceActivityManager.startMonitoring(startAt: Date())
+        deviceActivityManager.startTimer()
+        
         snoozeCount = 1
         alarmMode = .once
         scheduledAlarm = nil
@@ -198,7 +202,7 @@ final class AlarmManager {
          scheduledAlarm = nextAlarm
          let interval = nextAlarm.time.getTime.timeIntervalSinceNow
          audioPlayer.play(atTime: interval, volume: 0.5)
-         deviceActivityManager.startMonitoring(startAt: nextAlarm.time.getTime)
+//         deviceActivityManager.startMonitoring(startAt: nextAlarm.time.getTime)
          startTimer(nextAlarm.time.getTime)
     }
     

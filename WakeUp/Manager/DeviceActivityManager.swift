@@ -101,7 +101,7 @@ final class DeviceActivityManager: ObservableObject {
         let now = Date()
         let end = Calendar.current.date(byAdding: .minute, value: 15, to: date)!
         
-        let startComponents = fullDateComponents(from: now)
+        let startComponents = fullDateComponents(from: date)
         let endComponents = fullDateComponents(from: end)
         
         do {
