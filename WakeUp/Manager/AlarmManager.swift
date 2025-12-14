@@ -40,7 +40,7 @@ final class AlarmManager {
     
     // MARK: - Alarm Execution
     
-    private var alarmMode: AlarmMode = .once
+    @Published private(set) var alarmMode: AlarmMode = .once
     
     // MARK: - Initializer
     
@@ -55,10 +55,6 @@ final class AlarmManager {
         self.notificationManager = notificationManager
         self.deviceActivityManager = deviceActivityManager
         updateAlarmSchedule()
-    }
-    
-    func setAlarmMode(_ mode: AlarmMode) {
-        self.alarmMode = mode
     }
     
     func updateAlarmSchedule(_ completion: (() -> ())? = nil) {
@@ -135,17 +131,22 @@ final class AlarmManager {
     
     // 울리고 있는 알람 일시 중지하고 지정 시간 후 다시 울리도록 설정
     func snoozeAlarm(by interval: TimeInterval) {
-        guard let scheduledAlarm else { return }
-       
-        snoozeCount += 1
-        
+        // 현재 알람 중지
         stopCurrentAlarm()
+        
+        // 알람 모드 변경
         alarmMode = .once
         
+        // 현재시간 + interval로 알람 예약
         let now = Date()
-        
         audioPlayer.play(atTime: interval, volume: 0.5)
-        startAlarmTimer(now.getTime + interval)
+        startAlarmTimer(now + interval)
+        
+        // interval 시간 이후로 snoozeCount 1회 증가(일회성)
+        let timer = Timer(timeInterval: interval, repeats: false) { _ in
+            self.snoozeCount += 1
+        }
+        RunLoop.main.add(timer, forMode: .common)
     }
     
     // 알람 끄기
@@ -224,7 +225,6 @@ final class AlarmManager {
     @objc
     private func activateAlarm() {
         guard scheduledAlarm != nil else { return }
-        
         if !isAlarmPlaying {
             isAlarmPlaying = true
             isOpenSheet = true
