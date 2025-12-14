@@ -63,9 +63,15 @@ struct TimerView: View {
             case .active:
                 deviceManager.startTimer()
             case .background:
-                deviceManager.stopTimer()            
+                deviceManager.stopTimer()
             @unknown default:
                 break
+            }
+        }
+        .onChange(of: deviceManager.remainingTime) { newValue in
+            if newValue <= 0 {
+                deviceManager.stopTimer()
+                dismiss()
             }
         }
     }
