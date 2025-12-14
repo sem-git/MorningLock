@@ -22,6 +22,8 @@ final class DeviceActivityManager: ObservableObject {
     private let sharedContainer = UserDefaults(suiteName: "group.com.awayke")
     /// 앱그룹 저장소 Key
     private let keyName = "testKey"
+    /// 현재 잠금 상태 Key
+    private let lockStateKey = "lockState"
     
     // MARK: - Properties
     
@@ -46,8 +48,11 @@ final class DeviceActivityManager: ObservableObject {
     private(set) var currentLockedSnapshot: Set<ApplicationToken> = []
     
     private init() {
+        restoreLockState()
         dataBind()
     }
+    
+    // MARK: - 선택 관리
     
     /// 앱그룹 저장소에 잠금 앱 저장
     func save() {
@@ -61,20 +66,9 @@ final class DeviceActivityManager: ObservableObject {
         }
     }
     
-    /// 잠금 앱 불러오기
-    func load() {
-        guard let data = sharedContainer?.data(forKey: keyName) else { return }
-        do {
-            let model = try JSONDecoder().decode(AppModel.self, from: data)
-            selection = model.selection
-            print("앱 잠금 선택 로드 완료")
-        } catch {
-            print("선택 로드 실패:", error)
-        }
-    }
-    
     /// 잠금 앱 초기화
     func clear() {
+        stopMonitoring()
         sharedContainer?.removeObject(forKey: keyName)
         selection = .init()
     }
@@ -103,6 +97,8 @@ final class DeviceActivityManager: ObservableObject {
         }
     }
     
+    // MARK: - 잠금 시작과 종료
+    
     /// 모니터링 시작
     func startMonitoring(startAt date: Date) {
         let end = Calendar.current.date(byAdding: .minute, value: 15, to: date)!
@@ -111,6 +107,8 @@ final class DeviceActivityManager: ObservableObject {
         let endComponents = fullDateComponents(from: end)
         
         currentLockedSnapshot = selection.applicationTokens
+        endTime = end
+        persistLockState()
         
         do {
             try center.startMonitoring(
@@ -132,7 +130,35 @@ final class DeviceActivityManager: ObservableObject {
     func stopMonitoring() {
         center.stopMonitoring([.testName])
         timer = nil
+        sharedContainer?.removeObject(forKey: lockStateKey)
+        currentLockedSnapshot = []
         print("DeviceActivity 모니터링 중단")
+    }
+    
+    // MARK: - 잠금 중 앱 추가
+    
+    /// 추가 잠금 앱 스냅샷 갱신
+    func commitSelectionWhileLocking() {
+        save()
+        applyShieldImmediately()
+        currentLockedSnapshot = selection.applicationTokens
+        persistLockState()
+    }
+    
+    /// Picker 완료 버튼 활성화 여부 판단
+    func canSaveSelectionWhileLocking() -> Bool {
+        let current = selection.applicationTokens
+        let base = currentLockedSnapshot
+        
+        guard base.isSubset(of: current) else {
+            return false
+        }
+        
+        guard current != base else {
+            return false
+        }
+        
+        return true
     }
     
     /// 추가 잠금 앱 바로 적용
@@ -153,29 +179,41 @@ final class DeviceActivityManager: ObservableObject {
         : selection.webDomainTokens
     }
     
-    /// 추가 잠금 앱 스냅샷 갱신
-    func commitSelectionWhileLocking() {
-        save()
-        applyShieldImmediately()
-        currentLockedSnapshot = selection.applicationTokens
+    // MARK: - 상태 저장 및 복구
+    
+    /// 잠금 상태를 앱그룹에 저장
+    private func persistLockState() {
+        let state = LockState(
+            endTime: endTime,
+            lockedApps: currentLockedSnapshot
+        )
+        
+        if let data = try? JSONEncoder().encode(state) {
+            sharedContainer?.set(data, forKey: lockStateKey)
+        }
     }
     
-    func canSaveSelectionWhileLocking() -> Bool {
-        let current = selection.applicationTokens
-        let base = currentLockedSnapshot
+    /// 앱 재실행 시 잠금 상태 복구
+    private func restoreLockState() {
+        guard
+            let data = sharedContainer?.data(forKey: lockStateKey),
+            let state = try? JSONDecoder().decode(LockState.self, from: data)
+        else { return }
         
-        guard base.isSubset(of: current) else {
-            return false
+        guard state.endTime > Date() else {
+            sharedContainer?.removeObject(forKey: lockStateKey)
+            return
         }
         
-        guard current != base else {
-            return false
-        }
+        endTime = state.endTime
+        currentLockedSnapshot = state.lockedApps
+        selection.applicationTokens = state.lockedApps
         
-        return true
     }
     
-    /// 타이머 시작
+    // MARK: - 타이머 및 UI 표시
+    
+    /// 남은 잠금 시간 계산
     func startTimer() {
         let totalTime = TimeInterval(minutes: 15)
         remainingTime = endTime.timeIntervalSince(.now)
