@@ -42,6 +42,8 @@ final class DeviceActivityManager: ObservableObject {
     @Published var remainingTime: TimeInterval = .zero
     /// 앱 잠금 남은 시간 표시용
     @Published var percent: Double = 0
+    /// 잠금 중 기준이 되는 현재 잠금 앱 스냅샷
+    private(set) var currentLockedSnapshot: Set<ApplicationToken> = []
     
     private init() {
         dataBind()
@@ -108,6 +110,8 @@ final class DeviceActivityManager: ObservableObject {
         let startComponents = fullDateComponents(from: date)
         let endComponents = fullDateComponents(from: end)
         
+        currentLockedSnapshot = selection.applicationTokens
+        
         do {
             try center.startMonitoring(
                 .testName,
@@ -148,7 +152,29 @@ final class DeviceActivityManager: ObservableObject {
         ? nil
         : selection.webDomainTokens
     }
-
+    
+    /// 추가 잠금 앱 스냅샷 갱신
+    func commitSelectionWhileLocking() {
+        save()
+        applyShieldImmediately()
+        currentLockedSnapshot = selection.applicationTokens
+    }
+    
+    func canSaveSelectionWhileLocking() -> Bool {
+        let current = selection.applicationTokens
+        let base = currentLockedSnapshot
+        
+        guard base.isSubset(of: current) else {
+            return false
+        }
+        
+        guard current != base else {
+            return false
+        }
+        
+        return true
+    }
+    
     /// 타이머 시작
     func startTimer() {
         let totalTime = TimeInterval(minutes: 15)
