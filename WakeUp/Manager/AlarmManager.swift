@@ -142,8 +142,10 @@ final class AlarmManager {
         stopCurrentAlarm()
         alarmMode = .once
         
+        let now = Date()
+        
         audioPlayer.play(atTime: interval, volume: 0.5)
-        startAlarmTimer(scheduledAlarm.time.getTime + interval)
+        startAlarmTimer(now.getTime + interval)
     }
     
     // 알람 끄기
