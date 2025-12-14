@@ -91,7 +91,7 @@ struct AppLockSelectionView: View {
             let isActive = permissionManager.notificationStatus == .authorized
             
             let alarm = AlarmEntity(
-                time: Date().addingTimeInterval(3 * 60),
+                time: Date().addingTimeInterval(60),
                 isActive: isActive,
                 repeatDay: []
             )

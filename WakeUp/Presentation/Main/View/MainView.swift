@@ -17,6 +17,7 @@ struct MainView: View {
     @EnvironmentObject var permissionManager: PermissionManager
     
     @State private var isPickerPresented = false
+    @State private var canSave: Bool = false
     
     var body: some View {
         NavigationStack(path: $viewModel.path) {
@@ -110,7 +111,7 @@ struct MainView: View {
                             .background(.gray600)
                             .cornerRadius(16)
                         }
-                        .opacity(alarm.isActive ? 1 : 0.3)
+//                        .opacity(alarm.isActive ? 1 : 0.3)
                     }
                 }
                 .padding(16)
@@ -119,21 +120,41 @@ struct MainView: View {
             .sheet(isPresented: $isPickerPresented) {
                 NavigationStack {
                     FamilyActivityPicker(selection: $deviceManager.selection)
+                        .onAppear {
+                            if deviceManager.isLockingNow {
+                                canSave = deviceManager.canSaveSelectionWhileLocking()
+                            } else {
+                                canSave = true
+                            }
+                        }
+                        .onChange(of: deviceManager.selection.applicationTokens) { _ in
+                            if deviceManager.isLockingNow {
+                                canSave = deviceManager.canSaveSelectionWhileLocking()
+                            } else {
+                                canSave = true
+                            }
+                        }
                         .toolbar {
                             ToolbarItem(placement: .principal) {
                                 Text("앱 선택")
                                     .font(.system(size: 20, weight: .bold))
                             }
-                            
                             ToolbarItem(placement: .confirmationAction) {
                                 Button("완료") {
-                                    deviceManager.save()
+                                    if deviceManager.isLockingNow {
+                                        deviceManager.commitSelectionWhileLocking()
+                                    } else {
+                                        deviceManager.save()
+                                    }
+                                    
                                     isPickerPresented = false
                                 }
+                                .disabled(!canSave)
                             }
                         }
                 }
             }
+            
             // TODO: 타이머 뷰가 나타날 때 sheet 비활성화
             .sheet(
                 isPresented: $viewModel.alarmSheetPresented,
