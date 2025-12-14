@@ -111,7 +111,7 @@ struct MainView: View {
                             .background(.gray600)
                             .cornerRadius(16)
                         }
-                        .opacity(alarm.isActive ? 1 : 0.3)
+//                        .opacity(alarm.isActive ? 1 : 0.3)
                     }
                 }
                 .padding(16)
