@@ -128,6 +128,11 @@ struct MainView: View {
                             ToolbarItem(placement: .confirmationAction) {
                                 Button("완료") {
                                     deviceManager.save()
+                                    
+                                    if deviceManager.isLockingNow {
+                                        deviceManager.applyShieldImmediately()
+                                    }
+                                    
                                     isPickerPresented = false
                                 }
                             }

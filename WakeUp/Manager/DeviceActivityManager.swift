@@ -9,6 +9,8 @@ final class DeviceActivityManager: ObservableObject {
     static let shared = DeviceActivityManager()
     
     private let center = DeviceActivityCenter()
+    private let store = ManagedSettingsStore()
+    
     private let events: [DeviceActivityEvent.Name: DeviceActivityEvent] = [
         .encouraged: DeviceActivityEvent(
             threshold: DateComponents(minute: 1)
@@ -27,6 +29,9 @@ final class DeviceActivityManager: ObservableObject {
     private var endTime = Date()
     private var cancellables = Set<AnyCancellable>()
     private var timer: AnyCancellable?
+    var isLockingNow: Bool {
+        Date() < endTime
+    }
     
     // MARK: - State
     
@@ -98,7 +103,6 @@ final class DeviceActivityManager: ObservableObject {
     
     /// 모니터링 시작
     func startMonitoring(startAt date: Date) {
-        let now = Date()
         let end = Calendar.current.date(byAdding: .minute, value: 15, to: date)!
         
         let startComponents = fullDateComponents(from: date)
@@ -127,6 +131,24 @@ final class DeviceActivityManager: ObservableObject {
         print("DeviceActivity 모니터링 중단")
     }
     
+    /// 추가 잠금 앱 바로 적용
+    func applyShieldImmediately() {
+        store.shield.applications =
+        selection.applicationTokens.isEmpty
+        ? nil
+        : selection.applicationTokens
+        
+        store.shield.applicationCategories =
+        selection.categoryTokens.isEmpty
+        ? nil
+        : .specific(selection.categoryTokens)
+        
+        store.shield.webDomains =
+        selection.webDomainTokens.isEmpty
+        ? nil
+        : selection.webDomainTokens
+    }
+
     /// 타이머 시작
     func startTimer() {
         let totalTime = TimeInterval(minutes: 15)
