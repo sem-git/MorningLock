@@ -19,9 +19,9 @@ enum OnboardingPath: Hashable {
 class OnboardingViewModel: ObservableObject {
     @Published var navigationPath: [OnboardingPath] = []
     @Published var isRequestingPermission = false
-    @Published var isOnboarding: Bool = UserDefaults.standard.bool(forKey: UserDefaultKey.isOnboarding) {
+    @Published var isOnboarding: Bool = UserDefaults.standard.bool(forKey: StringLiteral.UserDefaultKeys.hasCompletedOnboarding) {
         didSet {
-            UserDefaults.standard.set(isOnboarding, forKey: UserDefaultKey.isOnboarding)
+            UserDefaults.standard.set(isOnboarding, forKey: StringLiteral.UserDefaultKeys.hasCompletedOnboarding)
         }
     }
     

@@ -7,24 +7,20 @@
 
 import SwiftUI
 
-struct UserDefaultKey {
-    static let isOnboarding = "isOnboarding"
-}
-
 struct RootView: View {
-    @AppStorage(UserDefaultKey.isOnboarding) private var isOnboarding = true        
+    @AppStorage(StringLiteral.UserDefaultKeys.hasCompletedOnboarding) private var hasCompletedOnboarding = true
     
     var body: some View {
         Group {
-            if isOnboarding {
-                OnboardingView()                
+            if hasCompletedOnboarding {
+                OnboardingView()
             } else {
                 MainView()
                     .transition(.move(edge: .trailing))
             }
         }
         .background(Color.gray800)
-        .animation(.easeInOut, value: isOnboarding)
+        .animation(.easeInOut, value: hasCompletedOnboarding)
     }
 }
 
