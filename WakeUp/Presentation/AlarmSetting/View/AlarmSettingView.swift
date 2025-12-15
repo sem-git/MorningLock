@@ -31,7 +31,7 @@ struct AlarmSettingView: View {
                             HStack(alignment: .center, spacing: 10) {
                                 ForEach(Weekday.allCases, id: \.self) { day in
                                     let daySelected = viewModel.weekDays.contains(day)
-                                    DayButton(title: day.dayName, isSelected: daySelected) {
+                                    DayItem(title: day.dayName, isSelected: daySelected) {
                                         viewModel.selecteDay(day)
                                     }
                                 }
