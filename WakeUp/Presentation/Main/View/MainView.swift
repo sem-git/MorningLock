@@ -8,9 +8,11 @@
 import SwiftUI
 import FamilyControls
 import DeviceActivity
+import GoogleMobileAds
 
 struct MainView: View {
     @StateObject var viewModel: MainViewModel = MainViewModel()
+    @StateObject private var nativeViewModel = NativeAdViewModel()
     @State private var sheetHeight: CGFloat = .zero
     
     @EnvironmentObject var deviceManager: DeviceActivityManager
@@ -111,11 +113,15 @@ struct MainView: View {
                             .background(.gray600)
                             .cornerRadius(16)
                         }
-//                        .opacity(alarm.isActive ? 1 : 0.3)
+                        .opacity(alarm.isActive ? 1 : 0.3)
                     }
                 }
                 .padding(16)
             }
+            .overlay(alignment: .bottom, content: {
+                GoogleAdMobView(nativeViewModel: nativeViewModel)
+                    .frame(maxHeight: 100)
+            })
             .animation(.default, value: viewModel.alarmList.count)
             .sheet(isPresented: $isPickerPresented) {
                 NavigationStack {
