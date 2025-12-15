@@ -9,14 +9,16 @@ import UserNotifications
 import Combine
 import FirebaseAnalytics
 
-// 알람 반복 여부
-enum AlarmMode {
-    case once
-    case repeating
-    case inactive
-}
-
+// TODO: 전체적으로 리팩토링 예정
 final class AlarmManager {
+    
+    // 알람 반복 여부
+    enum AlarmMode {
+        case once
+        case repeating
+        case inactive
+    }
+    
     static let shared = AlarmManager()
     
     // MARK: - Managers
@@ -28,9 +30,14 @@ final class AlarmManager {
     
     // MARK: - Alarm State
     
+    /// 알람 재생 여부
     @Published private(set) var isAlarmPlaying: Bool = false
+    /// sheet 보임 여부
     @Published private(set) var isOpenSheet: Bool = false
+    /// 스누즈 횟수
     @Published private(set) var snoozeCount: Int = 1
+    /// 알람 모드
+    @Published private(set) var alarmMode: AlarmMode = .once
     
     // MARK: - Alarm Scheduling
     
@@ -38,12 +45,7 @@ final class AlarmManager {
     private var scheduledAlarm: AlarmEntity?
     private var alarmTimer: Timer?
     
-    // MARK: - Alarm Execution
-    
-    @Published private(set) var alarmMode: AlarmMode = .once
-    
     // MARK: - Initializer
-    
     private init(
         dataManager: CoreDataManager = .shared,
         audioPlayer: AudioPlayerManager = .shared,
@@ -73,7 +75,7 @@ final class AlarmManager {
     
     // MARK: - 알람 데이터 관리
     
-    // 새로운 알람을 CoreData에 저장하고 알람 큐에 추가한 뒤 스케줄 설정
+    /// 새로운 알람을 CoreData에 저장하고 알람 큐에 추가한 뒤 스케줄 설정
     func addAlarm(_ alarm: AlarmEntity) async {
         do {
             try await dataManager.addAlarm(alarm: alarm)
@@ -84,7 +86,7 @@ final class AlarmManager {
         }
     }
     
-    // 기존 알람 정보 수정하여 스케줄 갱신
+    /// 기존 알람 정보 수정하여 스케줄 갱신
     func updateAlarm(_ alarm: AlarmEntity) {
         do {
             try dataManager.updateAlarm(alarm: alarm)
@@ -149,7 +151,7 @@ final class AlarmManager {
         RunLoop.main.add(timer, forMode: .common)
     }
     
-    // 알람 끄기
+    /// 알람 끄기
     func deactiveAlarm() {
         guard var currentAlarm = scheduledAlarm else { return }
         
