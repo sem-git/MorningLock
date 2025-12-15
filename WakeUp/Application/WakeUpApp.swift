@@ -58,16 +58,6 @@ struct WakeUpApp: App {
 final class AppDelegate: NSObject, UIApplicationDelegate {
     private let alarmManager: AlarmManager = .shared
     
-    // 앱의 잠금이 해제된 경우
-    func applicationProtectedDataDidBecomeAvailable(_ application: UIApplication) {
-        alarmManager.setAlarmMode(.repeating)
-    }
-    
-    // 앱의 잠금이 해제되지 않은 경우
-    func applicationProtectedDataWillBecomeUnavailable(_ application: UIApplication) {
-        alarmManager.setAlarmMode(.once)
-    }
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.awayke.refresh", using: nil) { task in
             self.handleAppRefresh(task: task as! BGAppRefreshTask)

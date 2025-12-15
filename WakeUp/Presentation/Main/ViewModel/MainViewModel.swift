@@ -18,14 +18,13 @@ class MainViewModel: ObservableObject {
     @Published var alarmSheetPresented = false
     @Published var snoozeCount = 1
     @Published var snoozeTime: TimeInterval = .minutes(5)
+    @Published var snoozeDisabled: Bool = false
     
     private let dataManager: CoreDataManager
     private let alarmManager: AlarmManager
     private let notificationManager: NotificationManager
     
     private var cancellables = Set<AnyCancellable>()
-    
-    var snoozeDisabled: Bool { snoozeCount == 3 }
     
     init(
         dataManager: CoreDataManager = .shared,
@@ -39,6 +38,7 @@ class MainViewModel: ObservableObject {
     }
     
     func bind() {
+        // 알람이 재생중이면서 isOpenSheet 보임여부에 따라서 Sheet열기
         Publishers.CombineLatest(
             alarmManager.$isAlarmPlaying,
             alarmManager.$isOpenSheet
@@ -48,10 +48,23 @@ class MainViewModel: ObservableObject {
         .assign(to: \.alarmSheetPresented, on: self)
         .store(in: &cancellables)
         
+        // 스누즈 횟수
         alarmManager.$snoozeCount
             .receive(on: RunLoop.main)
             .assign(to: \.snoozeCount, on: self)
             .store(in: &cancellables)
+                        
+        // 알람이 울리는 중이거나 스누즈 횟수가 3회이상 초과시 버튼 disable
+        Publishers.CombineLatest(
+            alarmManager.$alarmMode,
+            alarmManager.$snoozeCount
+        )
+        .receive(on: RunLoop.main)
+        .map { alarmMode, snoozeCount in
+            alarmMode == .once || snoozeCount >= 3
+        }
+        .assign(to: \.snoozeDisabled, on: self)
+        .store(in: &cancellables)        
     }
     
     func navigateToAlarmSetting(_ alarm: AlarmEntity? = nil) {
