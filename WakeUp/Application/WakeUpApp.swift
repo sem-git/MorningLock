@@ -19,16 +19,16 @@ struct WakeUpApp: App {
     @StateObject private var deviceManager = DeviceActivityManager.shared
     @StateObject private var permissionManager = PermissionManager.shared
     
-    @State private var timerPresented = false
+    @State private var isTimerPresented = false
     
     var body: some Scene {
         WindowGroup {
             RootView()
                 .onReceive(NotificationCenter.default.publisher(for: .openTimer)) { _ in
                     AlarmManager.shared.dismissSheet()
-                    timerPresented = true
+                    isTimerPresented = true
                 }
-                .fullScreenCover(isPresented: $timerPresented, onDismiss: {
+                .fullScreenCover(isPresented: $isTimerPresented, onDismiss: {
                     AlarmManager.shared.openSheet()
                 }, content: {
                     TimerView()
@@ -41,7 +41,6 @@ struct WakeUpApp: App {
                             AnalyticsParameterItemName: "enter-background",
                             AnalyticsParameterContentType: "system",
                         ])
-                        print("App entered background")
                         delegate.scheduleAppBackgroundRefresh()
                         delegate.scheduleAppBackgroundProcessing()
                         break
