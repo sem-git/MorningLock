@@ -7,6 +7,7 @@
 
 import Combine
 import SwiftUI
+import AppTrackingTransparency
 
 enum MainRoute: Hashable {
     case alarmSetting(AlarmEntity?)
@@ -80,6 +81,12 @@ class MainViewModel: ObservableObject {
     
     func snoozeAlarm() {
         alarmManager.snoozeAlarm(by: snoozeTime)
+    }
+    
+    func requestTrackingAuthorization() {
+        ATTrackingManager.requestTrackingAuthorization { _ in
+            
+        }
     }
 }
 

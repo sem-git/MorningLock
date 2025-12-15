@@ -895,6 +895,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WakeUp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = awayke;
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "개인에게 최적화된 광고를 제공하기 위해 사용자의 광고 활동 정보를 수집합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -936,6 +937,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WakeUp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = awayke;
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "개인에게 최적화된 광고를 제공하기 위해 사용자의 광고 활동 정보를 수집합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

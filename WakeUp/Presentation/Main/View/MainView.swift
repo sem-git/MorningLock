@@ -179,6 +179,8 @@ struct MainView: View {
             .background(.gray800)
             .onAppear {
                 viewModel.fetchAlarm()
+                viewModel.requestTrackingAuthorization()
+                
             }
             .navigationDestination(for: MainRoute.self, destination: { destination in
                 switch destination {
