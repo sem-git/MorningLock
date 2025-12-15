@@ -15,7 +15,7 @@ enum MainRoute: Hashable {
 class MainViewModel: ObservableObject {
     @Published var alarmList: [AlarmEntity] = []
     @Published var path: [MainRoute] = []
-    @Published var alarmSheetPresented = false
+    @Published var isAlarmSheetPresented = false
     @Published var snoozeCount = 1
     @Published var snoozeTime: TimeInterval = .minutes(5)
     @Published var snoozeDisabled: Bool = false
@@ -45,7 +45,7 @@ class MainViewModel: ObservableObject {
         )
         .receive(on: RunLoop.main)
         .map { $0 && $1 }
-        .assign(to: \.alarmSheetPresented, on: self)
+        .assign(to: \.isAlarmSheetPresented, on: self)
         .store(in: &cancellables)
         
         // 스누즈 횟수
