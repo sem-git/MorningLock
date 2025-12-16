@@ -119,7 +119,7 @@ struct MainView: View {
                 .padding(16)
             }
             .overlay(alignment: .bottom, content: {
-                GoogleAdMobView(nativeViewModel: nativeViewModel)
+                NativeAdMobView(nativeViewModel: nativeViewModel)
                     .frame(maxHeight: 50)
             })
             .animation(.default, value: viewModel.alarmList.count)

@@ -84,8 +84,21 @@ class MainViewModel: ObservableObject {
     }
     
     func requestTrackingAuthorization() {
-        ATTrackingManager.requestTrackingAuthorization { _ in
-            
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            ATTrackingManager.requestTrackingAuthorization { status in
+                switch status {
+                case .notDetermined:
+                    print("App Tracking Transparency: notDetermined")
+                case .restricted:
+                    print("App Tracking Transparency: restricted")
+                case .denied:
+                    print("App Tracking Transparency: denied")
+                case .authorized:
+                    print("App Tracking Transparency: authorized")
+                @unknown default:         
+                    print("Unknow")
+                }
+            }
         }
     }
 }

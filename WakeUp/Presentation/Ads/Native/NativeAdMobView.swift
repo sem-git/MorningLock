@@ -1,5 +1,5 @@
 //
-//  GoogleAdMobView.swift
+//  NativeAdMobView.swift
 //  WakeUp
 //
 //  Created by a on 12/15/25.
@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 import GoogleMobileAds
 
-struct GoogleAdMobView: UIViewRepresentable {
+struct NativeAdMobView: UIViewRepresentable {
     typealias UIViewType = NativeAdView
     
     @ObservedObject var nativeViewModel: NativeAdViewModel
@@ -18,7 +18,7 @@ struct GoogleAdMobView: UIViewRepresentable {
         Bundle.main.loadNibNamed(
             "NativeAdView",
             owner: nil,
-            options: nil)?.first as! NativeAdView
+            options: nil)?.first as! NativeAdView        
     }
     
     func updateUIView(_ nativeAdView: NativeAdView, context: Context) {
@@ -54,5 +54,5 @@ struct GoogleAdMobView: UIViewRepresentable {
 }
 
 #Preview {
-    GoogleAdMobView(nativeViewModel: NativeAdViewModel())
+    NativeAdMobView(nativeViewModel: NativeAdViewModel())
 }
