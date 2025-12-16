@@ -120,7 +120,7 @@ struct MainView: View {
             }
             .overlay(alignment: .bottom, content: {
                 GoogleAdMobView(nativeViewModel: nativeViewModel)
-                    .frame(maxHeight: 100)
+                    .frame(maxHeight: 50)
             })
             .animation(.default, value: viewModel.alarmList.count)
             .sheet(isPresented: $isPickerPresented) {
