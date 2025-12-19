@@ -13,7 +13,7 @@ struct MainView: View {
     @StateObject var viewModel: MainViewModel = MainViewModel()
     @State private var sheetHeight: CGFloat = .zero
     
-    @EnvironmentObject var deviceManager: DeviceActivityManager
+    @StateObject var deviceManager: DeviceActivityManager = .shared
     @EnvironmentObject var permissionManager: PermissionManager
     
     @State private var isPickerPresented = false

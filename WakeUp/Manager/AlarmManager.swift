@@ -167,7 +167,7 @@ final class AlarmManager {
         
         // 잠금 시작
         deviceActivityManager.startMonitoring(startAt: Date())
-        
+        deviceActivityManager.commitSelectionWhileLocking()
         // 반복 알람 여부 반영
         currentAlarm.isActive = !currentAlarm.repeatDay.isEmpty
         updateAlarm(currentAlarm)
