@@ -24,15 +24,12 @@ struct WakeUpApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
-                .onReceive(NotificationCenter.default.publisher(for: .openTimer)) { _ in                    
-                    AlarmManager.shared.dismissSheet()
+                .onReceive(NotificationCenter.default.publisher(for: .openTimer)) { _ in
                     isTimerPresented = true
                 }
-                .fullScreenCover(isPresented: $isTimerPresented, onDismiss: {
-                    AlarmManager.shared.openSheet()
-                }, content: {
+                .fullScreenCover(isPresented: $isTimerPresented, content: {
                     TimerView()
-                })
+                })                
                 .onChange(of: scenePhase) { newPhase in
                     switch newPhase {
                     case .background:
@@ -48,7 +45,6 @@ struct WakeUpApp: App {
                         break
                     }
                 }
-//                .environmentObject(deviceManager)
                 .environmentObject(permissionManager)
         }
     }

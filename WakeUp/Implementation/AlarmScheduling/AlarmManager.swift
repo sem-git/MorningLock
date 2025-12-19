@@ -33,6 +33,8 @@ final class AlarmManager {
     
     private var cancellables = Set<AnyCancellable>()
     
+    private let maxSnoozeCount: Int = 3
+    
     // MARK: - Published Properties
     
     /// 현재 활성화된 알람이 재생 중인지 여부를 나타내는 값입니다.
@@ -40,8 +42,6 @@ final class AlarmManager {
     /// - 알람의 동작 상태에 따라 isAlarmPlaying 값이 자동으로 갱신됩니다.
     /// - 외부에서 isAlarmPlaying 값을 직접 수정할 수 없습니다.
     @Published private(set) var isAlarmPlaying: Bool = false
-    
-    @Published private(set) var isOpenSheet: Bool = false
     
     /// 현재 활성화된 알람에 대한 스누즈 횟수를 나타내는 값입니다.
     ///
@@ -64,17 +64,6 @@ final class AlarmManager {
 }
 
 extension AlarmManager {
-    
-    /// 알람 관련 UI 시트를 표시합니다.
-    func openSheet() {
-        isOpenSheet = true
-    }
-    
-    /// 알람 관련 UI 시트를 닫습니다.
-    func dismissSheet() {
-        isOpenSheet = false
-    }
-    
     /// 새로운 알람을 등록하고 스케줄을 갱신합니다.
     ///
     /// - Parameter alarm: 새로 등록할 알람 엔티티
@@ -166,7 +155,6 @@ extension AlarmManager {
         audioPlayer.play(atTime: interval, volume: 0.5)
         Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { timer in
             self.isAlarmPlaying = true
-            self.isOpenSheet = true
             self.notificationManager.postImmediateNotification()
             timer.invalidate()
         }
@@ -177,11 +165,10 @@ extension AlarmManager {
         audioPlayer.stop()
         
         if reschedule {
-            isAlarmPlaying = false
-            isOpenSheet = true
+            isAlarmPlaying = true
         } else {
+            snoozeCount = 1
             isAlarmPlaying = false
-            isOpenSheet = false
         }
     }
 }

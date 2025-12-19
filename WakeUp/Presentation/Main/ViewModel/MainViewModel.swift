@@ -42,12 +42,8 @@ class MainViewModel: ObservableObject {
     
     func bind() {
         // 알람이 재생중이면서 isOpenSheet 보임여부에 따라서 Sheet열기
-        Publishers.CombineLatest(
-            alarmManager.$isAlarmPlaying,
-            alarmManager.$isOpenSheet
-        )
+        alarmManager.$isAlarmPlaying
         .receive(on: RunLoop.main)
-        .map { $0 || $1 }
         .assign(to: \.isAlarmSheetPresented, on: self)
         .store(in: &cancellables)
         
