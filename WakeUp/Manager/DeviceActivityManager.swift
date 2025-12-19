@@ -62,7 +62,7 @@ final class DeviceActivityManager: ObservableObject {
     
     private init() {
         restoreLockState()
-        dataBind()
+        dataBind()        
     }
     
     // MARK: - 선택 관리

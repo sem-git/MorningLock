@@ -56,7 +56,7 @@ class MainViewModel: ObservableObject {
                         
         // 알람이 울리는 중이거나 스누즈 횟수가 3회이상 초과시 버튼 disable
         Publishers.CombineLatest(
-            alarmManager.$alarmMode,
+            alarmManager.$alarmNotificationMode,
             alarmManager.$snoozeCount
         )
         .receive(on: RunLoop.main)
@@ -83,8 +83,8 @@ class MainViewModel: ObservableObject {
         alarmManager.updateAlarm(alarm)
     }
     
-    func deleteAlarm(_ id: UUID) {
-        alarmManager.removeAlarm(id)
+    func deleteAlarm(withId id: UUID) {
+        alarmManager.removeAlarm(withId: id)
     }
     
     func deactiveAlarm() {

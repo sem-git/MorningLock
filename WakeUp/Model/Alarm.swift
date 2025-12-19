@@ -47,5 +47,5 @@ struct AlarmEntity: Hashable, Identifiable {
 extension AlarmEntity: Comparable {
     static func < (lhs: AlarmEntity, rhs: AlarmEntity) -> Bool {
         lhs.time < rhs.time
-    }
+    }        
 }

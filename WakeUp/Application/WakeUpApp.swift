@@ -24,7 +24,7 @@ struct WakeUpApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
-                .onReceive(NotificationCenter.default.publisher(for: .openTimer)) { _ in
+                .onReceive(NotificationCenter.default.publisher(for: .openTimer)) { _ in                    
                     AlarmManager.shared.dismissSheet()
                     isTimerPresented = true
                 }
