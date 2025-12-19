@@ -27,9 +27,6 @@ final class AlarmManager {
     /// 알람 Notification의 생성, 갱신, 해제를 담당하는 매니저 클래스
     private let notificationManager: NotificationManager
     
-    /// 앱 사용 제한 및 잠금 처리를 위한  매니저 클래스
-    private let deviceActivityManager: DeviceActivityManager
-    
     // MARK: - Properties
     
     private let scheduler: AlarmScheduler = .default
@@ -56,13 +53,11 @@ final class AlarmManager {
     private init(
         dataManager: CoreDataManager = .shared,
         audioPlayer: AudioPlayerManager = .shared,
-        notificationManager: NotificationManager = .shared,
-        deviceActivityManager: DeviceActivityManager = .shared
+        notificationManager: NotificationManager = .shared
     ) {
         self.dataManager = dataManager
         self.audioPlayer = audioPlayer
         self.notificationManager = notificationManager
-        self.deviceActivityManager = deviceActivityManager
         syncAlarmSchedule()
         registerTasksScheduledAlarm()
     }
@@ -135,10 +130,6 @@ extension AlarmManager {
         
         // 활성화된 알람 관련 작업을 모두 종료
         deactiveCurrentAlarm()
-        
-        // 잠금 시작
-        deviceActivityManager.startMonitoring(startAt: Date())
-        deviceActivityManager.commitSelectionWhileLocking()
         
         // 알람 반복 여부에 따라서 isActive 업데이트
         currentAlarm.isActive = !currentAlarm.repeatDay.isEmpty

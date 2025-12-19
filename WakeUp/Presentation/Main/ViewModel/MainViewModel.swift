@@ -23,17 +23,20 @@ class MainViewModel: ObservableObject {
     private let dataManager: CoreDataManager
     private let alarmManager: AlarmManager
     private let notificationManager: NotificationManager
+    private let deviceActivityManager: DeviceActivityManager
     
     private var cancellables = Set<AnyCancellable>()
     
     init(
         dataManager: CoreDataManager = .shared,
         alarmManager: AlarmManager = .shared,
-        notificationManager: NotificationManager = .shared
+        notificationManager: NotificationManager = .shared,
+        deviceActivityManager: DeviceActivityManager = .shared
     ) {
         self.dataManager = dataManager
         self.alarmManager = alarmManager
         self.notificationManager = notificationManager
+        self.deviceActivityManager = deviceActivityManager
         bind()
     }
     
@@ -89,6 +92,8 @@ class MainViewModel: ObservableObject {
     
     func deactiveAlarm() {
         alarmManager.deactiveAlarm()
+        deviceActivityManager.startMonitoring(startAt: .now)
+        deviceActivityManager.commitSelectionWhileLocking()
     }
     
     func snoozeAlarm() {
