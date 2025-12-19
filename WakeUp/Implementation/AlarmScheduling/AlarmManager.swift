@@ -185,19 +185,3 @@ extension AlarmManager {
         }
     }
 }
-
-// MARK: - Enum
-extension AlarmManager {
-    /// AlarmManager 클래스 내부에서 Notification 표시 반복 방식을 나타내는 enum입니다.
-    enum AlarmNotificationMode {
-        
-        /// 알림을 한 번만 트리거합니다.
-        case once
-        
-        /// 반복 스케줄에 따라 Notification을 지속적으로 트리거합니다.
-        case repeating
-        
-        /// Notification을 트리거하지 않습니다.
-        case inactive
-    }
-}
