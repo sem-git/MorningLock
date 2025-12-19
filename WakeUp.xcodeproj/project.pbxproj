@@ -15,6 +15,7 @@
 		006E18012ED5FDF500BB576C /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 006E18002ED5FDF500BB576C /* FirebaseCore */; };
 		006E18032ED5FDF500BB576C /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 006E18022ED5FDF500BB576C /* FirebaseCrashlytics */; };
 		006E18052ED5FDF500BB576C /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 006E18042ED5FDF500BB576C /* FirebaseRemoteConfig */; };
+		765A2A782EF5AB24008EE4FD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 765A2A772EF5AB24008EE4FD /* StoreKit.framework */; };
 		76874F8E2ED9A70F0067C086 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76E681B42ED705FC00E94EEF /* ManagedSettings.framework */; };
 		76874F8F2ED9A70F0067C086 /* ManagedSettingsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76E681B62ED705FC00E94EEF /* ManagedSettingsUI.framework */; };
 		76874F972ED9A70F0067C086 /* ShieldConfiguration.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 76874F8D2ED9A70F0067C086 /* ShieldConfiguration.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -100,6 +101,7 @@
 		00CD949F2E9D3FD4001C47CD /* WakeUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WakeUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00CD94AC2E9D3FD6001C47CD /* WakeUpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WakeUpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00CD94B62E9D3FD6001C47CD /* WakeUpUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WakeUpUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		765A2A772EF5AB24008EE4FD /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		76874F8D2ED9A70F0067C086 /* ShieldConfiguration.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShieldConfiguration.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7699EC862ECF7E78003BCA19 /* DeviceReport.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = DeviceReport.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7699EF8E2ED0677C003BCA19 /* DeviceMonitor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DeviceMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -232,6 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				006E17FB2ED5FDF500BB576C /* FirebaseAnalytics in Frameworks */,
+				765A2A782EF5AB24008EE4FD /* StoreKit.framework in Frameworks */,
 				006E17FD2ED5FDF500BB576C /* FirebaseAnalyticsCore in Frameworks */,
 				006E18032ED5FDF500BB576C /* FirebaseCrashlytics in Frameworks */,
 				006E18052ED5FDF500BB576C /* FirebaseRemoteConfig in Frameworks */,
@@ -313,6 +316,7 @@
 		7699EF8F2ED0677C003BCA19 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				765A2A772EF5AB24008EE4FD /* StoreKit.framework */,
 				7699EF902ED0677C003BCA19 /* DeviceActivity.framework */,
 				76E681B42ED705FC00E94EEF /* ManagedSettings.framework */,
 				76E681B62ED705FC00E94EEF /* ManagedSettingsUI.framework */,
