@@ -49,7 +49,7 @@ struct WakeUpApp: App {
                         break
                     }
                 }
-                .environmentObject(deviceManager)
+//                .environmentObject(deviceManager)
                 .environmentObject(permissionManager)
         }
     }

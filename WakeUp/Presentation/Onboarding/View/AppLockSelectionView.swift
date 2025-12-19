@@ -13,7 +13,7 @@ import ExtensionKit
 
 struct AppLockSelectionView: View {
     @EnvironmentObject var viewModel: OnboardingViewModel
-    @EnvironmentObject var deviceManager: DeviceActivityManager
+    @StateObject var deviceManager: DeviceActivityManager = .shared
     @EnvironmentObject var permissionManager: PermissionManager
     
     @State private var isPickerPresented = false
@@ -92,7 +92,7 @@ struct AppLockSelectionView: View {
             
             let alarm = AlarmEntity(
                 time: Date().addingTimeInterval(60),
-                isActive: isActive,
+                isActive: false,
                 repeatDay: []
             )
             
