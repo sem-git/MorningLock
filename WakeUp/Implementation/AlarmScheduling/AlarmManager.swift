@@ -32,14 +32,12 @@ final class AlarmManager {
     
     // MARK: - Properties
     
-    /// 알람 실행 순서를 관리하기 위한 내부 큐
-    private var alarmQueue: AlarmQueue!
-    
-    /// 현재 스케줄링되어 있는 알람 엔티티
-    private var scheduledAlarm: AlarmEntity?
+    private let scheduler: AlarmScheduler = .default
     
     /// 알람 트리거 타이밍을 제어하기 위한 타이머
     private var alarmTimer: Timer?
+    
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Published Properties
     
@@ -74,21 +72,14 @@ final class AlarmManager {
         self.audioPlayer = audioPlayer
         self.notificationManager = notificationManager
         self.deviceActivityManager = deviceActivityManager
-        updateAlarmSchedule()
+        syncAlarmSchedule()
+        registerTasksScheduledAlarm()
     }
 }
 
 
 extension AlarmManager {
-    /// 알람 스케줄을 갱신합니다.
-    ///
-    /// - 내부적으로 알람 큐를 재구성하고, 다음에 실행될 알람을 스케줄링합니다.
-    /// - 필요 시 스케줄링 완료 후 completion 클로저를 호출합니다.
-    func updateAlarmSchedule(_ completion: (() -> ())? = nil) {
-        buildQueue()
-        scheduleAlarm()
-        completion?()
-    }
+
     
     /// 알람 관련 UI 시트를 표시합니다.
     func openSheet() {
@@ -106,8 +97,7 @@ extension AlarmManager {
     func addAlarm(_ alarm: AlarmEntity) async {
         do {
             try await dataManager.addAlarm(alarm: alarm)
-            alarmQueue.insert(alarm)
-            scheduleAlarm()
+            scheduler.insert(alarm)
         } catch {
             print("Failed to add alarm: \(error)")
         }
@@ -119,7 +109,7 @@ extension AlarmManager {
     func updateAlarm(_ alarm: AlarmEntity) {
         do {
             try dataManager.updateAlarm(alarm: alarm)
-            updateAlarmSchedule()
+            syncAlarmSchedule()
         } catch {
             print("Failure to update alarm: \(error)")
         }
@@ -130,8 +120,7 @@ extension AlarmManager {
     /// - Parameter id: 삭제할 알람의 고유 id
     func removeAlarm(withId id: UUID) {
         dataManager.deleteAlarm(id: id)
-        buildQueue()
-        scheduleAlarm()
+        syncAlarmSchedule()
     }
     
     /// 현재 활성화된 알람을 기준으로 스누즈를 적용합니다.
@@ -158,11 +147,10 @@ extension AlarmManager {
     
     /// 현재 활성화된 알람을 종료하고 스케줄을 갱신합니다.
     func deactiveAlarm() {
-        guard var currentAlarm = scheduledAlarm else { return }
+        guard var currentAlarm = scheduler.scheduledAlarm.value else { return }
         
         // 알람 종료
         alarmNotificationMode = .once
-        scheduledAlarm = nil
         
         // 타이머 종료
         alarmTimer?.invalidate()
@@ -175,7 +163,7 @@ extension AlarmManager {
         // 잠금 시작
         deviceActivityManager.startMonitoring(startAt: Date())
         deviceActivityManager.commitSelectionWhileLocking()
-        // 반복 알람 여부 반영
+        
         currentAlarm.isActive = !currentAlarm.repeatDay.isEmpty
         updateAlarm(currentAlarm)
     }
@@ -183,33 +171,31 @@ extension AlarmManager {
 
 // MARK: - Alarm Scheduling
 extension AlarmManager {
-        
-    private func buildQueue() {
-        alarmQueue = AlarmQueue(sort: .upcoming)
-        
-        let today = Calendar.current.component(.weekday, from: Date())
-        
-        // 큐에 추가될 알림들 미리 필터링
-        dataManager
-            .fetchAlarm()
-            .toEntities()
-            .filter { alarm in
-                guard alarm.isActive else { return false }
-                if alarm.repeatDay.isEmpty { return true }
-                // 현재 날짜 기준 2일
-                let validDays: [Int] = (0...2).map { offset in
-                    ((today - 1 + offset) % 7) + 1
-                }
-                return alarm.repeatDay.contains { weekDay in
-                    validDays.contains(weekDay.rawValue)
+    
+    /// 알람 스케줄러에 데이터를 추가
+    private func syncAlarmSchedule() {
+        scheduler.buildQueue(with: dataManager.fetchAlarm().toEntities())
+        scheduler.scheduleAlarm()
+    }
+    
+    /// 스케줄러에서 선택된 알람을 감지하고 오디오  작업을 수행합니다.
+    private func registerTasksScheduledAlarm() {
+        scheduler
+            .scheduledAlarm
+            .sink { scheduledAlarm in
+                if let scheduledAlarm {
+                    let interval = scheduledAlarm.time.nextOccurrenceIncludingMinutes.timeIntervalSinceNow
+                    self.audioPlayer.play(atTime: interval, volume: 0.5)
+                    self.startAlarmTimer(scheduledAlarm.time.nextOccurrenceIncludingMinutes)
+                } else {
+                    self.stopCurrentAlarm()
                 }
             }
-            .forEach { alarmQueue.insert($0) }
+            .store(in: &cancellables)
     }
     
     @objc
     private func activateAlarm() {
-        guard scheduledAlarm != nil else { return }
         if !isAlarmPlaying {
             isAlarmPlaying = true
             isOpenSheet = true
@@ -224,30 +210,6 @@ extension AlarmManager {
         case .inactive:
             break
         }
-    }
-    
-    private func scheduleAlarm() {
-        guard let nextAlarm = alarmQueue.peek() else {
-            stopCurrentAlarm()
-            return
-        }
-        
-        if let scheduled = scheduledAlarm,
-           scheduled.id == nextAlarm.id,
-           scheduled.time.getTime == nextAlarm.time.getTime {
-            return
-        }
-        
-        // 오늘 울리는 알림이거나 일회성 알림 여부 확인
-        guard nextAlarm.repeatDay.hasToday || nextAlarm.repeatDay.isEmpty else {
-            return
-        }
-        
-        // 알람 등록
-        scheduledAlarm = nextAlarm
-        let interval = nextAlarm.time.getTime.timeIntervalSinceNow
-        audioPlayer.play(atTime: interval, volume: 0.5)
-        startAlarmTimer(nextAlarm.time.getTime)
     }
     
     private func startAlarmTimer(_ date: Date) {
