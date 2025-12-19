@@ -44,7 +44,7 @@ class MainViewModel: ObservableObject {
             alarmManager.$isOpenSheet
         )
         .receive(on: RunLoop.main)
-        .map { $0 && $1 }
+        .map { $0 || $1 }
         .assign(to: \.isAlarmSheetPresented, on: self)
         .store(in: &cancellables)
         
@@ -56,12 +56,12 @@ class MainViewModel: ObservableObject {
                         
         // 알람이 울리는 중이거나 스누즈 횟수가 3회이상 초과시 버튼 disable
         Publishers.CombineLatest(
-            alarmManager.$alarmNotificationMode,
+            alarmManager.$isAlarmPlaying,
             alarmManager.$snoozeCount
         )
         .receive(on: RunLoop.main)
-        .map { alarmMode, snoozeCount in
-            alarmMode == .once || snoozeCount >= 3
+        .map { isAlarmPlaying, snoozeCount in
+            !isAlarmPlaying || snoozeCount >= 3
         }
         .assign(to: \.snoozeDisabled, on: self)
         .store(in: &cancellables)        
