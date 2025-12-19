@@ -9,14 +9,14 @@ import FamilyControls
 import Combine
 import UserNotifications
 
-enum AuthorizationState {
-    case unknown
-    case authorized
-    case denied
-}
-
 @MainActor
 final class PermissionManager: ObservableObject {
+    
+    enum AuthorizationState {
+        case unknown
+        case authorized
+        case denied
+    }
     
     static let shared = PermissionManager()
     

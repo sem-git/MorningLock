@@ -1,5 +1,5 @@
 //
-//  AlarmView.swift
+//  AlarmItem.swift
 //  WakeUp
 //
 //  Created by a on 10/13/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AlarmView: View {
+struct AlarmItem: View {
     @Binding var alarm: AlarmEntity    
     
     var body: some View {
@@ -43,7 +43,3 @@ struct AlarmView: View {
         .cornerRadius(16)
     }
 }
-
-//#Preview {
-//    AlarmView(isOn: .constant(true))
-//}

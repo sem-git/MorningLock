@@ -56,21 +56,23 @@ struct TimerView: View {
             }
         }
         .onAppear {
-            deviceManager.startTimer()
+            deviceManager.startLockTimer()
         }
-        .onChange(of: scenePhase) { newPhase in
+        .onChange(of: scenePhase) { _, newPhase in
             switch newPhase {
             case .active:
-                deviceManager.startTimer()
+                deviceManager.startLockTimer()
             case .background:
-                deviceManager.stopTimer()
+                deviceManager.stopLockTimer()
+            case .inactive:
+                break
             @unknown default:
                 break
             }
         }
-        .onChange(of: deviceManager.remainingTime) { newValue in
-            if newValue <= 0 {
-                deviceManager.stopTimer()
+        .onChange(of: deviceManager.remainingTime) { _, remainingTime in
+            if remainingTime <= 0 {
+                deviceManager.stopLockTimer()
                 dismiss()
             }
         }
@@ -85,9 +87,6 @@ struct RoundProgressView : View {
     @Binding var percent: Double;
     
     var body: some View {
-        
-        let multiplier = width / 40
-        
         let progress = 1 - (CGFloat(percent) / 100)
         
         return ZStack {

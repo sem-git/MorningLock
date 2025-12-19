@@ -32,6 +32,7 @@ enum MainButtonStyle {
 
 struct MainButton: View {
     let title: String
+    
     var disabled: Bool = false
     var buttonStyle: MainButtonStyle = .default
     var action: (() -> ())?

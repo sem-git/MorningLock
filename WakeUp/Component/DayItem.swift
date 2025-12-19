@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-struct DayButton: View {
+struct DayItem: View {
     let title: String
+    
     var isSelected: Bool = false
     var action: (() -> Void)?
     
@@ -32,8 +33,8 @@ struct DayButton: View {
 
 #Preview {
     HStack(spacing: 8) {
-        DayButton(title: "월", isSelected: true)
-        DayButton(title: "화", isSelected: false)
+        DayItem(title: "월", isSelected: true)
+        DayItem(title: "화", isSelected: false)
     }
     .padding()
     .background(.gray800)

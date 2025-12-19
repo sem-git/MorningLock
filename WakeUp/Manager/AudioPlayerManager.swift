@@ -11,6 +11,7 @@ final class AudioPlayerManager: NSObject {
     static let shared = AudioPlayerManager()
     
     private var audioPlayer: AVAudioPlayer?
+    
     private let session = AVAudioSession.sharedInstance()
     
     private override init() {}
@@ -39,6 +40,7 @@ final class AudioPlayerManager: NSObject {
         }
     }
     
+    /// 오디오세션 종료
     func stop() {
         do {
             audioPlayer?.stop()

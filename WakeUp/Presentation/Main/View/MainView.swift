@@ -26,7 +26,7 @@ struct MainView: View {
                     ForEach(Array(viewModel.alarmList.enumerated()), id: \.self.element.id) { (index, alarm) in
                         VStack(spacing: 1) {
                             // alarmList가 바뀔 때까지 업데이트 안 됨
-                            AlarmView(alarm: Binding(get: {
+                            AlarmItem(alarm: Binding(get: {
                                 // 삭제 시 인덱스 오류 방지
                                 if index > viewModel.alarmList.count-1 {
                                     return AlarmEntity(id: UUID(), time: .now, isActive: false, repeatDay: [])
@@ -41,6 +41,7 @@ struct MainView: View {
                                 viewModel.navigateToAlarmSetting(alarm)
                             }
                             
+                            // TODO: 컴포넌트로 분리 예정
                             VStack(alignment: .leading, spacing: 0) {
                                 Text("잠글 앱")
                                     .font(.system(size: 17, weight: .semibold))
@@ -117,19 +118,20 @@ struct MainView: View {
                 .padding(16)
             }
             .animation(.default, value: viewModel.alarmList.count)
+            // TODO: 컴포넌트로 분리
             .sheet(isPresented: $isPickerPresented) {
                 NavigationStack {
                     FamilyActivityPicker(selection: $deviceManager.selection)
                         .onAppear {
                             if deviceManager.isLockingNow {
-                                canSave = deviceManager.canSaveSelectionWhileLocking()
+                                canSave = deviceManager.canSaveSelectionWhileLocking
                             } else {
                                 canSave = true
                             }
                         }
-                        .onChange(of: deviceManager.selection.applicationTokens) { _ in
+                        .onChange(of: deviceManager.selection.applicationTokens) { _, _ in
                             if deviceManager.isLockingNow {
-                                canSave = deviceManager.canSaveSelectionWhileLocking()
+                                canSave = deviceManager.canSaveSelectionWhileLocking
                             } else {
                                 canSave = true
                             }
@@ -157,7 +159,7 @@ struct MainView: View {
             
             // TODO: 타이머 뷰가 나타날 때 sheet 비활성화
             .sheet(
-                isPresented: $viewModel.alarmSheetPresented,
+                isPresented: $viewModel.isAlarmSheetPresented,
                 onDismiss: {
                     viewModel.fetchAlarm()
                 },
@@ -243,6 +245,13 @@ extension MainView {
                 }
             }
         }
+    }
+}
+
+struct AppIconLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.icon
+            .scaleEffect(2.5)
     }
 }
 
