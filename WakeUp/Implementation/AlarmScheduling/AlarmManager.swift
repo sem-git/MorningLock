@@ -34,9 +34,6 @@ final class AlarmManager {
     
     private let scheduler: AlarmScheduler = .default
     
-    /// 알람 트리거 타이밍을 제어하기 위한 타이머
-    private var alarmTimer: Timer?
-    
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Published Properties
@@ -55,12 +52,6 @@ final class AlarmManager {
     /// - 임의로 snoozeCount 값을 수정할 수 없습니다.
     @Published private(set) var snoozeCount: Int = 1
     
-    /// 알람 Notification의 표시 방식을 나타내는 값입니다.
-    ///
-    /// - 현재 등록된 알람의 Notification 트리거 상태를 나타냅니다.
-    /// - 외부에서는 이 값을 직접 수정할 수 없습니다.
-    @Published private(set) var alarmNotificationMode: AlarmNotificationMode = .once
-    
     // MARK: - Initializer
     private init(
         dataManager: CoreDataManager = .shared,
@@ -77,9 +68,7 @@ final class AlarmManager {
     }
 }
 
-
 extension AlarmManager {
-
     
     /// 알람 관련 UI 시트를 표시합니다.
     func openSheet() {
@@ -128,42 +117,30 @@ extension AlarmManager {
     /// - 현재시간 기준 interval 만큼 알람을 지연시킵니다
     func snoozeAlarm(by interval: TimeInterval) {
         // 현재 알람 중지
-        stopCurrentAlarm()
-        
-        // 알람 모드 변경
-        alarmNotificationMode = .once
+        deactiveCurrentAlarm(reschedule: true)
         
         // 현재시간 + interval로 알람 예약
-        let now = Date()
-        audioPlayer.play(atTime: interval, volume: 0.5)
-        startAlarmTimer(now + interval)
+        activateCurrentAlarm(after: interval)
         
         // interval 시간 이후로 snoozeCount 1회 증가(일회성)
-        let timer = Timer(timeInterval: interval, repeats: false) { _ in
+        Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { timer in
             self.snoozeCount += 1
+            timer.invalidate()
         }
-        RunLoop.main.add(timer, forMode: .common)
     }
     
     /// 현재 활성화된 알람을 종료하고 스케줄을 갱신합니다.
     func deactiveAlarm() {
         guard var currentAlarm = scheduler.scheduledAlarm.value else { return }
         
-        // 알람 종료
-        alarmNotificationMode = .once
-        
-        // 타이머 종료
-        alarmTimer?.invalidate()
-        
-        // UI 및 사운드 종료
-        isAlarmPlaying = false
-        isOpenSheet = false
-        audioPlayer.stop()
+        // 활성화된 알람 관련 작업을 모두 종료
+        deactiveCurrentAlarm()
         
         // 잠금 시작
         deviceActivityManager.startMonitoring(startAt: Date())
         deviceActivityManager.commitSelectionWhileLocking()
         
+        // 알람 반복 여부에 따라서 isActive 업데이트
         currentAlarm.isActive = !currentAlarm.repeatDay.isEmpty
         updateAlarm(currentAlarm)
     }
@@ -185,49 +162,36 @@ extension AlarmManager {
             .sink { scheduledAlarm in
                 if let scheduledAlarm {
                     let interval = scheduledAlarm.time.nextOccurrenceIncludingMinutes.timeIntervalSinceNow
-                    self.audioPlayer.play(atTime: interval, volume: 0.5)
-                    self.startAlarmTimer(scheduledAlarm.time.nextOccurrenceIncludingMinutes)
+                    self.activateCurrentAlarm(after: interval)
                 } else {
-                    self.stopCurrentAlarm()
+                    self.deactiveCurrentAlarm()
                 }
             }
             .store(in: &cancellables)
     }
     
-    @objc
-    private func activateAlarm() {
-        if !isAlarmPlaying {
-            isAlarmPlaying = true
-            isOpenSheet = true
-        }
-        
-        switch alarmNotificationMode {
-        case .once:
-            notificationManager.postImmediateNotification()
-            alarmNotificationMode = .inactive
-        case .repeating:
-            notificationManager.postImmediateNotification()
-        case .inactive:
-            break
+    // interval을 기준으로 알람 작업 예약
+    private func activateCurrentAlarm(after interval: TimeInterval) {
+        audioPlayer.play(atTime: interval, volume: 0.5)
+        Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { timer in
+            self.isAlarmPlaying = true
+            self.isOpenSheet = true
+            self.notificationManager.postImmediateNotification()
+            timer.invalidate()
         }
     }
     
-    private func startAlarmTimer(_ date: Date) {
-        alarmTimer = Timer(
-            fireAt: date,
-            interval: 5,
-            target: self,
-            selector: #selector(activateAlarm),
-            userInfo: nil,
-            repeats: true
-        )
-        RunLoop.main.add(alarmTimer!, forMode: .common)
-    }
-    
-    // 현재 울리고 있는 알람의 사운드 및 타이머 중지
-    private func stopCurrentAlarm() {
+    // 알람 작업 취소
+    private func deactiveCurrentAlarm(reschedule: Bool = false) {
         audioPlayer.stop()
-        alarmTimer?.invalidate()
+        
+        if reschedule {
+            isAlarmPlaying = false
+            isOpenSheet = true
+        } else {
+            isAlarmPlaying = false
+            isOpenSheet = false
+        }
     }
 }
 
