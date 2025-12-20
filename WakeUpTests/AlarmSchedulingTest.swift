@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import WakeUp
+import Combine
 
 final class AlarmSchedulingTest: XCTestCase {
     var sut: AlarmScheduler!
@@ -25,7 +26,7 @@ final class AlarmSchedulingTest: XCTestCase {
     
     override func setUpWithError() throws {
         try super.setUpWithError()
-        sut = DefaultAlarmScheduler(sortOption: .test(testDate: testDate))
+        sut = .test
     }
     
     override func tearDownWithError() throws {
@@ -36,18 +37,18 @@ final class AlarmSchedulingTest: XCTestCase {
     func test_동일한_시간의_알람이_여러개일때_가장_가까운_알람을_선택한다() throws {
         // given - 알람목록을 가져오고 스케줄러에 데이터를 추가
         let alarms: [AlarmEntity] = [
-            AlarmEntity(time: .now, repeatDay: [.fri]),
-            AlarmEntity(time: .now, repeatDay: [.mon]),
-            AlarmEntity(time: .now, repeatDay: []), // 가장 빠른 알람
+            AlarmEntity(fireDate: testDate, repeatDay: [.fri]),
+            AlarmEntity(fireDate: testDate, repeatDay: [.mon]),
+            AlarmEntity(fireDate: testDate.addingTimeInterval(.minutes(2)), repeatDay: []), // 가장 빠른 알람
         ]
         // 데이터 추가
         sut.buildQueue(with: alarms)
         
         // when - 알람 스케줄링 시작
-        sut.scheduleAlarm()
+        sut.schedule()
         
         // then - 현재시간 기준 가장 빠른 알람인 일요일 알람이 스케줄링된다
-        let scheduledAlarm = try XCTUnwrap(sut.scheduledAlarm)
+        let scheduledAlarm = try XCTUnwrap(sut.scheduledAlarm.value)
         let lastAlarm = try XCTUnwrap(alarms.last)
         XCTAssertEqual(scheduledAlarm.id, lastAlarm.id, "스케줄링된 알람과 가장 빠른 알람의 id가 일치하지 않음")
     }
@@ -55,17 +56,17 @@ final class AlarmSchedulingTest: XCTestCase {
     func test_서로_다른시간의_알람들중_가장_빠른_알람이_선택된다() throws {
         // given - 서로다른 시간의 알람 목록을 스케줄러에 추가
         let alarms: [AlarmEntity] = [
-            AlarmEntity(time: testDate.addingTimeInterval(100)),
-            AlarmEntity(time: testDate.addingTimeInterval(50)),
-            AlarmEntity(time: testDate.addingTimeInterval(10)) // 가장 빠른 알람
+            AlarmEntity(fireDate: testDate.addingTimeInterval(100)),
+            AlarmEntity(fireDate: testDate.addingTimeInterval(50)),
+            AlarmEntity(fireDate: testDate.addingTimeInterval(10)) // 가장 빠른 알람
         ]
         sut.buildQueue(with: alarms)
         
         // when - 알람 스케줄링 시작
-        sut.scheduleAlarm()    
+        sut.schedule()
         
-        // when - 마지막 알람이 스케줄링된 상태
-        let scheduledAlarm = try XCTUnwrap(sut.scheduledAlarm)
+        // then - 마지막 알람이 스케줄링된 상태
+        let scheduledAlarm = try XCTUnwrap(sut.scheduledAlarm.value)
         let lastAlarm = try XCTUnwrap(alarms.last)
         XCTAssertEqual(scheduledAlarm.id, lastAlarm.id, "스케줄링된 알람과 가장 빠른 알람의 id가 일치하지 않음")
     }
@@ -73,19 +74,38 @@ final class AlarmSchedulingTest: XCTestCase {
     func test_비활성화된_알람은_스케줄링_대상에서_제외된다() throws {
         // given - 비활성화된 알람을 추가
         let alarms: [AlarmEntity] = [
-            AlarmEntity(time: testDate.addingTimeInterval(100), isActive: true),
-            AlarmEntity(time: testDate.addingTimeInterval(50), isActive: false),
-            AlarmEntity(time: testDate.addingTimeInterval(10), isActive: false) // 가장 빠른 알람
+            AlarmEntity(fireDate: testDate.addingTimeInterval(100), isActive: true),
+            AlarmEntity(fireDate: testDate.addingTimeInterval(50), isActive: false),
+            AlarmEntity(fireDate: testDate.addingTimeInterval(10), isActive: false) // 가장 빠른 알람
         ]
         sut.buildQueue(with: alarms)
         
         // when - 알람 스케줄링 시작
-        sut.scheduleAlarm()
+        sut.schedule()
         
-        let scheduledAlarm = try XCTUnwrap(sut.scheduledAlarm)
+        let scheduledAlarm = try XCTUnwrap(sut.scheduledAlarm.value)
         let firstAlarm = try XCTUnwrap(alarms.first)
         XCTAssertEqual(scheduledAlarm.id, firstAlarm.id)
         XCTAssertTrue(scheduledAlarm.isActive)
     }
+    
+//    func test_특정범위_이외의_알람은_스케줄링_대상에서_제외된다() throws {
+//        // given - 2일 이상 떨어진 날짜 목록 추가
+//        let alarms: [AlarmEntity] = [
+//            AlarmEntity(fireDate: testDate.addingTimeInterval(.init(days: 3))),
+//            AlarmEntity(fireDate: testDate.addingTimeInterval(.init(days: 4))),
+//            AlarmEntity(fireDate: testDate.addingTimeInterval(.init(days: 5))),
+//        ]
+//        sut.buildQueue(with: alarms)
+//        
+//        // when - 알람 스케줄링 시작
+//        sut.schedule()
+//        
+//        // then - 스케줄링된 알람이 존재하지 않는다.
+//        // testDate=5
+//        // sun = 1, mon=2, tue=3, wed=4, thu=5, fri=6, sat=7
+//        
+//        XCTAssertNil(sut.scheduledAlarm.value)
+//    }
 }
 
