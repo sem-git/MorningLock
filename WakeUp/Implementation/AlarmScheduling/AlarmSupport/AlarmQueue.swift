@@ -8,40 +8,11 @@
 import Foundation
 
 enum QueueSortOption {
-    case upcoming
-    case test(testDate: Date)
+    case upcomingDate
     
     var sortClosure: (AlarmEntity, AlarmEntity) -> Bool {
         switch self {
-        case .upcoming:
-            return {
-                let today = Calendar.current.component(.weekday, from: Date())
-                
-                let prev = $0.repeatDay.map { (weekDay: Weekday) -> Int in (weekDay.rawValue - today + 7) % 7}.min() ?? 0
-                let next = $1.repeatDay.map { (weekDay: Weekday) -> Int in (weekDay.rawValue - today + 7) % 7 }.min() ?? 0
-                
-                // 오늘이랑 내일이 같지 않은 경우 오프셋 기준으로 정렬
-                if prev != next {
-                    return prev < next
-                }
-                // offset이 같으면 오늘 기준 시간 비교
-                return $0.time.nextOccurrenceIncludingMinutes < $1.time.nextOccurrenceIncludingMinutes
-            }
-        case .test(let testDate):
-            return {
-                let today = Calendar.current.component(.weekday, from: testDate)
-                
-                let prev = $0.repeatDay.map { (weekDay: Weekday) -> Int in (weekDay.rawValue - today + 7) % 7}.min() ?? 0
-                let next = $1.repeatDay.map { (weekDay: Weekday) -> Int in (weekDay.rawValue - today + 7) % 7 }.min() ?? 0
-                
-                // 오늘이랑 내일이 같지 않은 경우 오프셋 기준으로 정렬
-                if prev != next {
-                    return prev < next
-                }
-                // offset이 같으면 오늘 기준 시간 비교
-                return $0.time.nextOccurrenceIncludingSeconds < $1.time.nextOccurrenceIncludingSeconds
-            }
-        }
+            case .upcomingDate:  { $0.fireDate < $1.fireDate } }
     }
 }
 
