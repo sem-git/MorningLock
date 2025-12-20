@@ -10,7 +10,7 @@ extension Array where Element == Alarm {
         map {
             AlarmEntity(
                 id: $0.id,
-                time: $0.time,
+                fireDate: $0.fireDate,
                 isActive: $0.isActive,
                 repeatDay: $0.repeatDay.map({
                     Weekday(rawValue: $0)!

@@ -6,7 +6,6 @@
 //
 
 import CoreData
-import UserNotifications
 
 class CoreDataManager {
     static let shared = CoreDataManager()
@@ -30,7 +29,7 @@ class CoreDataManager {
         let newAlarm = Alarm(context: context)
         newAlarm.id = alarm.id
         newAlarm.isActive = alarm.isActive
-        newAlarm.time = alarm.time
+        newAlarm.fireDate = alarm.fireDate
         newAlarm.repeatDay = alarm.repeatDay.map { $0.rawValue }
         
         do {
@@ -65,7 +64,7 @@ class CoreDataManager {
                 
                 if var updateAlarm = data.first {
                     updateAlarm.isActive = alarm.isActive
-                    updateAlarm.time = alarm.time
+                    updateAlarm.fireDate = alarm.fireDate
                     updateAlarm.repeatDay = alarm.repeatDay.map(\.rawValue)
                     try context.save()
                 }

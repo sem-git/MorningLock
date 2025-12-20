@@ -25,14 +25,11 @@ struct WakeUpApp: App {
         WindowGroup {
             RootView()
                 .onReceive(NotificationCenter.default.publisher(for: .openTimer)) { _ in
-                    AlarmManager.shared.dismissSheet()
                     isTimerPresented = true
                 }
-                .fullScreenCover(isPresented: $isTimerPresented, onDismiss: {
-                    AlarmManager.shared.openSheet()
-                }, content: {
+                .fullScreenCover(isPresented: $isTimerPresented, content: {
                     TimerView()
-                })
+                })                
                 .onChange(of: scenePhase) { newPhase in
                     switch newPhase {
                     case .background:
@@ -48,7 +45,6 @@ struct WakeUpApp: App {
                         break
                     }
                 }
-//                .environmentObject(deviceManager)
                 .environmentObject(permissionManager)
         }
     }
@@ -76,9 +72,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             task.setTaskCompleted(success: false)
         }
         
-        alarmManager.updateAlarmSchedule() {
-            Analytics.logEvent("UpdateQueue", parameters: nil)
-        }
+//        alarmManager.updateAlarmSchedule() {
+//            Analytics.logEvent("UpdateQueue", parameters: nil)
+//        }
         
         task.setTaskCompleted(success: true)
     }
@@ -91,9 +87,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             task.setTaskCompleted(success: false)
         }
         
-        alarmManager.updateAlarmSchedule() {
-            Analytics.logEvent("UpdateQueue", parameters: nil)
-        }
+//        alarmManager.updateAlarmSchedule() {
+//            Analytics.logEvent("UpdateQueue", parameters: nil)
+//        }
         
         task.setTaskCompleted(success: true)
     }
