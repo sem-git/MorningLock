@@ -29,7 +29,7 @@ struct MainView: View {
                             AlarmItem(alarm: Binding(get: {
                                 // 삭제 시 인덱스 오류 방지
                                 if index > viewModel.alarmList.count-1 {
-                                    return AlarmEntity(id: UUID(), time: .now, isActive: false, repeatDay: [])
+                                    return AlarmEntity(id: UUID(), fireDate: .now, isActive: false, repeatDay: [])
                                 } else {
                                     return alarm
                                 }

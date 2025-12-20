@@ -1,8 +1,8 @@
-import Foundation
-import ManagedSettings
+import Combine
 import DeviceActivity
 import FamilyControls
-import Combine
+import Foundation
+import ManagedSettings
 
 // TODO: UserDefaultManager로 만들기
 @MainActor

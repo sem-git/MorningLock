@@ -75,7 +75,7 @@ class MainViewModel: ObservableObject {
         alarmList = dataManager
             .fetchAlarm()
             .toEntities()
-            .sorted { $0.time.nextOccurrenceIncludingSeconds < $1.time.nextOccurrenceIncludingSeconds }
+            .sorted { $0.fireDate.nextOccurrenceIncludingSeconds < $1.fireDate.nextOccurrenceIncludingSeconds }
     }
     
     func updateAlarm(_ alarm: AlarmEntity) {

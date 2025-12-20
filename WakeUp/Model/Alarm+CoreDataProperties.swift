@@ -20,7 +20,7 @@ extension Alarm {
 
     @NSManaged public var id: UUID
     @NSManaged public var isActive: Bool
-    @NSManaged public var time: Date
+    @NSManaged public var fireDate: Date
     @NSManaged public var repeatDay: [Int]
 
 }

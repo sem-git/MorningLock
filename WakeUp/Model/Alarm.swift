@@ -11,7 +11,7 @@ import SwiftUI
 
 struct AlarmEntity: Hashable, Identifiable {
     var id: UUID
-    var time: Date
+    var fireDate: Date
     var isActive: Bool
     var repeatDay: [Weekday]
     
@@ -19,7 +19,7 @@ struct AlarmEntity: Hashable, Identifiable {
         let formatter = DateFormatter()
         formatter.locale = .current
         formatter.dateFormat = "HH:mm"
-        let dateString = formatter.string(from: time)
+        let dateString = formatter.string(from: fireDate)
         return dateString
     }
     
@@ -27,18 +27,18 @@ struct AlarmEntity: Hashable, Identifiable {
         let formatter = DateFormatter()
         formatter.locale = .current
         formatter.dateFormat = "a"
-        let meridiem = formatter.string(from: time)
+        let meridiem = formatter.string(from: fireDate)
         return meridiem
     }
     
     init(
         id: UUID = .init(),
-        time: Date = .now,
+        fireDate: Date = .now,
         isActive: Bool = true,
         repeatDay: [Weekday] = []
     ) {
         self.id = id
-        self.time = time
+        self.fireDate = fireDate
         self.isActive = isActive
         self.repeatDay = repeatDay
     }
@@ -46,6 +46,6 @@ struct AlarmEntity: Hashable, Identifiable {
 
 extension AlarmEntity: Comparable {
     static func < (lhs: AlarmEntity, rhs: AlarmEntity) -> Bool {
-        lhs.time < rhs.time
+        lhs.fireDate < rhs.fireDate
     }        
 }

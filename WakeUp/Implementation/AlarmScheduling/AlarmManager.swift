@@ -6,7 +6,7 @@
 //
 
 import Combine
-import UserNotifications
+import Foundation
 
 /// 등록된 알람을 스케줄링하고 알람 백그라운드 작업을 예약하는 클래스입니다.
 final class AlarmManager {
@@ -63,6 +63,8 @@ final class AlarmManager {
     }
 }
 
+// MARK: - Alarm Generate
+
 extension AlarmManager {
     /// 새로운 알람을 등록하고 스케줄을 갱신합니다.
     ///
@@ -100,6 +102,8 @@ extension AlarmManager {
     ///
     /// - 현재시간 기준 interval 만큼 알람을 지연시킵니다
     func snoozeAlarm(by interval: TimeInterval) {
+        if snoozeCount >= maxSnoozeCount { return }
+        
         // 현재 알람 중지
         deactiveCurrentAlarm(reschedule: true)
         
@@ -132,7 +136,7 @@ extension AlarmManager {
     /// 알람 스케줄러에 데이터를 추가
     private func syncAlarmSchedule() {
         scheduler.buildQueue(with: dataManager.fetchAlarm().toEntities())
-        scheduler.scheduleAlarm()
+        scheduler.schedule()
     }
     
     /// 스케줄러에서 선택된 알람을 감지하고 오디오  작업을 수행합니다.
@@ -141,7 +145,7 @@ extension AlarmManager {
             .scheduledAlarm
             .sink { scheduledAlarm in
                 if let scheduledAlarm {
-                    let interval = scheduledAlarm.time.nextOccurrenceIncludingMinutes.timeIntervalSinceNow
+                    let interval = scheduledAlarm.fireDate.nextOccurrenceIncludingMinutes.timeIntervalSinceNow
                     self.activateCurrentAlarm(after: interval)
                 } else {
                     self.deactiveCurrentAlarm()
