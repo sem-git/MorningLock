@@ -38,13 +38,6 @@
 			remoteGlobalIDString = 00CD949E2E9D3FD4001C47CD;
 			remoteInfo = WakeUp;
 		};
-		00CD94B72E9D3FD6001C47CD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 00CD94972E9D3FD4001C47CD /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 00CD949E2E9D3FD4001C47CD;
-			remoteInfo = WakeUp;
-		};
 		76874F952ED9A70F0067C086 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 00CD94972E9D3FD4001C47CD /* Project object */;
@@ -99,7 +92,6 @@
 		0045135E2EE76A9900E6CF51 /* ShieldAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShieldAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		00CD949F2E9D3FD4001C47CD /* WakeUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WakeUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00CD94AC2E9D3FD6001C47CD /* WakeUpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WakeUpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		00CD94B62E9D3FD6001C47CD /* WakeUpUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WakeUpUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		76874F8D2ED9A70F0067C086 /* ShieldConfiguration.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShieldConfiguration.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7699EC862ECF7E78003BCA19 /* DeviceReport.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = DeviceReport.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7699EF8E2ED0677C003BCA19 /* DeviceMonitor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DeviceMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -247,13 +239,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		00CD94B32E9D3FD6001C47CD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		76874F8A2ED9A70F0067C086 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -301,7 +286,6 @@
 			children = (
 				00CD949F2E9D3FD4001C47CD /* WakeUp.app */,
 				00CD94AC2E9D3FD6001C47CD /* WakeUpTests.xctest */,
-				00CD94B62E9D3FD6001C47CD /* WakeUpUITests.xctest */,
 				7699EC862ECF7E78003BCA19 /* DeviceReport.appex */,
 				7699EF8E2ED0677C003BCA19 /* DeviceMonitor.appex */,
 				76874F8D2ED9A70F0067C086 /* ShieldConfiguration.appex */,
@@ -402,29 +386,6 @@
 			productReference = 00CD94AC2E9D3FD6001C47CD /* WakeUpTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		00CD94B52E9D3FD6001C47CD /* WakeUpUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 00CD94C62E9D3FD6001C47CD /* Build configuration list for PBXNativeTarget "WakeUpUITests" */;
-			buildPhases = (
-				00CD94B22E9D3FD6001C47CD /* Sources */,
-				00CD94B32E9D3FD6001C47CD /* Frameworks */,
-				00CD94B42E9D3FD6001C47CD /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				00CD94B82E9D3FD6001C47CD /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				00CD94B92E9D3FD6001C47CD /* WakeUpUITests */,
-			);
-			name = WakeUpUITests;
-			packageProductDependencies = (
-			);
-			productName = WakeUpUITests;
-			productReference = 00CD94B62E9D3FD6001C47CD /* WakeUpUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 		76874F8C2ED9A70F0067C086 /* ShieldConfiguration */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 76874F982ED9A70F0067C086 /* Build configuration list for PBXNativeTarget "ShieldConfiguration" */;
@@ -511,10 +472,6 @@
 						CreatedOnToolsVersion = 26.0.1;
 						TestTargetID = 00CD949E2E9D3FD4001C47CD;
 					};
-					00CD94B52E9D3FD6001C47CD = {
-						CreatedOnToolsVersion = 26.0.1;
-						TestTargetID = 00CD949E2E9D3FD4001C47CD;
-					};
 					76874F8C2ED9A70F0067C086 = {
 						CreatedOnToolsVersion = 26.1.1;
 					};
@@ -545,7 +502,6 @@
 			targets = (
 				00CD949E2E9D3FD4001C47CD /* WakeUp */,
 				00CD94AB2E9D3FD6001C47CD /* WakeUpTests */,
-				00CD94B52E9D3FD6001C47CD /* WakeUpUITests */,
 				7699EC852ECF7E78003BCA19 /* DeviceReport */,
 				7699EF8D2ED0677C003BCA19 /* DeviceMonitor */,
 				76874F8C2ED9A70F0067C086 /* ShieldConfiguration */,
@@ -570,13 +526,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		00CD94AA2E9D3FD6001C47CD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		00CD94B42E9D3FD6001C47CD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -628,13 +577,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		00CD94B22E9D3FD6001C47CD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		76874F892ED9A70F0067C086 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -668,11 +610,6 @@
 			isa = PBXTargetDependency;
 			target = 00CD949E2E9D3FD4001C47CD /* WakeUp */;
 			targetProxy = 00CD94AD2E9D3FD6001C47CD /* PBXContainerItemProxy */;
-		};
-		00CD94B82E9D3FD6001C47CD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 00CD949E2E9D3FD4001C47CD /* WakeUp */;
-			targetProxy = 00CD94B72E9D3FD6001C47CD /* PBXContainerItemProxy */;
 		};
 		76874F962ED9A70F0067C086 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1011,46 +948,6 @@
 			};
 			name = Release;
 		};
-		00CD94C72E9D3FD6001C47CD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7UL55F8A57;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.WakeUpUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = WakeUp;
-			};
-			name = Debug;
-		};
-		00CD94C82E9D3FD6001C47CD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7UL55F8A57;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.WakeUpUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = WakeUp;
-			};
-			name = Release;
-		};
 		76874F992ED9A70F0067C086 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1286,15 +1183,6 @@
 			buildConfigurations = (
 				00CD94C42E9D3FD6001C47CD /* Debug */,
 				00CD94C52E9D3FD6001C47CD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		00CD94C62E9D3FD6001C47CD /* Build configuration list for PBXNativeTarget "WakeUpUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				00CD94C72E9D3FD6001C47CD /* Debug */,
-				00CD94C82E9D3FD6001C47CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
