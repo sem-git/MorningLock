@@ -24,7 +24,7 @@ class DeviceActivityMonitorExtension: DeviceActivityMonitor {
 
     private func loadSelectedApps() -> FamilyActivitySelection? {
         let userDefaults = UserDefaults(suiteName: "group.com.awayke")
-        guard let data = userDefaults?.data(forKey: "testKey") else {
+        guard let data = userDefaults?.data(forKey: "appLockStateKey") else {
             return nil
         }
         
