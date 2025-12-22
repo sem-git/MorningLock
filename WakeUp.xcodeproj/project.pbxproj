@@ -194,11 +194,6 @@
 			path = WakeUpTests;
 			sourceTree = "<group>";
 		};
-		00CD94B92E9D3FD6001C47CD /* WakeUpUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = WakeUpUITests;
-			sourceTree = "<group>";
-		};
 		76874F902ED9A70F0067C086 /* ShieldConfiguration */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -289,7 +284,6 @@
 			children = (
 				00CD94A12E9D3FD4001C47CD /* WakeUp */,
 				00CD94AF2E9D3FD6001C47CD /* WakeUpTests */,
-				00CD94B92E9D3FD6001C47CD /* WakeUpUITests */,
 				7699EC872ECF7E78003BCA19 /* DeviceReport */,
 				7699EF922ED0677C003BCA19 /* DeviceMonitor */,
 				76874F902ED9A70F0067C086 /* ShieldConfiguration */,
