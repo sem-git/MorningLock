@@ -17,6 +17,7 @@ struct AlarmSettingView: View {
                 VStack(alignment: .leading, spacing: 1) {
                     // 시간 설정
                     DatePicker("", selection: $viewModel.alarm.fireDate, displayedComponents: .hourAndMinute)
+                        .environment(\.locale, Locale(identifier: "en_US"))
                         .datePickerStyle(.wheel)
                         .labelsHidden()
                     
