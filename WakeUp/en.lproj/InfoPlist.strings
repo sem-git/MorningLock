@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  WakeUp
+
+  Created by a on 12/23/25.
+  
+*/
+
+"NSTrackingUsageDescription" = "Your advertising activity may be used to provide you with personalized ads.";
+"CFBundleDisplayName" = "Morning Lock";
