@@ -12,47 +12,40 @@ struct AlarmSettingView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        VStack(spacing: 0) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 1) {
-                    // 시간 설정
-                    DatePicker("", selection: $viewModel.alarm.fireDate, displayedComponents: .hourAndMinute)
-                        .environment(\.locale, Locale(identifier: "en_US"))
-                        .datePickerStyle(.wheel)
-                        .labelsHidden()
-                    
-                    // 요일 설정
-                    VStack(alignment: .leading, spacing: 14) {
-                        Text("반복")
-                            .font(.system(size: 17, weight: .semibold))
-                            .foregroundStyle(.gray50)
-                        
-                        GeometryReader { geometry in
-                            let itemSize = (geometry.size.width - 10 * 6) / 7
-                            HStack(alignment: .center, spacing: 10) {
-                                ForEach(Weekday.allCases, id: \.self) { day in
-                                    let daySelected = viewModel.weekDays.contains(day)
-                                    DayItem(title: day.dayName, isSelected: daySelected) {
-                                        viewModel.selecteDay(day)
-                                    }
-                                }
-                            }
+        VStack(spacing: 16) {
+            // 시간 설정
+            DatePicker("", selection: $viewModel.alarm.fireDate, displayedComponents: .hourAndMinute)
+                .environment(\.locale, Locale(identifier: "en_US"))
+                .datePickerStyle(.wheel)
+                .labelsHidden()
+            
+            // 요일 설정
+            VStack(alignment: .leading, spacing: 14) {
+                Text("반복")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(.gray50)
+                
+                HStack(alignment: .center, spacing: 8) {
+                    ForEach(Weekday.allCases, id: \.self) { day in
+                        let daySelected = viewModel.weekDays.contains(day)
+                        DayItem(title: day.dayName, isSelected: daySelected) {
+                            viewModel.selecteDay(day)
                         }
-                        .frame(height: 50)
                     }
-                    .padding(16)
-                    .background(.gray600)
-                    .cornerRadius(16)
                 }
-                .padding(16)
             }
+            .padding(16)
+            .background(.gray600)
+            .cornerRadius(16)
+            
+            Spacer()
         }
+        .padding(.horizontal, 16)
         .navigationBarItems(leading: backButton)
         .navigationTitle("알람 설정")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .overlay(alignment: .bottom, content: {
-            
             MainButton(title: viewModel.isEditing ? "수정 하기" : "저장 하기") {
                 if viewModel.isEditing {
                     updateAlarm()
@@ -85,33 +78,3 @@ struct AlarmSettingView: View {
         dismiss()
     }
 }
-
-struct SettingOption: View {
-    let title: String
-    let subtitle: String
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundStyle(.white)
-                    Text(subtitle)
-                        .font(.system(size: 14))
-                        .foregroundStyle(.gray)
-                }
-                Spacer()
-                Image(.icRight)
-            }
-            .padding()
-            .background(Color.white.opacity(0.1))
-            .cornerRadius(12)
-        }
-    }
-}
-
-//#Preview {
-//    AlarmSettingView(viewModel: AlarmSettingViewModel())
-//}
