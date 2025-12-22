@@ -56,12 +56,12 @@ class MainViewModel: ObservableObject {
                         
         // 알람이 울리는 중이거나 스누즈 횟수가 3회이상 초과시 버튼 disable
         Publishers.CombineLatest(
-            alarmManager.$isAlarmPlaying,
+            alarmManager.$isSnoozeActive,
             alarmManager.$snoozeCount
         )
         .receive(on: RunLoop.main)
-        .map { isAlarmPlaying, snoozeCount in
-            !isAlarmPlaying || snoozeCount >= 3
+        .map { isSnoozeActive, snoozeCount in
+            isSnoozeActive || snoozeCount >= 3
         }
         .assign(to: \.snoozeDisabled, on: self)
         .store(in: &cancellables)        
