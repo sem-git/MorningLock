@@ -148,11 +148,11 @@ struct MainView: View {
                         }
                         .toolbar {
                             ToolbarItem(placement: .principal) {
-                                Text("앱 선택")
+                                Text(NSLocalizedString("SelectApps", comment: "앱 선택"))
                                     .font(.system(size: 20, weight: .bold))
                             }
                             ToolbarItem(placement: .confirmationAction) {
-                                Button("완료") {
+                                Button(NSLocalizedString("Complete", comment: "완료")) {
                                     if deviceManager.isLockingNow {
                                         deviceManager.commitSelectionWhileLocking()
                                     } else {
@@ -233,10 +233,15 @@ extension MainView {
                 .foregroundStyle(.primary)
                 .padding(.top, 24)
             
-            Text(String(format: NSLocalizedString("alarmRiningSubTitle", comment: "알람 횟수 표시"), viewModel.snoozeCount))
+            Text(NSLocalizedString("alarmRiningSubTitle", comment: "알람 횟수 표시"))
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
                 .padding(.top, 8)
+            
+            Text(String(format: NSLocalizedString("alarmRingingCount", comment: "알람 횟수 표시"), viewModel.snoozeCount))
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
             
             Image(.imgLock)

@@ -28,4 +28,26 @@ final class NotificationManager {
         )
         center.add(request)
     }
+    
+    func postDelayNotification(after seconds: TimeInterval, title: String, body: String) {
+        center.removeAllPendingNotificationRequests()
+        
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        content.sound = nil
+
+        let trigger = UNTimeIntervalNotificationTrigger(
+            timeInterval: seconds,
+            repeats: false
+        )
+
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: content,
+            trigger: trigger
+        )
+
+        center.add(request)
+    }
 }

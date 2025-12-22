@@ -161,10 +161,18 @@ extension AlarmManager {
     
     // interval을 기준으로 알람 작업 예약
     private func activateCurrentAlarm(after interval: TimeInterval) {
+        // 오디오 재생
         audioPlayer.play(atTime: interval, volume: 0.5)
+        
+        // 노티피케이션 등록
+        notificationManager.postDelayNotification(
+            after: interval,
+            title: NSLocalizedString("AlarmRingingNotificationTitle", comment: "알람 타이틀"),
+            body: NSLocalizedString("AlarmRingingNotificationSubTitle", comment: "알람 서브 타이틀")
+        )
+        // 타이머 등록
         alarmTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { _ in
             self.isAlarmPlaying = true
-            self.notificationManager.postImmediateNotification()
         }
     }
     
