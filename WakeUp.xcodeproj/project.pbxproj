@@ -112,21 +112,21 @@
 		009CE6402EAB8549005B0F5A /* Exceptions for "WakeUp" folder in "WakeUp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				Resources/Info.plist,
 			);
 			target = 00CD949E2E9D3FD4001C47CD /* WakeUp */;
 		};
 		00D99E092EF9C0E40012C0E7 /* Exceptions for "WakeUp" folder in "ShieldConfiguration" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"/Localized: Localizable.strings",
+				"/Localized: Resources/Localizable.strings",
 			);
 			target = 76874F8C2ED9A70F0067C086 /* ShieldConfiguration */;
 		};
 		00D99E0A2EF9C0E40012C0E7 /* Exceptions for "WakeUp" folder in "ShieldAction" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"/Localized: Localizable.strings",
+				"/Localized: Resources/Localizable.strings",
 			);
 			target = 0045135D2EE76A9900E6CF51 /* ShieldAction */;
 		};
@@ -839,7 +839,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = WakeUp/WakeUp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = WakeUp/Resources/WakeUp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -848,7 +848,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7UL55F8A57;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = WakeUp/Info.plist;
+				INFOPLIST_FILE = WakeUp/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "아침잠금";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = NSUserTrackingUsageDescription;
@@ -886,7 +886,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = WakeUp/WakeUp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = WakeUp/Resources/WakeUp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
@@ -896,7 +896,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7UL55F8A57;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = WakeUp/Info.plist;
+				INFOPLIST_FILE = WakeUp/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "아침잠금";
 				"INFOPLIST_KEY_CFBundleDisplayName[sdk=iphoneos*]" = "아침잠금";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
