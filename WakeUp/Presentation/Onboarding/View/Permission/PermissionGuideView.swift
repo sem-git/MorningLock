@@ -20,7 +20,7 @@ struct PermissionGuideView: View {
                     Button {
                         viewModel.navigate(to: .screenTimePermission)
                     } label: {
-                        Color.red.opacity(0.3)
+                        Color.clear
                     }
                     .frame(width: 145, height: 55)
                 }
