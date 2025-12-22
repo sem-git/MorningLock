@@ -18,7 +18,7 @@ final class AudioPlayerManager: NSObject {
     
     /// 일정 시간 이후 음악 재생
     func play(atTime: TimeInterval, volume: Float) {
-        guard let url = Bundle.main.url(forResource: "sampleSound", withExtension: "caf") else {
+        guard let url = Bundle.main.url(forResource: "perfect-beauty", withExtension: "mp3") else {
             print("Not found audio file")
             return
         }
