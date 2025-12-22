@@ -45,7 +45,7 @@
 "AlarmRingingNotificationTitle" = "Turn Off the Alarm in the App";
 "AlarmRingingNotificationSubTitle" = "Have a refreshing morning!";
 
-"MorningUnlockedNotificationTitle" = "When Your Will Awakens";
+"MorningUnlockedNotificationTitle" = "When Your Will Awakens 🔥";
 "MorningUnlockedNotificationSubTitle" = "The set time has passed and app restrictions have been lifted. We’re cheering you on as you start your day.";
 
 "appLockScreenTitle" = "Waiting for your morning routine\nShall we focus on starting the day?";
@@ -54,3 +54,6 @@
 
 "CheckRemainingTimeNotificationTitle" = "Check Remaining Time";
 "CheckRemainingTimeNotificationSubTitle" = "Check the remaining time in the app!";
+
+"SelectApps" = "Select Apps";
+"Complete" = "Done";

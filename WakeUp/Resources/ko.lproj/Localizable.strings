@@ -57,7 +57,7 @@
 "CheckRemainingTimeNotificationTitle" = "남은 시간 확인하기";
 "CheckRemainingTimeNotificationSubTitle" = "남은 시간을 앱에서 확인해보세요!";
 
-"MorningUnlockedNotificationTitle" = "의지가 깨어나는 시간";
+"MorningUnlockedNotificationTitle" = "의지가 깨어나는 시간 🔥";
 "MorningUnlockedNotificationSubTitle" = "설정된 시간이 지나 앱 잠금이 해제되었습니다. 오늘의 시작을 응원할게요.";
 
 // 앱잠금 화면
@@ -65,3 +65,5 @@
 "appLockScreenSubTitle" = "잠금 상태입니다";
 "remainingTimeButtonText" = "남은 시간은?";
 
+"SelectApps" = "앱 선택";
+"Complete" = "완료";
