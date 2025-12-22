@@ -21,6 +21,8 @@ struct AlarmItem: View {
                     Text("\(alarm.dateString)")
                         .font(.system(size: 48, weight: .bold))
                         .foregroundStyle(.gray50)
+                        .fixedSize(horizontal: true, vertical: false)
+                    
                     Spacer()
                     
                     Toggle("", isOn: Binding(get: {
@@ -29,6 +31,7 @@ struct AlarmItem: View {
                         alarm.isActive = isActive
                     }))
                 }
+                
                 HStack {
                     ForEach(Weekday.allCases, id: \.self) {
                         Text($0.dayName)
