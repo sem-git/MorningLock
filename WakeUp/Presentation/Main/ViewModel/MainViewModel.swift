@@ -85,11 +85,13 @@ class MainViewModel: ObservableObject {
     func deleteAlarm(withId id: UUID) {
         alarmManager.removeAlarm(withId: id)
     }
-    
+        
     func deactiveAlarm() {
         alarmManager.deactiveAlarm()
-        deviceActivityManager.startMonitoring(startAt: .now)
-        deviceActivityManager.commitSelectionWhileLocking()
+        if deviceActivityManager.selectedApp != nil {
+            deviceActivityManager.startMonitoring(startAt: .now)
+            deviceActivityManager.commitSelectionWhileLocking()
+        }
     }
     
     func snoozeAlarm() {

@@ -831,7 +831,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WakeUp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = awayke;
+				INFOPLIST_KEY_CFBundleDisplayName = "아침잠금";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -873,7 +873,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WakeUp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = awayke;
+				INFOPLIST_KEY_CFBundleDisplayName = "아침잠금";
+				"INFOPLIST_KEY_CFBundleDisplayName[sdk=iphoneos*]" = "아침잠금";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1137,7 +1138,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.awayke.DeviceMonitor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AwaykeDeviceMonitor;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AwaykeDeviceMonitor2;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
