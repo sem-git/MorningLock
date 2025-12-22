@@ -26,7 +26,8 @@
 "contactButtonText" = "Help";
 
 "alarmRiningTitle" = "Alarm Ringing";
-"alarmRiningSubTitle" = "Apps will be locked for 15 minutes\n*%d out of 3 rings";
+"alarmRiningSubTitle" = "Apps will be locked for 15 minutes";
+"alarmRingingCount" = "*%d out of 3 rings";
 "snoozeButtonText" = "Snooze %d min";
 "deactiveAlarmText" = "Dismiss";
 
@@ -43,6 +44,9 @@
 
 "AlarmRingingNotificationTitle" = "Turn Off the Alarm in the App";
 "AlarmRingingNotificationSubTitle" = "Have a refreshing morning!";
+
+"MorningUnlockedNotificationTitle" = "When Your Will Awakens";
+"MorningUnlockedNotificationSubTitle" = "The set time has passed and app restrictions have been lifted. We’re cheering you on as you start your day.";
 
 "appLockScreenTitle" = "Waiting for your morning routine\nShall we focus on starting the day?";
 "appLockScreenSubTitle" = "Locked";

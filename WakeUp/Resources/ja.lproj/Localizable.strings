@@ -25,7 +25,8 @@
 "contactButtonText" = "へルプ";
 
 "alarmRiningTitle" = "アラームが鳴りました";
-"alarmRiningSubTitle" = "これから15分間設定したアプリをロックします\n*3回中、%d回目";
+"alarmRiningSubTitle" = "これから15分間設定したアプリをロックします";
+"alarmRingingCount" = "*3回中、%d回目";
 "snoozeButtonText" = "%d分後にスヌーズ";
 "deactiveAlarmText" = "停止する";
 
@@ -42,6 +43,9 @@
 
 "AlarmRingingNotificationTitle" = "アプリでアラームを停止";
 "AlarmRingingNotificationSubTitle" = "爽やかな朝をお過ごしください！";
+
+"MorningUnlockedNotificationTitle" = "意志が目覚める時間";
+"MorningUnlockedNotificationSubTitle" = "設定された時間が過ぎ、アプリのロックが解除されました。今日の始まりを応援します。";
 
 "appLockScreenTitle" = "朝の準備を待っています\n今日の始まりに集中してみませんか？";
 "appLockScreenSubTitle" = "ロック中";

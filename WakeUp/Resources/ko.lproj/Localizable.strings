@@ -36,7 +36,8 @@
 
 // Home/Bottomsheet/alarm
 "alarmRiningTitle" = "알림이 울렸습니다";
-"alarmRiningSubTitle" = "지금부터 15분동안 설정한 앱들을 잠글게요\n*3회 중 %d회 울림";
+"alarmRiningSubTitle" = "지금부터 15분동안 설정한 앱들을 잠글게요";
+"alarmRingingCount" = "*3회 중 %d회 울림";
 "snoozeButtonText" = "5분 후 다시 알림";
 "deactiveAlarmText" = "알람 끄기";
 
@@ -55,6 +56,9 @@
 
 "CheckRemainingTimeNotificationTitle" = "남은 시간 확인하기";
 "CheckRemainingTimeNotificationSubTitle" = "남은 시간을 앱에서 확인해보세요!";
+
+"MorningUnlockedNotificationTitle" = "의지가 깨어나는 시간";
+"MorningUnlockedNotificationSubTitle" = "설정된 시간이 지나 앱 잠금이 해제되었습니다. 오늘의 시작을 응원할게요.";
 
 // 앱잠금 화면
 "appLockScreenTitle" = "아침 준비를 기다리는 중이에요\n오늘의 시작에 집중해볼까요?";
