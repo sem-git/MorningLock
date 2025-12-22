@@ -25,7 +25,7 @@ struct AlarmEntity: Hashable, Identifiable {
     
     var meridiem: String {
         let formatter = DateFormatter()
-        formatter.locale = .current
+        formatter.locale = Locale(identifier: "ko_KR")
         formatter.dateFormat = "a"
         let meridiem = formatter.string(from: fireDate)
         return meridiem
