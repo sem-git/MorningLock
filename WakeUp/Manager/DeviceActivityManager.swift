@@ -116,6 +116,7 @@ final class DeviceActivityManager: ObservableObject {
     
     /// 모니터링 시작
     func startMonitoring(startAt date: Date) {
+        center.stopMonitoring([.testName])
         let end = Calendar.current.date(byAdding: .minute, value: appLockDurationMinutes, to: date)!
         
         let startComponents = fullDateComponents(from: date)
@@ -132,19 +133,13 @@ final class DeviceActivityManager: ObservableObject {
                 during: DeviceActivitySchedule(
                     intervalStart: startComponents,
                     intervalEnd: endComponents,
-                    repeats: true
+                    repeats: false
                 ),
                 events: events
             )
             endTime = end
         } catch {
             print("DeviceActivity 모니터링 실패:", error)
-        }
-        
-        // 앱 잠금 해제(임시)
-        Timer.scheduledTimer(withTimeInterval: .minutes(appLockDurationMinutes), repeats: false) { timer in
-            self.unblockApps()
-            timer.invalidate()
         }
     }
     
@@ -204,6 +199,7 @@ final class DeviceActivityManager: ObservableObject {
 //        if let data = try? JSONEncoder().encode(state) {
 //            sharedContainer?.set(data, forKey: StringLiteral.UserDefaultKeys.appLockStateKey)
 //        }
+        
         if let data = try? JSONEncoder().encode(appBlockState) {
             sharedContainer?.set(data, forKey: StringLiteral.UserDefaultKeys.appLockStateKey)
         }

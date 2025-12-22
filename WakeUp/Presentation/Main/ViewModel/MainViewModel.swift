@@ -89,7 +89,8 @@ class MainViewModel: ObservableObject {
     func deactiveAlarm() {
         alarmManager.deactiveAlarm()
         if deviceActivityManager.selectedApp != nil {
-            deviceActivityManager.startMonitoring(startAt: .now)           
+            deviceActivityManager.startMonitoring(startAt: .now)
+            deviceActivityManager.commitSelectionWhileLocking()
         }
     }
     

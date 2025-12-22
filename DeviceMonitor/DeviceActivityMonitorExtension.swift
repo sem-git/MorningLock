@@ -15,7 +15,7 @@ class DeviceActivityMonitorExtension: DeviceActivityMonitor {
 
     override func intervalDidStart(for activity: DeviceActivityName) {
         super.intervalDidStart(for: activity)
-        
+     
         if let selection = loadSelectedApps() {
             print("앱 목록 로드 성공")
             blockSelectedApps(selection)
@@ -55,7 +55,7 @@ class DeviceActivityMonitorExtension: DeviceActivityMonitor {
     
     override func intervalDidEnd(for activity: DeviceActivityName) {
         super.intervalDidEnd(for: activity)
-        
+     
         // 모든 차단 해제
         store.shield.applications = nil
         store.shield.applicationCategories = nil
