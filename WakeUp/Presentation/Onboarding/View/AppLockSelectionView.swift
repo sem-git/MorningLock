@@ -20,12 +20,12 @@ struct AppLockSelectionView: View {
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            Text("알람이 울리면 잠글 앱을 설정해주세요")
+            Text(NSLocalizedString("appSelectTitle", comment: "comment"))
                 .font(.system(size: 22, weight: .bold))
                 .foregroundColor(.gray50)
                 .padding(.top, 48)
             
-            Text("추가하기를 누르면 앱 선택 화면이 뜰 거에요")
+            Text(NSLocalizedString("appSelectSubTitle", comment: "comment"))
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundColor(.gray200)
                 .padding(.top, 12)
@@ -35,13 +35,13 @@ struct AppLockSelectionView: View {
             
             HStack(spacing: 16) {
                 MainButton(
-                    title: "건너뛰기",
+                    title: NSLocalizedString("skipButtonText", comment: "comment"),
                     buttonStyle: .text
                 ) {
                     addDefaultAlarm()
                 }
                 
-                MainButton(title: "추가하기") {
+                MainButton(title: NSLocalizedString("addButtonText", comment: "comment")) {
                     Task {
                         switch permissionManager.screenTimeStatus {
                             

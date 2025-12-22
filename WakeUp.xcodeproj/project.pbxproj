@@ -116,6 +116,20 @@
 			);
 			target = 00CD949E2E9D3FD4001C47CD /* WakeUp */;
 		};
+		00D99E092EF9C0E40012C0E7 /* Exceptions for "WakeUp" folder in "ShieldConfiguration" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"/Localized: Localizable.strings",
+			);
+			target = 76874F8C2ED9A70F0067C086 /* ShieldConfiguration */;
+		};
+		00D99E0A2EF9C0E40012C0E7 /* Exceptions for "WakeUp" folder in "ShieldAction" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"/Localized: Localizable.strings",
+			);
+			target = 0045135D2EE76A9900E6CF51 /* ShieldAction */;
+		};
 		76874F9B2ED9A70F0067C086 /* Exceptions for "ShieldConfiguration" folder in "ShieldConfiguration" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -169,6 +183,8 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				009CE6402EAB8549005B0F5A /* Exceptions for "WakeUp" folder in "WakeUp" target */,
+				00D99E092EF9C0E40012C0E7 /* Exceptions for "WakeUp" folder in "ShieldConfiguration" target */,
+				00D99E0A2EF9C0E40012C0E7 /* Exceptions for "WakeUp" folder in "ShieldAction" target */,
 			);
 			path = WakeUp;
 			sourceTree = "<group>";
@@ -492,6 +508,8 @@
 			knownRegions = (
 				en,
 				Base,
+				ko,
+				ja,
 			);
 			mainGroup = 00CD94962E9D3FD4001C47CD;
 			minimizedProjectReferenceProxies = 1;
@@ -704,6 +722,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -768,6 +787,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

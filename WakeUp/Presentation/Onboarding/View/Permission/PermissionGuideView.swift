@@ -29,12 +29,12 @@ struct PermissionGuideView: View {
             
             VStack(spacing: 0) {
                 VStack(spacing: 12) {
-                    Text("스크린타임과 알람 권한을\n꼭 허용해주세요")
+                    Text(NSLocalizedString("requestScreenTimeTitle", comment: "comment"))
                         .font(.system(size: 22, weight: .bold))
                         .foregroundColor(.gray50)
                         .multilineTextAlignment(.center)
                     
-                    Text("아침 잠금을 사용하기 위해서 꼭 필요해요\n아래의 화면이 뜨면 계속을 눌러주세요")
+                    Text(NSLocalizedString("requestScreenTimeSubTitle", comment: "comment"))
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundColor(.gray200)
                         .multilineTextAlignment(.center)
@@ -43,7 +43,7 @@ struct PermissionGuideView: View {
                 
                 Spacer()
                 
-                MainButton(title: "다음으로") {
+                MainButton(title: NSLocalizedString("nextButtonText", comment: "comment")) {
                     viewModel.navigate(to: .screenTimePermission)
                 }
             }

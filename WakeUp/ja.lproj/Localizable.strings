@@ -1,0 +1,51 @@
+/* 
+  Localizable.strings
+  WakeUp
+
+  Created by a on 12/23/25.
+  
+*/
+
+"onboardingTitle" = "意志が目覚める時間";
+"onboardingSubTitle" = "朝の準備中に不要なアプリをロック\nさっと朝の用意に集中できます";
+"StartButtonText" = "始める";
+
+"requestScreenTimeTitle" = "スクリーンタイムとアラームの\n権限を必ず許可してください";
+"requestScreenTimeSubTitle" = "Awaykeを使うには必要です\n次の画面が出たら「続ける」を\nタップしてください";
+"nextButtonText" = "次へ";
+
+"requestScreenTimeProgess" = "スクリーンタイムの権限を\nリクエストしています";
+"requestNotificationProgess" = "通知の権限を\nリクエストしています";
+
+"appSelectTitle" = "アラームが鳴ったときに\nロックするアプリを設定します";
+"appSelectSubTitle" = "「追加する」をタップすると、\nアプリを選べます";
+"skipButtonText" = "スキップ";
+"addButtonText" = "追加する";
+
+"contactButtonText" = "へルプ";
+
+"alarmRiningTitle" = "アラームが鳴りました";
+"alarmRiningSubTitle" = "これから15分間設定したアプリをロックします\n*3回中、%d回目";
+"snoozeButtonText" = "%d分後にスヌーズ";
+"deactiveAlarmText" = "停止する";
+
+"appLockTitle" = "ロックするアプリ";
+"appLockSubTitle" = "アラーム後15分間ロックされます";
+
+//AlarmSetting/Default
+"alarmSettingScreenTitle" = "アラーム設定";
+"repeatTitle" = "繰り返し";
+"saveButtonText" = "保存する";
+
+"lockingAppTitle" = "朝の準備が終わるまでロック中です";
+"lockingAppSubTitle" = "この時間に、今日の準備に集中しましょう";
+
+"AlarmRingingNotificationTitle" = "アプリでアラームを停止";
+"AlarmRingingNotificationSubTitle" = "爽やかな朝をお過ごしください！";
+
+"appLockScreenTitle" = "朝の準備を待っています\n今日の始まりに集中してみませんか？";
+"appLockScreenSubTitle" = "ロック中";
+"remainingTimeButtonText" = "残り時間は？";
+
+"CheckRemainingTimeNotificationTitle" = "残り時間を確認";
+"CheckRemainingTimeNotificationSubTitle" = "アプリで残り時間を確認してみてください！";

@@ -23,7 +23,7 @@ extension Weekday {
     
     var dayName: String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.locale = .autoupdatingCurrent
         return formatter.veryShortWeekdaySymbols[self.rawValue - 1]
     }
 }

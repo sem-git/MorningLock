@@ -45,12 +45,12 @@ struct MainView: View {
                             
                             // TODO: 컴포넌트로 분리 예정
                             VStack(alignment: .leading, spacing: 0) {
-                                Text("잠글 앱")
+                                Text(NSLocalizedString("appLockTitle", comment: "앱 잠금"))
                                     .font(.system(size: 17, weight: .semibold))
                                     .foregroundStyle(.gray50)
                                     .padding(.bottom, 8)
                                 
-                                Text("알람 후 15분 동안 잠글게요")
+                                Text(NSLocalizedString("appLockSubTitle", comment: "알람 후 15분동안 잠글게요"))
                                     .font(.system(size: 15, weight: .regular))
                                     .foregroundStyle(.gray200)
                                     .padding(.bottom, 16)
@@ -220,7 +220,7 @@ extension MainView {
         Button(action: {
             viewModel.toggleWebView()
         }, label: {
-            Text("문의")
+            Text(NSLocalizedString("contactButtonText", comment: "comment"))
                 .foregroundStyle(.gray50)
                 .font(Font.system(size: 15, weight: .regular))
         })
@@ -228,12 +228,12 @@ extension MainView {
     
     private var alarmSheetView: some View {
         VStack(spacing: 0) {
-            Text("알림이 울렸습니다")
+            Text(NSLocalizedString("alarmRiningTitle", comment: "알람이 울렸습니다."))
                 .font(.system(size: 20, weight: .semibold))
                 .foregroundStyle(.primary)
                 .padding(.top, 24)
             
-            Text("지금부터 15분동안 설정한 앱들을 잠글게요\n*3회 중 \(viewModel.snoozeCount)회 울림")
+            Text(String(format: NSLocalizedString("alarmRiningSubTitle", comment: "알람 횟수 표시"), viewModel.snoozeCount))
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(.secondary)
                 .padding(.top, 8)
@@ -244,13 +244,13 @@ extension MainView {
             
             HStack(spacing: 16) {
                 MainButton(
-                    title: "\(Int(viewModel.snoozeTime / 60))분 후 다시 알림",
+                    title: String(format: NSLocalizedString("snoozeButtonText", comment: "스누즈 버튼"), Int(viewModel.snoozeTime / 60)),
                     disabled: viewModel.snoozeDisabled,
                     buttonStyle: .text
                 ) {
                     viewModel.snoozeAlarm()
                 }
-                MainButton(title: "알람 끄기") {
+                MainButton(title: NSLocalizedString("deactiveAlarmText", comment: "알람 끄기")) {
                     viewModel.deactiveAlarm()
                 }
             }

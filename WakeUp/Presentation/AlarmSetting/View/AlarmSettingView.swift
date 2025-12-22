@@ -22,7 +22,7 @@ struct AlarmSettingView: View {
             
             // 요일 설정
             VStack(alignment: .leading, spacing: 14) {
-                Text("반복")
+                Text(NSLocalizedString("repeatTitle", comment: "반복"))
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(.gray50)
                 
@@ -43,7 +43,7 @@ struct AlarmSettingView: View {
         }
         .padding(.horizontal, 16)
         .navigationBarItems(leading: backButton)
-        .navigationTitle("알람 설정")
+        .navigationTitle(NSLocalizedString("alarmSettingScreenTitle", comment: "네비게이션 타이틀"))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .overlay(alignment: .bottom, content: {
@@ -51,7 +51,7 @@ struct AlarmSettingView: View {
                 NativeAdMobView(nativeViewModel: nativeViewModel)
                     .frame(maxHeight: 64)
                     .padding(.horizontal, 16)
-                MainButton(title: "저장 하기", disabled: viewModel.buttonDisabled) {
+                MainButton(title: NSLocalizedString("saveButtonText", comment: "저장하기"), disabled: viewModel.buttonDisabled) {
                     if viewModel.isEditing {
                         updateAlarm()
                     } else {

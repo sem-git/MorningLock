@@ -1,0 +1,52 @@
+/* 
+  Localizable.strings
+  WakeUp
+
+  Created by a on 12/23/25.
+  
+*/
+
+"onboardingTitle" = "Wake up your willpower";
+"onboardingSubTitle" = "Lock unnecessary apps in the morning\nFocus on getting ready without distractions";
+"StartButtonText" = "Get Started";
+
+"requestScreenTimeTitle" = "Allow screen time and alarm\npermissions";
+"requestScreenTimeSubTitle" = "Awayke needs these to work properly\nTap Continue when the next screen appears";
+"nextButtonText" = "Next";
+
+"requestScreenTimeProgess" = "Requesting screen time permission";
+"requestNotificationProgess" = "Requesting notification permission";
+
+// Onboarding/AppSelect/Active
+"appSelectTitle" = "Set the apps to lock\nwhen your alarm goes off";
+"appSelectSubTitle" = "Tap ‘Add’ to choose which apps to lock.";
+"skipButtonText" = "Skip";
+"addButtonText" = "Add";
+
+"contactButtonText" = "Help";
+
+"alarmRiningTitle" = "Alarm Ringing";
+"alarmRiningSubTitle" = "Apps will be locked for 15 minutes\n*%d out of 3 rings";
+"snoozeButtonText" = "Snooze %d min";
+"deactiveAlarmText" = "Dismiss";
+
+"appLockTitle" = "Apps to Lock";
+"appLockSubTitle" = "Locked for 15 minutes after the alarm";
+
+"alarmSettingScreenTitle" = "Alarm Settings";
+"repeatTitle" = "Repeat";
+"saveButtonText" = "Save";
+
+// Locking/Default
+"lockingAppTitle" = "Morning prep in progress…";
+"lockingAppSubTitle" = "Stay focused and start strong!";
+
+"AlarmRingingNotificationTitle" = "Turn Off the Alarm in the App";
+"AlarmRingingNotificationSubTitle" = "Have a refreshing morning!";
+
+"appLockScreenTitle" = "Waiting for your morning routine\nShall we focus on starting the day?";
+"appLockScreenSubTitle" = "Locked";
+"remainingTimeButtonText" = "Remaining time?";
+
+"CheckRemainingTimeNotificationTitle" = "Check Remaining Time";
+"CheckRemainingTimeNotificationSubTitle" = "Check the remaining time in the app!";

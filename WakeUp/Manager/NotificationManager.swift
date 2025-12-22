@@ -5,6 +5,7 @@
 //  Created by a on 11/24/25.
 //
 
+import Foundation
 import UserNotifications
 
 final class NotificationManager {
@@ -16,8 +17,8 @@ final class NotificationManager {
     
     func postImmediateNotification() {
         let content = UNMutableNotificationContent()
-        content.title = "앱에서 알람 끄기"
-        content.body = "상쾌한 아침을 보내세요!"
+        content.title = NSLocalizedString("AlarmRingingNotificationTitle", comment: "알람 타이틀")
+        content.body = NSLocalizedString("AlarmRingingNotificationSubTitle", comment: "알람 서브 타이틀")
         content.sound = nil
         
         let request = UNNotificationRequest(
