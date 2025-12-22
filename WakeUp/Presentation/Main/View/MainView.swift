@@ -8,9 +8,11 @@
 import SwiftUI
 import FamilyControls
 import DeviceActivity
+import GoogleMobileAds
 
 struct MainView: View {
     @StateObject var viewModel: MainViewModel = MainViewModel()
+    @StateObject private var nativeViewModel = NativeAdViewModel()
     @State private var sheetHeight: CGFloat = .zero
     
     @StateObject var deviceManager: DeviceActivityManager = .shared
@@ -117,6 +119,11 @@ struct MainView: View {
                 }
                 .padding(16)
             }
+            .overlay(alignment: .bottom, content: {
+                NativeAdMobView(nativeViewModel: nativeViewModel)
+                    .frame(maxHeight: 64)
+                    .padding(.horizontal, 16)
+            })
             .animation(.default, value: viewModel.alarmList.count)
             .sheet(isPresented: $viewModel.isWebViewPresented, content: {
                 WebView(url: "https://docs.google.com/forms/d/e/1FAIpQLSduOHAV4hz962dKI66QEk8KmBkxgmQaT7hFD8xJQgCX4TQr8w/viewform?usp=dialog")                
@@ -182,6 +189,8 @@ struct MainView: View {
             .background(.gray800)
             .onAppear {
                 viewModel.fetchAlarm()
+                viewModel.requestTrackingAuthorization()
+                
             }
             .navigationDestination(for: MainRoute.self, destination: { destination in
                 switch destination {

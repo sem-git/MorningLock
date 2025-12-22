@@ -7,6 +7,7 @@
 
 import Combine
 import SwiftUI
+import AppTrackingTransparency
 
 enum MainRoute: Hashable {
     case alarmSetting(AlarmEntity?)
@@ -101,6 +102,25 @@ class MainViewModel: ObservableObject {
     
     func toggleWebView() {
         isWebViewPresented.toggle()
+    }
+    
+    func requestTrackingAuthorization() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            ATTrackingManager.requestTrackingAuthorization { status in
+                switch status {
+                case .notDetermined:
+                    print("App Tracking Transparency: notDetermined")
+                case .restricted:
+                    print("App Tracking Transparency: restricted")
+                case .denied:
+                    print("App Tracking Transparency: denied")
+                case .authorized:
+                    print("App Tracking Transparency: authorized")
+                @unknown default:         
+                    print("Unknow")
+                }
+            }
+        }
     }
 }
 

@@ -13,7 +13,7 @@ struct AlarmItem: View {
     var body: some View {
         VStack {
             VStack(alignment: .leading, spacing: 0) {
-                HStack(alignment: .bottom) {
+                HStack(alignment: .lastTextBaseline) {
                     Text("\(alarm.meridiem)")
                         .font(.system(size: 20, weight: .regular))
                         .foregroundStyle(.gray50)
