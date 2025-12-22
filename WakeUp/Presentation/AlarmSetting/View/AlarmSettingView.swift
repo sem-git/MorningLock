@@ -52,7 +52,7 @@ struct AlarmSettingView: View {
         .navigationBarBackButtonHidden(true)
         .overlay(alignment: .bottom, content: {
             
-            MainButton(title: "저장 하기") {
+            MainButton(title: "저장 하기", disabled: viewModel.buttonDisabled) {
                 if viewModel.isEditing {
                     updateAlarm()
                 } else {
