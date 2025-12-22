@@ -50,6 +50,7 @@ struct AlarmSettingView: View {
             VStack {
                 NativeAdMobView(nativeViewModel: nativeViewModel)
                     .frame(maxHeight: 64)
+                    .padding(.horizontal, 16)
                 MainButton(title: "저장 하기", disabled: viewModel.buttonDisabled) {
                     if viewModel.isEditing {
                         updateAlarm()
