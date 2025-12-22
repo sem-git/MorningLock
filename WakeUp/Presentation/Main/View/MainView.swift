@@ -121,7 +121,8 @@ struct MainView: View {
             }
             .overlay(alignment: .bottom, content: {
                 NativeAdMobView(nativeViewModel: nativeViewModel)
-                    .frame(maxHeight: 50)
+                    .frame(maxHeight: 64)
+                    .padding(.horizontal, 16)
             })
             .animation(.default, value: viewModel.alarmList.count)
             // TODO: 컴포넌트로 분리

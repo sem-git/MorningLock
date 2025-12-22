@@ -29,7 +29,7 @@ struct NativeAdMobView: UIViewRepresentable {
         
         nativeAdView.mediaView?.mediaContent = nativeAd.mediaContent
         
-        (nativeAdView.bodyView as? UILabel)?.text = nativeAd.body
+        (nativeAdView.bodyView as? UILabel)?.text = (nativeAd.body ?? "")
         
         (nativeAdView.iconView as? UIImageView)?.image = nativeAd.icon?.image
         

@@ -54,6 +54,8 @@ struct TimerView: View {
                 .padding(.top, 137)
                 Spacer()
                 NativeAdMobView(nativeViewModel: nativeViewModel)
+                    .frame(maxHeight: 64)
+                    .padding(.horizontal, 16)
             }
         }
         .onAppear {
