@@ -15,7 +15,7 @@
 		006E18012ED5FDF500BB576C /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 006E18002ED5FDF500BB576C /* FirebaseCore */; };
 		006E18032ED5FDF500BB576C /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 006E18022ED5FDF500BB576C /* FirebaseCrashlytics */; };
 		006E18052ED5FDF500BB576C /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 006E18042ED5FDF500BB576C /* FirebaseRemoteConfig */; };
-		007F137E2EF17AE1007EDCE4 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 007F137D2EF17AE1007EDCE4 /* GoogleMobileAds */; };
+		00D99DF72EF992B20012C0E7 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 00D99DF62EF992B20012C0E7 /* GoogleMobileAds */; };
 		76874F8E2ED9A70F0067C086 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76E681B42ED705FC00E94EEF /* ManagedSettings.framework */; };
 		76874F8F2ED9A70F0067C086 /* ManagedSettingsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76E681B62ED705FC00E94EEF /* ManagedSettingsUI.framework */; };
 		76874F972ED9A70F0067C086 /* ShieldConfiguration.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 76874F8D2ED9A70F0067C086 /* ShieldConfiguration.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -228,9 +228,9 @@
 				006E17FD2ED5FDF500BB576C /* FirebaseAnalyticsCore in Frameworks */,
 				006E18032ED5FDF500BB576C /* FirebaseCrashlytics in Frameworks */,
 				006E18052ED5FDF500BB576C /* FirebaseRemoteConfig in Frameworks */,
-				007F137E2EF17AE1007EDCE4 /* GoogleMobileAds in Frameworks */,
 				006E18012ED5FDF500BB576C /* FirebaseCore in Frameworks */,
 				006E17FF2ED5FDF500BB576C /* FirebaseAnalyticsIdentitySupport in Frameworks */,
+				00D99DF72EF992B20012C0E7 /* GoogleMobileAds in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,6 +325,8 @@
 				004513602EE76A9900E6CF51 /* ShieldAction */,
 			);
 			name = ShieldAction;
+			packageProductDependencies = (
+			);
 			productName = ShieldAction;
 			productReference = 0045135E2EE76A9900E6CF51 /* ShieldAction.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -358,7 +360,7 @@
 				006E18002ED5FDF500BB576C /* FirebaseCore */,
 				006E18022ED5FDF500BB576C /* FirebaseCrashlytics */,
 				006E18042ED5FDF500BB576C /* FirebaseRemoteConfig */,
-				007F137D2EF17AE1007EDCE4 /* GoogleMobileAds */,
+				00D99DF62EF992B20012C0E7 /* GoogleMobileAds */,
 			);
 			productName = WakeUp;
 			productReference = 00CD949F2E9D3FD4001C47CD /* WakeUp.app */;
@@ -381,6 +383,8 @@
 				00CD94AF2E9D3FD6001C47CD /* WakeUpTests */,
 			);
 			name = WakeUpTests;
+			packageProductDependencies = (
+			);
 			productName = WakeUpTests;
 			productReference = 00CD94AC2E9D3FD6001C47CD /* WakeUpTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -401,6 +405,8 @@
 				76874F902ED9A70F0067C086 /* ShieldConfiguration */,
 			);
 			name = ShieldConfiguration;
+			packageProductDependencies = (
+			);
 			productName = ShieldConfiguration;
 			productReference = 76874F8D2ED9A70F0067C086 /* ShieldConfiguration.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -421,6 +427,8 @@
 				7699EC872ECF7E78003BCA19 /* DeviceReport */,
 			);
 			name = DeviceReport;
+			packageProductDependencies = (
+			);
 			productName = DeviceReport;
 			productReference = 7699EC862ECF7E78003BCA19 /* DeviceReport.appex */;
 			productType = "com.apple.product-type.extensionkit-extension";
@@ -441,6 +449,8 @@
 				7699EF922ED0677C003BCA19 /* DeviceMonitor */,
 			);
 			name = DeviceMonitor;
+			packageProductDependencies = (
+			);
 			productName = DeviceMonitor;
 			productReference = 7699EF8E2ED0677C003BCA19 /* DeviceMonitor.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -487,7 +497,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				006E17F92ED5FDF500BB576C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				007F137C2EF17AE1007EDCE4 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				00D99DF52EF992B20012C0E7 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 00CD94A02E9D3FD4001C47CD /* Products */;
@@ -826,7 +836,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WakeUp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "아침잠금";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "개인에게 최적화된 광고를 제공하기 위해 사용자의 광고 활동 정보를 수집합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -870,7 +879,6 @@
 				INFOPLIST_FILE = WakeUp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "아침잠금";
 				"INFOPLIST_KEY_CFBundleDisplayName[sdk=iphoneos*]" = "아침잠금";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "개인에게 최적화된 광고를 제공하기 위해 사용자의 광고 활동 정보를 수집합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1222,7 +1230,7 @@
 				minimumVersion = 12.6.0;
 			};
 		};
-		007F137C2EF17AE1007EDCE4 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+		00D99DF52EF992B20012C0E7 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
 			requirement = {
@@ -1263,9 +1271,9 @@
 			package = 006E17F92ED5FDF500BB576C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseRemoteConfig;
 		};
-		007F137D2EF17AE1007EDCE4 /* GoogleMobileAds */ = {
+		00D99DF62EF992B20012C0E7 /* GoogleMobileAds */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 007F137C2EF17AE1007EDCE4 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			package = 00D99DF52EF992B20012C0E7 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
 			productName = GoogleMobileAds;
 		};
 /* End XCSwiftPackageProductDependency section */

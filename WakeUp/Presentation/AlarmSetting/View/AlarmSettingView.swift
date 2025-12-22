@@ -49,16 +49,17 @@ struct AlarmSettingView: View {
         .overlay(alignment: .bottom, content: {
             VStack {
                 NativeAdMobView(nativeViewModel: nativeViewModel)
-                    .frame(maxHeight: 64)                    
-            MainButton(title: "저장 하기", disabled: viewModel.buttonDisabled) {
-                if viewModel.isEditing {
-                    updateAlarm()
-                } else {
-                    saveAlarm()
+                    .frame(maxHeight: 64)
+                MainButton(title: "저장 하기", disabled: viewModel.buttonDisabled) {
+                    if viewModel.isEditing {
+                        updateAlarm()
+                    } else {
+                        saveAlarm()
+                    }
                 }
+                .padding(.horizontal, 16)
             }
-            .padding(.horizontal, 16)
-        })
+            })
         .background(.gray800)
     }
     
