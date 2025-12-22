@@ -6,5 +6,5 @@
   
 */
 
-"NSTrackingUsageDescription" = "Your advertising activity may be used to provide you with personalized ads.";
+"NSUserTrackingUsageDescription" = "Your advertising activity may be used to provide you with personalized ads.";
 "CFBundleDisplayName" = "Morning Lock";
