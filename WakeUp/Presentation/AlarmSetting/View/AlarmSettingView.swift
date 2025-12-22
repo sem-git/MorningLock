@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AlarmSettingView: View {
     @StateObject var viewModel: AlarmSettingViewModel
+    @StateObject private var nativeViewModel = NativeAdViewModel()
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -51,12 +52,15 @@ struct AlarmSettingView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .overlay(alignment: .bottom, content: {
-            
-            MainButton(title: viewModel.isEditing ? "수정 하기" : "저장 하기") {
-                if viewModel.isEditing {
-                    updateAlarm()
-                } else {
-                    saveAlarm()
+            VStack {
+                NativeAdMobView(nativeViewModel: nativeViewModel)
+                    .frame(maxHeight: 50)
+                MainButton(title: viewModel.isEditing ? "수정 하기" : "저장 하기") {
+                    if viewModel.isEditing {
+                        updateAlarm()
+                    } else {
+                        saveAlarm()
+                    }
                 }
             }
             .padding(.horizontal, 16)

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="GADNativeAdView">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FD3-zZ-jV7" userLabel="Divider">
+                    <rect key="frame" x="196" y="17.666666666666668" width="1" height="15.000000000000004"/>
+                    <color key="backgroundColor" name="Gray300"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="15" id="88s-fC-nvq"/>
+                        <constraint firstAttribute="width" constant="1" id="ozG-nV-tqs"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CL1-MK-t7j">
+                    <rect key="frame" x="207" y="11.666666666666664" width="30" height="27"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                    <color key="tintColor" name="Gray200"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" title="">
+                        <color key="titleColor" name="Gray300"/>
+                    </state>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qhy-h6-nLh">
+                    <rect key="frame" x="137" y="15" width="29" height="20"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kvl-tY-FP7">
+                            <rect key="frame" x="6" y="0.0" width="17" height="20"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                            <color key="textColor" name="Gray300"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" name="Gray500"/>
+                    <constraints>
+                        <constraint firstItem="kvl-tY-FP7" firstAttribute="top" secondItem="Qhy-h6-nLh" secondAttribute="top" id="EvF-jZ-C6H"/>
+                        <constraint firstAttribute="trailing" secondItem="kvl-tY-FP7" secondAttribute="trailing" constant="6" id="GMl-Kr-Hv8"/>
+                        <constraint firstAttribute="bottom" secondItem="kvl-tY-FP7" secondAttribute="bottom" id="Ocl-Vh-fVR"/>
+                        <constraint firstItem="kvl-tY-FP7" firstAttribute="leading" secondItem="Qhy-h6-nLh" secondAttribute="leading" constant="6" id="WPD-Gb-6L1"/>
+                        <constraint firstAttribute="height" constant="20" id="XI0-w8-8CA"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <integer key="value" value="8"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bMa-fB-I17">
+                    <rect key="frame" x="176" y="25" width="0.0" height="0.0"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" name="Gray300"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XLV-41-xq0">
+                    <rect key="frame" x="353" y="15" width="20" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="20" id="py6-ss-6Lm"/>
+                        <constraint firstAttribute="height" constant="20" id="xhu-oP-7pM"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" name="Gray800"/>
+            <constraints>
+                <constraint firstItem="CL1-MK-t7j" firstAttribute="leading" secondItem="FD3-zZ-jV7" secondAttribute="trailing" constant="10" id="1vw-DU-anp"/>
+                <constraint firstItem="bMa-fB-I17" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="2il-kz-svc"/>
+                <constraint firstItem="Qhy-h6-nLh" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="33v-MV-NeL"/>
+                <constraint firstItem="XLV-41-xq0" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="DqO-Ki-AaM"/>
+                <constraint firstItem="FD3-zZ-jV7" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="EX6-AJ-K97"/>
+                <constraint firstItem="CL1-MK-t7j" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Ucs-64-MpN"/>
+                <constraint firstItem="FD3-zZ-jV7" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="WdR-dZ-Zeq"/>
+                <constraint firstItem="bMa-fB-I17" firstAttribute="leading" secondItem="Qhy-h6-nLh" secondAttribute="trailing" constant="10" id="hNh-3Y-dzM"/>
+                <constraint firstItem="FD3-zZ-jV7" firstAttribute="leading" secondItem="bMa-fB-I17" secondAttribute="trailing" constant="20" id="n3i-DU-LqA"/>
+                <constraint firstAttribute="trailing" secondItem="XLV-41-xq0" secondAttribute="trailing" constant="20" id="yO0-bp-idw"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="callToActionView" destination="CL1-MK-t7j" id="42d-ca-MHS"/>
+                <outlet property="headlineView" destination="bMa-fB-I17" id="tOm-CV-j6c"/>
+                <outlet property="iconView" destination="XLV-41-xq0" id="iGj-QI-Drg"/>
+            </connections>
+            <point key="canvasLocation" x="139.69465648854961" y="153.52112676056339"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="Gray200">
+            <color red="0.70200002193450928" green="0.70200002193450928" blue="0.70200002193450928" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Gray300">
+            <color red="0.46274509803921571" green="0.46274509803921571" blue="0.46274509803921571" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Gray500">
+            <color red="0.2630000114440918" green="0.2630000114440918" blue="0.2630000114440918" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Gray800">
+            <color red="0.090196078431372548" green="0.090196078431372548" blue="0.090196078431372548" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+    </resources>
+</document>
