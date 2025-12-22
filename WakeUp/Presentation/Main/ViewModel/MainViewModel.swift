@@ -19,32 +19,32 @@ class MainViewModel: ObservableObject {
     @Published var snoozeCount = 1
     @Published var snoozeTime: TimeInterval = .minutes(5)
     @Published var snoozeDisabled: Bool = false
+    @Published var isWebViewPresented: Bool = false
     
     private let dataManager: CoreDataManager
     private let alarmManager: AlarmManager
     private let notificationManager: NotificationManager
+    private let deviceActivityManager: DeviceActivityManager
     
     private var cancellables = Set<AnyCancellable>()
     
     init(
         dataManager: CoreDataManager = .shared,
         alarmManager: AlarmManager = .shared,
-        notificationManager: NotificationManager = .shared
+        notificationManager: NotificationManager = .shared,
+        deviceActivityManager: DeviceActivityManager = .shared
     ) {
         self.dataManager = dataManager
         self.alarmManager = alarmManager
         self.notificationManager = notificationManager
+        self.deviceActivityManager = deviceActivityManager
         bind()
     }
     
     func bind() {
         // 알람이 재생중이면서 isOpenSheet 보임여부에 따라서 Sheet열기
-        Publishers.CombineLatest(
-            alarmManager.$isAlarmPlaying,
-            alarmManager.$isOpenSheet
-        )
+        alarmManager.$isAlarmPlaying
         .receive(on: RunLoop.main)
-        .map { $0 && $1 }
         .assign(to: \.isAlarmSheetPresented, on: self)
         .store(in: &cancellables)
         
@@ -56,12 +56,12 @@ class MainViewModel: ObservableObject {
                         
         // 알람이 울리는 중이거나 스누즈 횟수가 3회이상 초과시 버튼 disable
         Publishers.CombineLatest(
-            alarmManager.$alarmMode,
+            alarmManager.$isSnoozeActive,
             alarmManager.$snoozeCount
         )
         .receive(on: RunLoop.main)
-        .map { alarmMode, snoozeCount in
-            alarmMode == .once || snoozeCount >= 3
+        .map { isSnoozeActive, snoozeCount in
+            isSnoozeActive || snoozeCount >= 3
         }
         .assign(to: \.snoozeDisabled, on: self)
         .store(in: &cancellables)        
@@ -76,23 +76,31 @@ class MainViewModel: ObservableObject {
         alarmList = dataManager
             .fetchAlarm()
             .toEntities()
-            .sorted { $0.time.getTime < $1.time.getTime }
+            .sorted { $0.fireDate.nextOccurrenceIncludingSeconds < $1.fireDate.nextOccurrenceIncludingSeconds }
     }
     
     func updateAlarm(_ alarm: AlarmEntity) {
         alarmManager.updateAlarm(alarm)
     }
     
-    func deleteAlarm(_ id: UUID) {
-        alarmManager.removeAlarm(id)
+    func deleteAlarm(withId id: UUID) {
+        alarmManager.removeAlarm(withId: id)
     }
-    
+        
     func deactiveAlarm() {
         alarmManager.deactiveAlarm()
+        if deviceActivityManager.selectedApp != nil {
+            deviceActivityManager.startMonitoring(startAt: .now)
+            deviceActivityManager.commitSelectionWhileLocking()
+        }
     }
     
     func snoozeAlarm() {
         alarmManager.snoozeAlarm(by: snoozeTime)
+    }
+    
+    func toggleWebView() {
+        isWebViewPresented.toggle()
     }
 }
 

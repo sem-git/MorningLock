@@ -40,7 +40,7 @@ struct MainView: View {
                             AlarmItem(alarm: Binding(get: {
                                 // 삭제 시 인덱스 오류 방지
                                 if index > viewModel.alarmList.count-1 {
-                                    return AlarmEntity(id: UUID(), time: .now, isActive: false, repeatDay: [])
+                                    return AlarmEntity(id: UUID(), fireDate: .now, isActive: false, repeatDay: [])
                                 } else {
                                     return alarm
                                 }
@@ -123,7 +123,7 @@ struct MainView: View {
                             .background(.gray600)
                             .cornerRadius(16)
                         }
-                        //                        .opacity(alarm.isActive ? 1 : 0.3)
+                        .opacity(alarm.isActive ? 1 : 0.3)
                     }
                 }
                 .padding(16)
@@ -143,6 +143,9 @@ struct MainView: View {
                 }
             }
             .animation(.default, value: viewModel.alarmList.count)
+            .sheet(isPresented: $viewModel.isWebViewPresented, content: {
+                WebView(url: "https://docs.google.com/forms/d/e/1FAIpQLSduOHAV4hz962dKI66QEk8KmBkxgmQaT7hFD8xJQgCX4TQr8w/viewform?usp=dialog")                
+            })
             // TODO: 컴포넌트로 분리
             .sheet(isPresented: $isPickerPresented) {
                 NavigationStack {
@@ -181,8 +184,6 @@ struct MainView: View {
                         }
                 }
             }
-            
-            // TODO: 타이머 뷰가 나타날 때 sheet 비활성화
             .sheet(
                 isPresented: $viewModel.isAlarmSheetPresented,
                 onDismiss: {
@@ -247,7 +248,7 @@ extension MainView {
     
     private var contactButton: some View {
         Button(action: {
-            
+            viewModel.toggleWebView()
         }, label: {
             Text("문의")
                 .foregroundStyle(.gray50)

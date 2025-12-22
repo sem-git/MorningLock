@@ -8,7 +8,21 @@
 import Foundation
 
 extension Date {
-    var getTime: Date {
+    var nextOccurrenceIncludingSeconds: Date {
+        let calendar = Calendar.current
+        let dateComponents = calendar.dateComponents([.hour, .minute, .second], from: self)
+        var todayComponents = calendar.dateComponents([.hour, .minute, .second], from: Date())
+        
+        todayComponents.hour = dateComponents.hour
+        todayComponents.minute = dateComponents.minute
+        todayComponents.second = dateComponents.second
+        
+        let today = calendar.date(from: todayComponents)!
+        
+        return today
+    }
+    
+    var nextOccurrenceIncludingMinutes: Date {
         let calendar = Calendar.current
         let dateComponents = calendar.dateComponents([.hour, .minute], from: self)
         var todayComponents = calendar.dateComponents([.year, .month, .day], from: Date())

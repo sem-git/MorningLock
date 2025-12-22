@@ -1,8 +1,8 @@
-import Foundation
-import ManagedSettings
+import Combine
 import DeviceActivity
 import FamilyControls
-import Combine
+import Foundation
+import ManagedSettings
 
 // TODO: UserDefaultManager로 만들기
 @MainActor
@@ -18,9 +18,11 @@ final class DeviceActivityManager: ObservableObject {
     private let store = ManagedSettingsStore()
     private let events: [DeviceActivityEvent.Name: DeviceActivityEvent] = [
         .encouraged: DeviceActivityEvent(
-            threshold: DateComponents(minute: 1)
+            threshold: DateComponents(minute: 15)
         )
     ]
+    /// 기본 앱 잠금 시간
+    private let appLockDurationMinutes = 15
     
     // MARK: - Properties
     
@@ -114,11 +116,13 @@ final class DeviceActivityManager: ObservableObject {
     
     /// 모니터링 시작
     func startMonitoring(startAt date: Date) {
-        let end = Calendar.current.date(byAdding: .minute, value: 15, to: date)!
+        center.stopMonitoring([.testName])
+        let end = Calendar.current.date(byAdding: .minute, value: appLockDurationMinutes, to: date)!
         
         let startComponents = fullDateComponents(from: date)
         let endComponents = fullDateComponents(from: end)
         
+        // 스냅샷에 현재 선택한 앱 토큰을 저장하고
         currentLockedSnapshot = selection.applicationTokens
         endTime = end
         persistLockState()
@@ -158,6 +162,12 @@ final class DeviceActivityManager: ObservableObject {
         persistLockState()
     }
     
+    func unblockApps() {
+        store.shield.applications = nil
+        store.shield.applicationCategories = nil
+        store.shield.webDomains = nil
+    }
+    
     /// 추가 잠금 앱 바로 적용
     func applyShieldImmediately() {
         store.shield.applications =
@@ -184,8 +194,13 @@ final class DeviceActivityManager: ObservableObject {
             endTime: endTime,
             lockedApps: currentLockedSnapshot
         )
+        let appBlockState = AppModel(selection: selection)
         
-        if let data = try? JSONEncoder().encode(state) {
+//        if let data = try? JSONEncoder().encode(state) {
+//            sharedContainer?.set(data, forKey: StringLiteral.UserDefaultKeys.appLockStateKey)
+//        }
+        
+        if let data = try? JSONEncoder().encode(appBlockState) {
             sharedContainer?.set(data, forKey: StringLiteral.UserDefaultKeys.appLockStateKey)
         }
     }
@@ -211,7 +226,7 @@ final class DeviceActivityManager: ObservableObject {
     // TODO: ViewModel에서 처리
     /// 남은 잠금 시간 계산
     func startLockTimer() {
-        let totalTime = TimeInterval(minutes: 15)
+        let totalTime = TimeInterval(minutes: appLockDurationMinutes)
         remainingTime = endTime.timeIntervalSince(.now)
         percent = (remainingTime / totalTime) * 100
         

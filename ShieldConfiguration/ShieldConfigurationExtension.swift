@@ -17,7 +17,7 @@ class ShieldConfigurationExtension: ShieldConfigurationDataSource {
             icon: UIImage(named: ""),
             title: .init(text: "잠금 상태입니다", color: .white),
             subtitle: .init(text: "아침 준비를 기다리는 중이에요\n오늘의 시작에 집중해볼까요?", color: .gray200),
-            primaryButtonLabel: .init(text: "잠금 시간이 얼마나 남았는지 궁금해요", color: .gray50),
+            primaryButtonLabel: .init(text: "남은 시간은?", color: .gray50),
             primaryButtonBackgroundColor: .gray500,
             secondaryButtonLabel: nil
         )
@@ -30,7 +30,7 @@ class ShieldConfigurationExtension: ShieldConfigurationDataSource {
             icon: UIImage(named: ""),
             title: .init(text: "잠금 상태입니다", color: .white),
             subtitle: .init(text: "아침 준비를 기다리는 중이에요\n오늘의 시작에 집중해볼까요?", color: .gray200),
-            primaryButtonLabel: .init(text: "잠금 시간이 얼마나 남았는지 궁금해요", color: .gray50),
+            primaryButtonLabel: .init(text: "남은 시간은?", color: .gray50),
             primaryButtonBackgroundColor: .gray500,
             secondaryButtonLabel: nil
         )

@@ -89,9 +89,19 @@ struct AppLockSelectionView: View {
     func addDefaultAlarm() {
         Task {
             let isActive = permissionManager.notificationStatus == .authorized
+            let calendar = Calendar.current
+            let now = Date()
+            
+            let defaultDate = calendar.date(
+                bySettingHour: calendar.component(.hour, from: now),
+                minute: calendar.component(.minute, from: now),
+                second: 0,
+                of: now
+            )!
+            let fireDate = calendar.date(byAdding: .minute, value: 1, to: defaultDate)!
             
             let alarm = AlarmEntity(
-                time: Date().addingTimeInterval(60),
+                fireDate: fireDate,
                 isActive: false,
                 repeatDay: []
             )
