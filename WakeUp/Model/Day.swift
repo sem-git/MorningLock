@@ -17,14 +17,14 @@ extension Weekday {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         return Calendar.current.weekdaySymbols.enumerated().compactMap { index, _ in
-            return Weekday(rawValue: index + 1) // 1부터 시작해야함
+            return Weekday(rawValue: index + 1) // 1부터 시작해야 함
         }
     }
     
     var dayName: String {
         let formatter = DateFormatter()
-        formatter.locale = Locale.autoupdatingCurrent
-        return formatter.veryShortWeekdaySymbols[self.rawValue-1]
+        formatter.locale = Locale(identifier: "ko_KR")
+        return formatter.veryShortWeekdaySymbols[self.rawValue - 1]
     }
 }
 
