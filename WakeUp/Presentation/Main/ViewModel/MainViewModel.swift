@@ -19,6 +19,7 @@ class MainViewModel: ObservableObject {
     @Published var snoozeCount = 1
     @Published var snoozeTime: TimeInterval = .minutes(5)
     @Published var snoozeDisabled: Bool = false
+    @Published var isWebViewPresented: Bool = false
     
     private let dataManager: CoreDataManager
     private let alarmManager: AlarmManager
@@ -96,6 +97,10 @@ class MainViewModel: ObservableObject {
     
     func snoozeAlarm() {
         alarmManager.snoozeAlarm(by: snoozeTime)
+    }
+    
+    func toggleWebView() {
+        isWebViewPresented.toggle()
     }
 }
 
