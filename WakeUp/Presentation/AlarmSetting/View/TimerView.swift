@@ -29,12 +29,12 @@ struct TimerView: View {
                     }
                     .padding()
                 }
-                Text("아침 준비를 기다리는 중이에요")
+                Text(NSLocalizedString("lockingAppTitle", comment: "아침 준비를 기다리는 중이에요"))
                     .font(.system(size: 22, weight: .bold))
                     .foregroundStyle(.gray50)
                     .padding(.top, 48)
                 
-                Text("오늘의 시작에 집중해볼까요?")
+                Text(NSLocalizedString("lockingAppSubTitle", comment: "아침 준비를 기다리는 중이에요"))
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(.gray200)
                     .padding(.top, 12)
