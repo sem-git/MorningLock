@@ -16,6 +16,15 @@ struct PermissionGuideView: View {
                 .ignoresSafeArea()
             
             Image(.imgScreentime)
+                .overlay(alignment: .bottomTrailing) {
+                    Button {
+                        viewModel.navigate(to: .screenTimePermission)
+                    } label: {
+                        Color.red.opacity(0.3)
+                    }
+                    .frame(width: 145, height: 55)
+                }
+
             
             
             VStack(spacing: 0) {
