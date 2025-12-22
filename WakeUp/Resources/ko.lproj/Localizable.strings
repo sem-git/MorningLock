@@ -36,7 +36,7 @@
 
 // Home/Bottomsheet/alarm
 "alarmRiningTitle" = "알림이 울렸습니다";
-"alarmRiningSubTitle" = "지금부터 15분동안 설정한 앱들을 잠글게요*3회 중 %d회 울림";
+"alarmRiningSubTitle" = "지금부터 15분동안 설정한 앱들을 잠글게요\n*3회 중 %d회 울림";
 "snoozeButtonText" = "5분 후 다시 알림";
 "deactiveAlarmText" = "알람 끄기";
 
