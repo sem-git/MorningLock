@@ -31,9 +31,11 @@ final class AlarmManager {
     
     private let scheduler: AlarmScheduler = .default
     
+    private let maxSnoozeCount: Int = 3
+    
     private var cancellables = Set<AnyCancellable>()
     
-    private let maxSnoozeCount: Int = 3
+    private var alarmTimer: Timer?
     
     // MARK: - Published Properties
     
@@ -146,30 +148,30 @@ extension AlarmManager {
     private func registerTasksScheduledAlarm() {
         scheduler
             .scheduledAlarm
-            .sink { scheduledAlarm in
+            .sink(receiveValue: { scheduledAlarm in
                 if let scheduledAlarm {
                     let interval = scheduledAlarm.fireDate.nextOccurrenceIncludingMinutes.timeIntervalSinceNow
                     self.activateCurrentAlarm(after: interval)
                 } else {
                     self.deactiveCurrentAlarm()
                 }
-            }
+            })
             .store(in: &cancellables)
     }
     
     // interval을 기준으로 알람 작업 예약
     private func activateCurrentAlarm(after interval: TimeInterval) {
         audioPlayer.play(atTime: interval, volume: 0.5)
-        Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { timer in
+        alarmTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { _ in
             self.isAlarmPlaying = true
             self.notificationManager.postImmediateNotification()
-            timer.invalidate()
         }
     }
     
     // 알람 작업 취소
     private func deactiveCurrentAlarm(reschedule: Bool = false) {
         audioPlayer.stop()
+        alarmTimer?.invalidate()
         
         if reschedule {
             isAlarmPlaying = true

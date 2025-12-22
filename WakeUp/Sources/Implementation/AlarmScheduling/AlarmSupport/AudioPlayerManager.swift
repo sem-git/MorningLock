@@ -43,7 +43,7 @@ final class AudioPlayerManager: NSObject {
     /// 오디오세션 종료
     func stop() {
         do {
-            audioPlayer?.stop()
+            audioPlayer?.stop()            
             try session.setActive(false)
         } catch {
             

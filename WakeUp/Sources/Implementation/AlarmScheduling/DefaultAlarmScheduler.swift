@@ -29,6 +29,8 @@ final class DefaultAlarmScheduler: AlarmScheduler {
     func schedule() {
         if let currentAlarm = alarmQueue.delete() {
             scheduledAlarm.send(currentAlarm)
+        } else {
+            scheduledAlarm.send(nil)
         }
     }
     
