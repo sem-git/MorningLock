@@ -14,6 +14,12 @@ final class AlarmSettingViewModel: ObservableObject {
     @Published var alarm: AlarmEntity
     
     private let alarmManager: AlarmManager
+    private let savedAlarm: AlarmEntity
+    
+    // 시간, 반복날짜 비교
+    var buttonDisabled: Bool {
+        isEditing && (weekDays == Set(savedAlarm.repeatDay) && alarm.fireDate == savedAlarm.fireDate)
+    }
     
     init(
         alarm: AlarmEntity? = nil,
@@ -24,7 +30,7 @@ final class AlarmSettingViewModel: ObservableObject {
         let alarm = alarm ?? .init()
         self.alarm = alarm
         self.weekDays = Set(alarm.repeatDay)
-
+        self.savedAlarm = alarm
     }
     
     func selecteDay(_ day: Weekday) {

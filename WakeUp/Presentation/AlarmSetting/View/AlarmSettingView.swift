@@ -17,6 +17,7 @@ struct AlarmSettingView: View {
                 VStack(alignment: .leading, spacing: 1) {
                     // 시간 설정
                     DatePicker("", selection: $viewModel.alarm.fireDate, displayedComponents: .hourAndMinute)
+                        .environment(\.locale, Locale(identifier: "en_US"))
                         .datePickerStyle(.wheel)
                         .labelsHidden()
                     
@@ -52,7 +53,7 @@ struct AlarmSettingView: View {
         .navigationBarBackButtonHidden(true)
         .overlay(alignment: .bottom, content: {
             
-            MainButton(title: viewModel.isEditing ? "수정 하기" : "저장 하기") {
+            MainButton(title: "저장 하기", disabled: viewModel.buttonDisabled) {
                 if viewModel.isEditing {
                     updateAlarm()
                 } else {

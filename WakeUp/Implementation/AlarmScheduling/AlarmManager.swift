@@ -49,6 +49,8 @@ final class AlarmManager {
     /// - 임의로 snoozeCount 값을 수정할 수 없습니다.
     @Published private(set) var snoozeCount: Int = 1
     
+    @Published private(set) var isSnoozeActive = false
+    
     // MARK: - Initializer
     private init(
         dataManager: CoreDataManager = .shared,
@@ -113,6 +115,7 @@ extension AlarmManager {
         // interval 시간 이후로 snoozeCount 1회 증가(일회성)
         Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { timer in
             self.snoozeCount += 1
+            self.isSnoozeActive = false
             timer.invalidate()
         }
     }
@@ -170,8 +173,10 @@ extension AlarmManager {
         
         if reschedule {
             isAlarmPlaying = true
+            isSnoozeActive = true
         } else {
             snoozeCount = 1
+            isSnoozeActive = false
             isAlarmPlaying = false
         }
     }
