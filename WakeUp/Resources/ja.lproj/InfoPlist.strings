@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  WakeUp
+
+  Created by a on 12/23/25.
+  
+*/
+"NSUserTrackingUsageDescription" = "最適な広告を提供するために、ユーザーの広告利用状況に関する情報を収集します。";
+"CFBundleDisplayName" = "朝ロック";
