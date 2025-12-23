@@ -68,16 +68,10 @@ struct MainView: View {
                                                             .font(.system(size: 17, weight: .semibold))
                                                             .foregroundStyle(.gray50)
                                                     )
-                                                    .onTapGesture {
-                                                        isPickerPresented = true
-                                                    }
                                             } else {
                                                 Label(token)
                                                     .labelStyle(AppIconLabelStyle())
                                                     .frame(width: 56, height: 56)
-                                                    .onTapGesture {
-                                                        isPickerPresented = true
-                                                    }
                                             }
                                             
                                         }
@@ -90,22 +84,6 @@ struct MainView: View {
                                             
                                             Image(.icPlus)
                                         }
-                                        .onTapGesture {
-                                            Task {
-                                                switch permissionManager.screenTimeStatus {
-                                                    
-                                                case .authorized:
-                                                    isPickerPresented = true
-                                                    
-                                                case .unknown, .denied:
-                                                    await permissionManager.requestScreenTime()
-                                                    
-                                                    if permissionManager.screenTimeStatus == .authorized {
-                                                        isPickerPresented = true
-                                                    }
-                                                }
-                                            }
-                                        }
                                     }
                                 }
                             }
@@ -113,6 +91,22 @@ struct MainView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(.gray600)
                             .cornerRadius(16)
+                            .onTapGesture {
+                                Task {
+                                    switch permissionManager.screenTimeStatus {
+                                        
+                                    case .authorized:
+                                        isPickerPresented = true
+                                        
+                                    case .unknown, .denied:
+                                        await permissionManager.requestScreenTime()
+                                        
+                                        if permissionManager.screenTimeStatus == .authorized {
+                                            isPickerPresented = true
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
