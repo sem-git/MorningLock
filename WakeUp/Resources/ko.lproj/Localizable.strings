@@ -1,0 +1,69 @@
+/* 
+  Localizable.strings
+  WakeUp
+
+  Created by a on 12/23/25.
+  
+*/
+
+// Onboarding/Start
+"onboardingTitle" = "의지가 깨어나는 시간";
+"onboardingSubTitle" = "불필요한 앱을 아침에 잠궈드릴게요\n후다닥 외출 준비에 집중할 수 있어요";
+"StartButtonText" = "시작하기";
+
+// Onboarding/ScreenTime
+"requestScreenTimeTitle" = "스크린타임과 알람 권한을\n꼭 허용해주세요";
+"requestScreenTimeSubTitle" = "아침 잠금을 사용하기 위해서 꼭 필요해요\n아래의 화면이 뜨면 계속을 눌러주세요";
+"nextButtonText" = "다음으로";
+
+// Onboarding/Screentime/Loader
+"requestScreenTimeProgess" = "스크린타임 권한을\n요청하고 있어요";
+
+// Onboarding/Notification/Loader
+"requestNotificationProgess" = "알림 권한을\n요청하고 있어요";
+
+// Onboarding/AppSelect/Active
+"appSelectTitle" = "알람이 울리면 잠글 앱을 설정해주세요";
+"appSelectSubTitle" = "추가하기를 누르면 앱 선택 화면이 뜰 거에요";
+"skipButtonText" = "건너뛰기";
+"addButtonText" = "추가하기";
+
+// Home
+"contactButtonText" = "문의";
+
+"appLockTitle" = "잠글 앱";
+"appLockSubTitle" = "알람 후 15분 동안 잠글게요";
+
+// Home/Bottomsheet/alarm
+"alarmRiningTitle" = "알림이 울렸습니다";
+"alarmRiningSubTitle" = "지금부터 15분동안 설정한 앱들을 잠글게요";
+"alarmRingingCount" = "*3회 중 %d회 울림";
+"snoozeButtonText" = "5분 후 다시 알림";
+"deactiveAlarmText" = "알람 끄기";
+
+//AlarmSetting/Default
+"alarmSettingScreenTitle" = "알람 설정";
+"repeatTitle" = "반복";
+"saveButtonText" = "저장하기";
+
+// Locking/Default
+"lockingAppTitle" = "아침 준비를 기다리는 중이에요";
+"lockingAppSubTitle" = "오늘의 시작에 집중해볼까요?";
+
+// Notification
+"AlarmRingingNotificationTitle" = "앱에서 알람 끄기";
+"AlarmRingingNotificationSubTitle" = "상쾌한 아침을 보내세요!";
+
+"CheckRemainingTimeNotificationTitle" = "남은 시간 확인하기";
+"CheckRemainingTimeNotificationSubTitle" = "남은 시간을 앱에서 확인해보세요!";
+
+"MorningUnlockedNotificationTitle" = "의지가 깨어나는 시간 🔥";
+"MorningUnlockedNotificationSubTitle" = "설정된 시간이 지나 앱 잠금이 해제되었습니다. 오늘의 시작을 응원할게요.";
+
+// 앱잠금 화면
+"appLockScreenTitle" = "아침 준비를 기다리는 중이에요\n오늘의 시작에 집중해볼까요?";
+"appLockScreenSubTitle" = "잠금 상태입니다";
+"remainingTimeButtonText" = "남은 시간은?";
+
+"SelectApps" = "앱 선택";
+"Complete" = "완료";
