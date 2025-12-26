@@ -12,54 +12,52 @@ struct SubscriptionCardView: View {
     let discountText: String
     let originalPrice: String
     let discountedPrice: String
-    let description: String
     let isHighlighted: Bool
     let isSelected: Bool
     
     var body: some View {
-        VStack(spacing: 0) {
+        HStack(spacing: 0) {
+            Image(.icCheck)
+                .renderingMode(.template)
+                .foregroundColor(isSelected ? .gray50 : .gray300)
+                .padding(.trailing, 16)
+            
             Text(title)
-                .font(.system(size: 18, weight: .bold))
-                .fontWeight(.bold)
+                .font(.system(size: 17, weight: .semibold))
                 .foregroundColor(isHighlighted ? .neon : .white)
-                .padding(.top, 10)
+                .padding(.trailing, 12)
             
             ZStack {
-                Circle()
+                RoundedRectangle(cornerRadius: 12)
                     .fill(isHighlighted ? .neon : .white)
-                    .frame(width: 70, height: 70)
+                    .frame(width: 56, height: 29)
                 
                 Text(discountText)
-                    .font(.system(size: 24, weight: .semibold))
+                    .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(.black)
             }
-            .padding(.top, 13)
             
-            Text(originalPrice)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(.gray200)
-                .strikethrough()
-                .padding(.top, 9)
+            Spacer()
             
-            Text(discountedPrice)
-                .font(.system(size: 20, weight: .heavy))
-                .foregroundColor(.neon)
-            
-            Text(description)
-                .font(.system(size: 12, weight: .regular))
-                .foregroundColor(.gray200)
-                .padding(.top, 13)
-                .padding(.bottom, 9)
-            
+            VStack(alignment: .trailing, spacing: 0) {
+                Text(discountedPrice)
+                    .font(.system(size: 17, weight: .heavy))
+                    .foregroundColor(.neon)
+                
+                Text(originalPrice)
+                    .font(.system(size: 15, weight: .regular))
+                    .foregroundColor(.gray200)
+                    .strikethrough()
+            }
         }
-        .frame(width: 136, height: 200)
+        .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(.gray800)
+                .fill(.gray600)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 24)
-                .stroke(isSelected ? Color.white : Color.clear, lineWidth: 2)
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(isSelected ? .gray100 : Color.clear, lineWidth: 1.5)
         )
         .animation(.easeInOut, value: isSelected)
     }
