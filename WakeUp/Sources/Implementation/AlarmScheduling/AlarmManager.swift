@@ -180,6 +180,7 @@ extension AlarmManager {
     private func deactiveCurrentAlarm(reschedule: Bool = false) {
         audioPlayer.stop()
         alarmTimer?.invalidate()
+        notificationManager.removePendingNotification()
         
         if reschedule {
             isAlarmPlaying = true
