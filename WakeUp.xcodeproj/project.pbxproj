@@ -16,6 +16,7 @@
 		006E18032ED5FDF500BB576C /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 006E18022ED5FDF500BB576C /* FirebaseCrashlytics */; };
 		006E18052ED5FDF500BB576C /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 006E18042ED5FDF500BB576C /* FirebaseRemoteConfig */; };
 		00D99DF72EF992B20012C0E7 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 00D99DF62EF992B20012C0E7 /* GoogleMobileAds */; };
+		00E93BE02EFC022A00EE22FE /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 00E93BDF2EFC022A00EE22FE /* FirebaseMessaging */; };
 		76874F8E2ED9A70F0067C086 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76E681B42ED705FC00E94EEF /* ManagedSettings.framework */; };
 		76874F8F2ED9A70F0067C086 /* ManagedSettingsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76E681B62ED705FC00E94EEF /* ManagedSettingsUI.framework */; };
 		76874F972ED9A70F0067C086 /* ShieldConfiguration.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 76874F8D2ED9A70F0067C086 /* ShieldConfiguration.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -235,6 +236,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00E93BE02EFC022A00EE22FE /* FirebaseMessaging in Frameworks */,
 				006E17FB2ED5FDF500BB576C /* FirebaseAnalytics in Frameworks */,
 				006E17FD2ED5FDF500BB576C /* FirebaseAnalyticsCore in Frameworks */,
 				006E18032ED5FDF500BB576C /* FirebaseCrashlytics in Frameworks */,
@@ -371,6 +373,7 @@
 				006E18022ED5FDF500BB576C /* FirebaseCrashlytics */,
 				006E18042ED5FDF500BB576C /* FirebaseRemoteConfig */,
 				00D99DF62EF992B20012C0E7 /* GoogleMobileAds */,
+				00E93BDF2EFC022A00EE22FE /* FirebaseMessaging */,
 			);
 			productName = WakeUp;
 			productReference = 00CD949F2E9D3FD4001C47CD /* WakeUp.app */;
@@ -700,7 +703,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.awayke.ShieldAction;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AwaykeShieldAction;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = awaykeShieldAction;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -886,7 +889,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = WakeUp/Resources/WakeUp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = WakeUp/Resources/WakeUpRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
@@ -916,7 +919,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.awayke;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AwaykeAppstore;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = awayke;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1101,7 +1104,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.awayke.DeviceReport;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AwaykeDeviceReport;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = awaykeDeviceReport;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -1168,7 +1171,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.awayke.DeviceMonitor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AwaykeDeviceMonitorAppStore;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = awaykeDeviceMonitor;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -1301,6 +1304,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 00D99DF52EF992B20012C0E7 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
 			productName = GoogleMobileAds;
+		};
+		00E93BDF2EFC022A00EE22FE /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 006E17F92ED5FDF500BB576C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
