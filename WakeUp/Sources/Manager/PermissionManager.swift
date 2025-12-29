@@ -8,6 +8,7 @@
 import FamilyControls
 import Combine
 import UserNotifications
+import UIKit
 
 @MainActor
 final class PermissionManager: ObservableObject {
@@ -70,7 +71,7 @@ final class PermissionManager: ObservableObject {
         do {
             let granted = try await center.requestAuthorization(
                 options: [.alert, .sound, .badge]
-            )
+            )            
             notificationStatus = granted ? .authorized : .denied
         } catch {
             notificationStatus = .denied

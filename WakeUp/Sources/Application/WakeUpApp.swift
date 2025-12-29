@@ -10,6 +10,7 @@ import CoreData
 import BackgroundTasks
 import FirebaseCore
 import FirebaseAnalytics
+import FirebaseMessaging
 import GoogleMobileAds
 
 @main
@@ -51,7 +52,15 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     private let alarmManager: AlarmManager = .shared
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        
+        UNUserNotificationCenter.current().delegate = self
+        FirebaseApp.configure()
+        
+        application.registerForRemoteNotifications()
+                        
+        Messaging.messaging().delegate = self
         MobileAds.shared.start()
+        
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.awayke.refresh", using: nil) { task in
             self.handleAppRefresh(task: task as! BGAppRefreshTask)
         }
@@ -59,6 +68,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.awayke.processing", using: nil) { task in
             self.handleProcessingTask(task: task as! BGProcessingTask)
         }
+        
         return true
     }
     
@@ -116,17 +126,33 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        UNUserNotificationCenter.current().delegate = self
-        FirebaseApp.configure()
         return true
     }
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
+    // deviceToken을 fcm 토큰으로 맵핑
+    func application(
+        _ application: UIApplication,
+        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+    ) {
+        Messaging.messaging().apnsToken = deviceToken
+    }
+    
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
         if response.notification.request.content.userInfo["action"] as? String == "openTimer" {
             NotificationCenter.default.post(name: .openTimer, object: response.notification.request.identifier)
         }
+    }
+    
+    // foreground 상태에서 노티피케이션 전송
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+         completionHandler([.list, .banner])
+     }
+}
+
+extension AppDelegate: MessagingDelegate {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
     }
 }
 
