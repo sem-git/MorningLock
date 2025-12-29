@@ -41,7 +41,7 @@ struct NativeAdMobView: UIViewRepresentable {
         
         (nativeAdView.advertiserView as? UILabel)?.text = nativeAd.advertiser
         
-        (nativeAdView.callToActionView as? UIButton)?.setTitle(nativeAd.callToAction, for: .normal)
+        (nativeAdView.callToActionView as? UIButton)?.setTitle("설치", for: .normal)
         
         // For the SDK to process touch events properly, user interaction should be disabled.
         nativeAdView.callToActionView?.isUserInteractionEnabled = true

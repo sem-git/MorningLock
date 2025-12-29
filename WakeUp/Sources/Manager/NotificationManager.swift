@@ -50,4 +50,8 @@ final class NotificationManager {
 
         center.add(request)
     }
+    
+    func removePendingNotification() {
+        center.removeAllPendingNotificationRequests()
+    }
 }

@@ -21,6 +21,7 @@ class MainViewModel: ObservableObject {
     @Published var snoozeTime: TimeInterval = .minutes(5)
     @Published var snoozeDisabled: Bool = false
     @Published var isWebViewPresented: Bool = false
+    @Published var isAppSelectionPresented: Bool = false
     
     private let dataManager: CoreDataManager
     private let alarmManager: AlarmManager
@@ -81,6 +82,9 @@ class MainViewModel: ObservableObject {
     }
     
     func updateAlarm(_ alarm: AlarmEntity) {
+        if alarm.isActive, deviceActivityManager.selectedApp == nil {
+            isAppSelectionPresented = true
+        }
         alarmManager.updateAlarm(alarm)
     }
     
@@ -106,6 +110,10 @@ class MainViewModel: ObservableObject {
     
     func toggleWebView() {
         isWebViewPresented.toggle()
+    }
+    
+    func toggleAppSelection() {
+        isAppSelectionPresented.toggle()
     }
     
     func requestTrackingAuthorization() {

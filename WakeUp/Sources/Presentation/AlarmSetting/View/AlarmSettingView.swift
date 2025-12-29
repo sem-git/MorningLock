@@ -51,6 +51,7 @@ struct AlarmSettingView: View {
                 NativeAdMobView(nativeViewModel: nativeViewModel)
                     .frame(maxHeight: 64)
                     .padding(.horizontal, 16)
+                    .opacity(nativeViewModel.isLoading ? 0 : 1)
                 MainButton(title: NSLocalizedString("saveButtonText", comment: "저장하기"), disabled: viewModel.buttonDisabled) {
                     if viewModel.isEditing {
                         updateAlarm()
