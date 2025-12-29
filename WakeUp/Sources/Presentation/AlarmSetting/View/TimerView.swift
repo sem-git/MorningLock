@@ -18,17 +18,16 @@ struct TimerView: View {
             Color.gray800.ignoresSafeArea(.all)
             
             VStack(spacing: 0) {
-                // TODO: 임시 닫기 버튼
                 HStack {
                     Spacer()
                     Button {
                         dismiss()
                     } label: {
-                        Image(systemName: "xmark")
-                            .foregroundStyle(.gray50)
+                        Image(.icX)
                     }
                     .padding()
                 }
+                
                 Text(NSLocalizedString("lockingAppTitle", comment: "아침 준비를 기다리는 중이에요"))
                     .font(.system(size: 22, weight: .bold))
                     .foregroundStyle(.gray50)
@@ -52,7 +51,9 @@ struct TimerView: View {
                         .font(.system(size: 40, weight: .bold))
                 )
                 .padding(.top, 137)
+                
                 Spacer()
+                
                 NativeAdMobView(nativeViewModel: nativeViewModel)
                     .frame(maxHeight: 64)
                     .padding(.horizontal, 16)
@@ -87,13 +88,13 @@ struct RoundProgressView : View {
     var height: CGFloat
     var color1: Color
     var color2: Color
+    
     @Binding var percent: Double;
     
     var body: some View {
         let progress = 1 - (CGFloat(percent) / 100)
         
         return ZStack {
-            
             Circle()
                 .stroke(.gray600, style: StrokeStyle(lineWidth: 16, lineCap: .round))
                 .frame(width: width, height: height)

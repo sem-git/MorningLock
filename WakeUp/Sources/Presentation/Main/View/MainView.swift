@@ -9,6 +9,13 @@ import SwiftUI
 import FamilyControls
 import DeviceActivity
 import GoogleMobileAds
+import StoreKit
+
+// 임시로 MainView에
+enum SubscriptionType {
+    case monthly
+    case yearly
+}
 
 struct MainView: View {
     @StateObject var viewModel: MainViewModel = MainViewModel()
@@ -19,7 +26,11 @@ struct MainView: View {
     @EnvironmentObject var permissionManager: PermissionManager
     
     @State private var isPickerPresented = false
+    @State private var isSubscriptionSheetPresented = false
     @State private var canSave: Bool = false
+    
+    @State private var selectedSubscription: SubscriptionType? = nil
+    @StateObject private var store = StoreKitManager()
     
     var body: some View {
         NavigationStack(path: $viewModel.path) {
@@ -111,6 +122,20 @@ struct MainView: View {
                     }
                 }
                 .padding(16)
+                
+                Button(action: {
+                    isSubscriptionSheetPresented = true
+                }) {
+                    Text("광고없이 사용하기")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.gray300)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(.gray300, lineWidth: 1)
+                        )
+                }
             }
             .overlay(alignment: .bottom, content: {
                 NativeAdMobView(nativeViewModel: nativeViewModel)
@@ -119,7 +144,7 @@ struct MainView: View {
             })
             .animation(.default, value: viewModel.alarmList.count)
             .sheet(isPresented: $viewModel.isWebViewPresented, content: {
-                WebView(url: "https://docs.google.com/forms/d/e/1FAIpQLSduOHAV4hz962dKI66QEk8KmBkxgmQaT7hFD8xJQgCX4TQr8w/viewform?usp=dialog")                
+                WebView(url: "https://docs.google.com/forms/d/e/1FAIpQLSduOHAV4hz962dKI66QEk8KmBkxgmQaT7hFD8xJQgCX4TQr8w/viewform?usp=dialog")
             })
             // TODO: 컴포넌트로 분리
             .sheet(isPresented: $isPickerPresented) {
@@ -191,6 +216,11 @@ struct MainView: View {
                     AlarmSettingView(viewModel: AlarmSettingViewModel(alarm: alarm))
                 }
             })
+            .sheet(isPresented: $isSubscriptionSheetPresented, content: {
+                subscriptionSheetView
+                    .presentationDetents([.large])
+                    .padding(.horizontal, 16)
+            })
         }
     }
 }
@@ -253,6 +283,139 @@ extension MainView {
                 }
             }
         }
+    }
+    
+    private var subscriptionSheetView: some View {
+        VStack(spacing: 16) {
+            HStack(spacing: 0) {
+                Spacer()
+                
+                Button {
+                    isSubscriptionSheetPresented = false
+                } label: {
+                    Image(.icX)
+                }
+            }
+            .padding(.top, 16)
+            
+            ScrollView {
+                VStack(spacing: 8) {
+                    Text("커피 한 잔 가격으로 광고 없이 사용하세요")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(.gray50)
+                    
+                    Text("효율적인 아침을 앞으로도 도와드릴게요")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(.gray200)
+                        .multilineTextAlignment(.center)
+                }
+                
+                Image(.imgSubscription)
+                
+                VStack(spacing: 16) {
+                    SubscriptionCardView(
+                        title: "월 구독",
+                        discountText: "-25%",
+                        originalPrice: "3,900원",
+                        discountedPrice: "2,900원",
+                        isHighlighted: false,
+                        isSelected: selectedSubscription == .monthly
+                    )
+                    .onTapGesture {
+                        toggleSubscription(.monthly)
+                    }
+                    
+                    SubscriptionCardView(
+                        title: "연 구독",
+                        discountText: "-38%",
+                        originalPrice: "46,800원",
+                        discountedPrice: "29,000원",
+                        isHighlighted: true,
+                        isSelected: selectedSubscription == .yearly
+                    )
+                    .onTapGesture {
+                        toggleSubscription(.yearly)
+                    }
+                }
+                
+                VStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 0) {
+                        BulletText(text: StringLiteral.SubscriptionNotice.limitedPrice)
+                        BulletText(text: StringLiteral.SubscriptionNotice.appleBilling)
+                        BulletText(text: StringLiteral.SubscriptionNotice.autoRenewal)
+                        BulletText(text: StringLiteral.SubscriptionNotice.renewalCharge)
+                        BulletText(text: StringLiteral.SubscriptionNotice.manageSubscription)
+                        BulletText(text: StringLiteral.SubscriptionNotice.termsAndPrivacy)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    HStack(spacing: 24) {
+                        Text("구매 복원")
+                        
+                        Text("이용약관")
+                        
+                        Text("개인정보처리방침")
+                    }
+                    .font(.system(size: 13, weight: .regular))
+                    .foregroundStyle(.gray50)
+                    .underline()
+                }
+                .padding(16)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(.black)
+                )
+            }
+            .scrollIndicators(.hidden)
+            
+            HStack(spacing: 16) {
+                MainButton(
+                    title: "다음에 하기",
+                    buttonStyle: .text
+                ) {
+                    isSubscriptionSheetPresented = false;
+                }
+                MainButton(title: "구입하기") {
+                    Task {
+                        await purchaseSelectedSubscription()
+                    }
+                }
+                .disabled(selectedSubscription == nil)
+                .opacity(selectedSubscription == nil ? 0.5 : 1)
+            }
+        }
+    }
+    
+    private func toggleSubscription(_ type: SubscriptionType) {
+        selectedSubscription = selectedSubscription == type ? nil : type
+    }
+    
+    @MainActor
+    private func purchaseSelectedSubscription() async {
+        guard let selectedSubscription else {
+            return
+        }
+        
+        let product: Product?
+        
+        switch selectedSubscription {
+        case .monthly:
+            product = store.products.first {
+                $0.id == "com.awayke.subscription.monthly"
+            }
+            
+        case .yearly:
+            product = store.products.first {
+                $0.id == "com.awayke.subscription.yearly"
+            }
+        }
+        
+        guard let product else {
+            print("선택된 Product 없음:", store.products.map { $0.id })
+            return
+        }
+        
+        await store.purchase(product)
     }
 }
 
