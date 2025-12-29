@@ -5,7 +5,7 @@ import Foundation
 import ManagedSettings
 
 // TODO: UserDefaultManager로 만들기
-@MainActor
+
 final class DeviceActivityManager: ObservableObject {
     static let shared = DeviceActivityManager()
     
@@ -190,15 +190,7 @@ final class DeviceActivityManager: ObservableObject {
     
     /// 잠금 상태를 앱그룹에 저장
     private func persistLockState() {
-        let state = LockState(
-            endTime: endTime,
-            lockedApps: currentLockedSnapshot
-        )
         let appBlockState = AppModel(selection: selection)
-        
-//        if let data = try? JSONEncoder().encode(state) {
-//            sharedContainer?.set(data, forKey: StringLiteral.UserDefaultKeys.appLockStateKey)
-//        }
         
         if let data = try? JSONEncoder().encode(appBlockState) {
             sharedContainer?.set(data, forKey: StringLiteral.UserDefaultKeys.appLockStateKey)

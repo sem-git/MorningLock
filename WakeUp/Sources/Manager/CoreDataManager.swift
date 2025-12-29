@@ -62,7 +62,7 @@ class CoreDataManager {
             do {
                 let data = try context.fetch(request)
                 
-                if var updateAlarm = data.first {
+                if let updateAlarm = data.first {
                     updateAlarm.isActive = alarm.isActive
                     updateAlarm.fireDate = alarm.fireDate
                     updateAlarm.repeatDay = alarm.repeatDay.map(\.rawValue)
