@@ -31,13 +31,13 @@ struct MainView: View {
                             AlarmItem(alarm: Binding(get: {
                                 // 삭제 시 인덱스 오류 방지
                                 if index > viewModel.alarmList.count-1 {
-                                    return AlarmEntity(id: UUID(), fireDate: .now, isActive: false, repeatDay: [])
+                                    return AlarmEntity()
                                 } else {
                                     return alarm
                                 }
                             }, set: {
                                 viewModel.alarmList[index] = $0
-                                viewModel.updateAlarm($0)
+                                viewModel.updateAlarm($0)                                
                             }))
                             .onTapGesture {
                                 viewModel.navigateToAlarmSetting(alarm)
@@ -121,6 +121,19 @@ struct MainView: View {
             .animation(.default, value: viewModel.alarmList.count)
             .sheet(isPresented: $viewModel.isWebViewPresented, content: {
                 WebView(url: "https://docs.google.com/forms/d/e/1FAIpQLSduOHAV4hz962dKI66QEk8KmBkxgmQaT7hFD8xJQgCX4TQr8w/viewform?usp=dialog")                
+            })
+            .sheet(isPresented: $viewModel.isAppSelectionPresented, content: {
+                appSelectionSheet
+                    .presentationDetents([.height(sheetHeight)])
+                    .padding(.horizontal, 16)
+                    .overlay {
+                        GeometryReader { geometry in
+                            Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
+                        }
+                    }
+                    .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                        sheetHeight = newHeight
+                    }
             })
             // TODO: 컴포넌트로 분리
             .sheet(isPresented: $isPickerPresented) {
@@ -208,6 +221,32 @@ struct InnerHeightPreferenceKey: PreferenceKey {
 extension MainView {
     private func removeRows(at offsets: IndexSet) {
         viewModel.alarmList.remove(atOffsets: offsets)
+    }
+    
+    private var appSelectionSheet: some View {
+        VStack(spacing: 0) {
+                Text("알람을 키셨네요")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundStyle(.gray50)
+                    .padding(.top, 24)
+                Text("알람이 울릴 때 잠글 앱을 설정해볼까요")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(.gray200)
+                    .padding(.top, 8)
+            
+            HStack(spacing: 16) {
+                MainButton(
+                    title: "알람만 키기" ,
+                    buttonStyle: .text,
+                    action: viewModel.toggleAppSelection
+                )
+                MainButton(title: "설정하기") {
+                    viewModel.toggleAppSelection()
+                    isPickerPresented = true
+                }
+            }
+            .padding(.top, 28)
+        }
     }
     
     private var contactButton: some View {
