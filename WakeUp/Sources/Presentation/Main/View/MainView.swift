@@ -401,16 +401,17 @@ extension MainView {
         switch selectedSubscription {
         case .monthly:
             product = store.products.first {
-                $0.subscription?.subscriptionPeriod.unit == .month
+                $0.id == "com.awayke.subscription.monthly"
             }
             
         case .yearly:
             product = store.products.first {
-                $0.subscription?.subscriptionPeriod.unit == .year
+                $0.id == "com.awayke.subscription.yearly"
             }
         }
         
         guard let product else {
+            print("선택된 Product 없음:", store.products.map { $0.id })
             return
         }
         

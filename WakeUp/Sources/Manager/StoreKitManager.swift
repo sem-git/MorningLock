@@ -17,17 +17,16 @@ class StoreKitManager: ObservableObject {
         "com.awayke.subscription.yearly"
     ]
     
-    @Published var products: [Product] = [] // App Store에서 받아온 상품 메타데이터
-    @Published var isSubscribed: Bool = false // 지금 유저가 구독 중인지
+    // App Store에서 받아온 상품 메타데이터
+    @Published var products: [Product] = []
+    // 지금 유저가 구독 중인지
+    @Published var isSubscribed: Bool = false
     
     init() {
         Task {
             await requestProducts()
             await updateSubscriptionStatus()
-        }
-        
-        Task.detached {
-            await self.listenForTransactions()
+            await listenForTransactions()
         }
     }
     
@@ -35,6 +34,9 @@ class StoreKitManager: ObservableObject {
     func requestProducts() async {
         do {
             products = try await Product.products(for: productIDs)
+            print("상품: ", products.map { $0.id })
+            
+            self.products = products
         } catch {
             print("실패", error)
         }
@@ -51,6 +53,7 @@ class StoreKitManager: ObservableObject {
                     print("Verification 실패")
                     return
                 }
+                print("구매 성공:", transaction.productID)
                 
                 await transaction.finish()
                 await updateSubscriptionStatus()
@@ -86,6 +89,7 @@ class StoreKitManager: ObservableObject {
     func listenForTransactions() async {
         for await result in StoreKit.Transaction.updates {
             if case .verified(let transaction) = result {
+                print("업데이트:", transaction.productID)
                 await transaction.finish()
                 await updateSubscriptionStatus()
             }
