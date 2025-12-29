@@ -51,7 +51,9 @@ struct TimerView: View {
                         .font(.system(size: 40, weight: .bold))
                 )
                 .padding(.top, 137)
+                
                 Spacer()
+                
                 NativeAdMobView(nativeViewModel: nativeViewModel)
                     .frame(maxHeight: 64)
                     .padding(.horizontal, 16)
@@ -86,13 +88,13 @@ struct RoundProgressView : View {
     var height: CGFloat
     var color1: Color
     var color2: Color
+    
     @Binding var percent: Double;
     
     var body: some View {
         let progress = 1 - (CGFloat(percent) / 100)
         
         return ZStack {
-            
             Circle()
                 .stroke(.gray600, style: StrokeStyle(lineWidth: 16, lineCap: .round))
                 .frame(width: width, height: height)

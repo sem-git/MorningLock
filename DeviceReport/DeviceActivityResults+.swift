@@ -11,7 +11,7 @@ import ManagedSettings
 
 extension DeviceActivityResults where Element ==  DeviceActivityData {
     func makeReport() async -> [AppReport] {
-        var appReports: [AppReport] = await []
+        var appReports: [AppReport] = []
         
         for await value in self {
             for await activity in value.activitySegments {

@@ -30,10 +30,9 @@ struct WakeUpApp: App {
                 }
                 .fullScreenCover(isPresented: $isTimerPresented, content: {
                     TimerView()
-                })                
-                .onChange(of: scenePhase) { newPhase in
-                    switch newPhase {
-                    case .background:
+                })
+                .onChange(of: scenePhase) { _, newPhase in
+                    if newPhase == .background {
                         Analytics.logEvent("EnterBackground", parameters: [
                             AnalyticsParameterItemID: "id",
                             AnalyticsParameterItemName: "enter-background",
@@ -41,9 +40,6 @@ struct WakeUpApp: App {
                         ])
                         delegate.scheduleAppBackgroundRefresh()
                         delegate.scheduleAppBackgroundProcessing()
-                        break
-                    @unknown default:
-                        break
                     }
                 }
                 .environmentObject(permissionManager)
@@ -74,9 +70,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             task.setTaskCompleted(success: false)
         }
         
-//        alarmManager.updateAlarmSchedule() {
-//            Analytics.logEvent("UpdateQueue", parameters: nil)
-//        }
+        //        alarmManager.updateAlarmSchedule() {
+        //            Analytics.logEvent("UpdateQueue", parameters: nil)
+        //        }
         
         task.setTaskCompleted(success: true)
     }
@@ -89,9 +85,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             task.setTaskCompleted(success: false)
         }
         
-//        alarmManager.updateAlarmSchedule() {
-//            Analytics.logEvent("UpdateQueue", parameters: nil)
-//        }
+        //        alarmManager.updateAlarmSchedule() {
+        //            Analytics.logEvent("UpdateQueue", parameters: nil)
+        //        }
         
         task.setTaskCompleted(success: true)
     }

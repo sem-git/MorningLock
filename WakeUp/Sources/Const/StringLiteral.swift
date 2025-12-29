@@ -31,5 +31,4 @@ enum StringLiteral {
         
         static let termsAndPrivacy = "자세한 내용은 이용약관 및 개인정보 처리방침에서 확인하실 수 있습니다."
     }
-    
 }
