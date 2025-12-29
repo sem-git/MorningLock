@@ -116,6 +116,7 @@ struct MainView: View {
                 NativeAdMobView(nativeViewModel: nativeViewModel)
                     .frame(maxHeight: 64)
                     .padding(.horizontal, 16)
+                    .opacity(nativeViewModel.isLoading ? 0 : 1)
             })
             .animation(.default, value: viewModel.alarmList.count)
             .sheet(isPresented: $viewModel.isWebViewPresented, content: {

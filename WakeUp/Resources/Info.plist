@@ -8,7 +8,9 @@
 		<string>com.awayke.processing</string>
 	</array>
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<string>ca-app-pub-4857892091468834~1453172067</string>
+	<key>AdUnitID</key>
+	<string>${AD_UNIT_ID}</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
