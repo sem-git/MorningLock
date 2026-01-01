@@ -32,6 +32,8 @@ struct MainView: View {
     @State private var selectedSubscription: SubscriptionType? = nil
     @StateObject private var store = StoreKitManager()
     
+    @Environment(\.openURL) private var openURL
+    
     var body: some View {
         NavigationStack(path: $viewModel.path) {
             ScrollView {
@@ -390,15 +392,35 @@ extension MainView {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
                     HStack(spacing: 24) {
-                        Text("구매 복원")
+                        Button {
+                            Task {
+                                await store.restorePurchases()
+                            }
+                        } label: {
+                            Text("구매 복원")
+                                .underline()
+                        }
                         
-                        Text("이용약관")
+                        Button {
+                            if let url = URL(string: "https://www.notion.so/2db236ba320180e58611c0e508826405?source=copy_link") {
+                                openURL(url)
+                            }
+                        } label: {
+                            Text("이용약관")
+                                .underline()
+                        }
                         
-                        Text("개인정보처리방침")
+                        Button {
+                            if let url = URL(string: "https://www.notion.so/2d2236ba320180c8a09ef58dce97639b?source=copy_link") {
+                                openURL(url)
+                            }
+                        } label: {
+                            Text("개인정보처리방침")
+                                .underline()
+                        }
                     }
                     .font(.system(size: 13, weight: .regular))
                     .foregroundStyle(.gray50)
-                    .underline()
                 }
                 .padding(16)
                 .background(
