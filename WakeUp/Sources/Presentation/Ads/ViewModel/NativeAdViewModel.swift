@@ -17,8 +17,9 @@ class NativeAdViewModel: NSObject, ObservableObject, NativeAdLoaderDelegate, Nat
         adLoader.isLoading
     }
     
-    override init() {
+    init(isDisabled: Bool) {
         super.init()
+        guard !isDisabled else { return }
         self.refreshAd()
     }
     

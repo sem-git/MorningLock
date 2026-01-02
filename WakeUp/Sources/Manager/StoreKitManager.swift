@@ -92,8 +92,11 @@ class StoreKitManager: ObservableObject {
             
             if isValidSubscription(transaction) {
                 isSubscribed = true
+                UserDefaults.standard.set(true, forKey: StringLiteral.UserDefaultKeys.isPremiumSubscriber)
                 print("현재 활성 구독:", transaction.productID)
                 return
+            } else {
+                UserDefaults.standard.set(false, forKey: StringLiteral.UserDefaultKeys.isPremiumSubscriber)
             }
         }
         

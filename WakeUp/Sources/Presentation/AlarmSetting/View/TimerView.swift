@@ -10,7 +10,8 @@ import SwiftUI
 struct TimerView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.scenePhase) var scenePhase
-    @StateObject private var nativeViewModel = NativeAdViewModel()
+    @StateObject private var nativeViewModel = NativeAdViewModel(isDisabled: UserDefaults.standard.bool(forKey: StringLiteral.UserDefaultKeys.isPremiumSubscriber))
+    @AppStorage(StringLiteral.UserDefaultKeys.isPremiumSubscriber) var isSubscribed = true
     @StateObject var deviceManager = DeviceActivityManager.shared
     
     var body: some View {
@@ -53,11 +54,11 @@ struct TimerView: View {
                 .padding(.top, 137)
                 
                 Spacer()
-                
-                NativeAdMobView(nativeViewModel: nativeViewModel)
-                    .frame(maxHeight: 64)
-                    .padding(.horizontal, 16)
-                    .opacity(nativeViewModel.isLoading ? 0 : 1)
+                if !isSubscribed {
+                    NativeAdMobView(nativeViewModel: nativeViewModel)
+                        .frame(maxHeight: 64)
+                        .padding(.horizontal, 16)                        
+                }
             }
         }
         .onAppear {

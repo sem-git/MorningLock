@@ -9,8 +9,9 @@ import SwiftUI
 
 struct AlarmSettingView: View {
     @StateObject var viewModel: AlarmSettingViewModel
-    @StateObject private var nativeViewModel = NativeAdViewModel()
+    @StateObject private var nativeViewModel = NativeAdViewModel(isDisabled: UserDefaults.standard.bool(forKey: StringLiteral.UserDefaultKeys.isPremiumSubscriber))
     @Environment(\.dismiss) var dismiss
+    @AppStorage(StringLiteral.UserDefaultKeys.isPremiumSubscriber) var isSubscribed = true
     
     var body: some View {
         VStack(spacing: 16) {
@@ -48,10 +49,11 @@ struct AlarmSettingView: View {
         .navigationBarBackButtonHidden(true)
         .overlay(alignment: .bottom, content: {
             VStack {
-                NativeAdMobView(nativeViewModel: nativeViewModel)
-                    .frame(maxHeight: 64)
-                    .padding(.horizontal, 16)
-                    .opacity(nativeViewModel.isLoading ? 0 : 1)
+                if !isSubscribed {
+                    NativeAdMobView(nativeViewModel: nativeViewModel)
+                        .frame(maxHeight: 64)
+                        .padding(.horizontal, 16)                        
+                }
                 MainButton(title: NSLocalizedString("saveButtonText", comment: "저장하기"), disabled: viewModel.buttonDisabled) {
                     if viewModel.isEditing {
                         updateAlarm()

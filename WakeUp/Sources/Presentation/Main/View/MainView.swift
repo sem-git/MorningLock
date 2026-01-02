@@ -19,7 +19,7 @@ enum SubscriptionType {
 
 struct MainView: View {
     @StateObject var viewModel: MainViewModel = MainViewModel()
-    @StateObject private var nativeViewModel = NativeAdViewModel()
+    @StateObject private var nativeViewModel = NativeAdViewModel(isDisabled: UserDefaults.standard.bool(forKey: StringLiteral.UserDefaultKeys.isPremiumSubscriber))
     @State private var sheetHeight: CGFloat = .zero
     
     @StateObject var deviceManager: DeviceActivityManager = .shared
@@ -31,6 +31,8 @@ struct MainView: View {
     
     @State private var selectedSubscription: SubscriptionType? = nil
     @StateObject private var store = StoreKitManager()
+    
+    @AppStorage(StringLiteral.UserDefaultKeys.isPremiumSubscriber) var isSubscribed = true
     
     @Environment(\.openURL) private var openURL
     
@@ -140,10 +142,11 @@ struct MainView: View {
                 }
             }
             .overlay(alignment: .bottom, content: {
-                NativeAdMobView(nativeViewModel: nativeViewModel)
-                    .frame(maxHeight: 64)
-                    .padding(.horizontal, 16)
-                    .opacity(nativeViewModel.isLoading ? 0 : 1)
+                if !isSubscribed {
+                    NativeAdMobView(nativeViewModel: nativeViewModel)
+                        .frame(maxHeight: 64)
+                        .padding(.horizontal, 16)
+                }
             })
             .animation(.default, value: viewModel.alarmList.count)
             .sheet(isPresented: $viewModel.isWebViewPresented, content: {
