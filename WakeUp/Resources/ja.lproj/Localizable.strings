@@ -56,3 +56,26 @@
 
 "SelectApps" = "アプリを選択";
 "Complete" = "完了";
+
+// 프로모션
+"PromotionSheetTitle" = "コーヒー1杯の値段で広告なしに";
+"PromotionSheetSubTitle" = "これからも効率的な朝をサポートします";
+
+"Monthly" = "月間";
+"Yearly" = "年間";
+
+"SubscriptionLimitedPrice" = "上記の価格はアプリのリリースを記念した期間限定の特典価格であり、サービスの運営方針や内部事情により、事前の告知なしに変更される場合があります。";
+"SubscriptionAppleBilling" = " 購入を確定すると、お支払い金額がApple IDアカウントに請求されます。";
+"SubscriptionAutoRenewal" = "定期購読は、現在の利用期間終了の24時間前までに解約しない限り、自動的に更新されます。";
+"SubscriptionRenewalCharge" = "更新料金は、現在の期間終了の24時間以内に請求されます。";
+"SubscriptionManageSubscription" = "定期購読の管理および解約は、App Storeのアカウント設定から直接変更できます。";
+"SubscriptionTermsAndPrivacy" = "詳細については、利用規約およびプライバシーポリシーでご確認いただけます。";
+
+"RestorePurchaseButtonText" = "購入を復元する";
+"TermsOfUseButtonText" = "利用規約";
+"PrivacyPolicyButtonText" = "プライバシーポリシー";
+
+"SubscribeButtonText" = "購入する";
+"SubscribeLaterButtonText" = "あとで";
+
+"RemoveAdsButtonText" = "広告なしで利用する";
