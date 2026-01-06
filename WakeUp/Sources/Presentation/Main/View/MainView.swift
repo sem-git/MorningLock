@@ -127,18 +127,20 @@ struct MainView: View {
                 }
                 .padding(16)
                 
-                Button(action: {
-                    isSubscriptionSheetPresented = true
-                }) {
-                    Text(NSLocalizedString("RemoveAdsButtonText", comment: "RemoveAdsButtonText"))
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.gray300)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(.gray300, lineWidth: 1)
-                        )
+                if !isSubscribed {
+                    Button(action: {
+                        isSubscriptionSheetPresented = true
+                    }) {
+                        Text(NSLocalizedString("RemoveAdsButtonText", comment: "RemoveAdsButtonText"))
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.gray300)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(.gray300, lineWidth: 1)
+                            )
+                    }
                 }
             }
             .overlay(alignment: .bottom, content: {
