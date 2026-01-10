@@ -10,9 +10,10 @@ import SwiftUI
 struct TimerView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.scenePhase) var scenePhase
-    @StateObject private var nativeViewModel = NativeAdViewModel(isDisabled: UserDefaults.standard.bool(forKey: StringLiteral.UserDefaultKeys.isPremiumSubscriber))
-    @AppStorage(StringLiteral.UserDefaultKeys.isPremiumSubscriber) var isSubscribed = true
+    @StateObject private var nativeViewModel = NativeAdViewModel()
+    
     @StateObject var deviceManager = DeviceActivityManager.shared
+    @StateObject private var store = StoreKitManager.shared
     
     var body: some View {
         ZStack {
@@ -54,11 +55,9 @@ struct TimerView: View {
                 .padding(.top, 137)
                 
                 Spacer()
-                if !isSubscribed {
-                    NativeAdMobView(nativeViewModel: nativeViewModel)
-                        .frame(maxHeight: 64)
-                        .padding(.horizontal, 16)                        
-                }
+                NativeAdMobView(nativeViewModel: nativeViewModel)
+                    .frame(maxHeight: 64)
+                    .padding(.horizontal, 16)
             }
         }
         .onAppear {
@@ -82,6 +81,11 @@ struct TimerView: View {
                 dismiss()
             }
         }
+        .onReceive(store.$subscriptionStatus, perform: { subscriptionStatus in
+            if subscriptionStatus == .notSubscribed {
+                nativeViewModel.loadAd()
+            }
+        })
     }
 }
 

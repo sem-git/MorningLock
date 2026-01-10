@@ -58,5 +58,5 @@ struct NativeAdMobView: UIViewRepresentable {
 }
 
 #Preview {
-    NativeAdMobView(nativeViewModel: NativeAdViewModel(isDisabled: false))
+    NativeAdMobView(nativeViewModel: NativeAdViewModel())
 }

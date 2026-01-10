@@ -19,7 +19,7 @@ enum SubscriptionType {
 
 struct MainView: View {
     @StateObject var viewModel: MainViewModel = MainViewModel()
-    @StateObject private var nativeViewModel = NativeAdViewModel(isDisabled: UserDefaults.standard.bool(forKey: StringLiteral.UserDefaultKeys.isPremiumSubscriber))
+    @StateObject private var nativeViewModel = NativeAdViewModel()
     @State private var sheetHeight: CGFloat = .zero
     
     @StateObject var deviceManager: DeviceActivityManager = .shared
@@ -30,9 +30,7 @@ struct MainView: View {
     @State private var canSave: Bool = false
     
     @State private var selectedSubscription: SubscriptionType? = nil
-    @StateObject private var store = StoreKitManager()
-    
-    @AppStorage(StringLiteral.UserDefaultKeys.isPremiumSubscriber) var isSubscribed = true
+    @StateObject private var store = StoreKitManager.shared
     
     @Environment(\.openURL) private var openURL
     
@@ -127,7 +125,7 @@ struct MainView: View {
                 }
                 .padding(16)
                 
-                if !isSubscribed {
+                if store.subscriptionStatus == .notSubscribed {
                     Button(action: {
                         isSubscriptionSheetPresented = true
                     }) {
@@ -144,11 +142,9 @@ struct MainView: View {
                 }
             }
             .overlay(alignment: .bottom, content: {
-                if !isSubscribed {
-                    NativeAdMobView(nativeViewModel: nativeViewModel)
-                        .frame(maxHeight: 64)
-                        .padding(.horizontal, 16)
-                }
+                NativeAdMobView(nativeViewModel: nativeViewModel)
+                    .frame(maxHeight: 64)
+                    .padding(.horizontal, 16)
             })
             .animation(.default, value: viewModel.alarmList.count)
             .sheet(isPresented: $viewModel.isWebViewPresented, content: {
@@ -229,8 +225,12 @@ struct MainView: View {
             .onAppear {
                 viewModel.fetchAlarm()
                 viewModel.requestTrackingAuthorization()
-                
             }
+            .onReceive(store.$subscriptionStatus, perform: { subscriptionStatus in
+                if subscriptionStatus == .notSubscribed {
+                    nativeViewModel.loadAd()
+                }
+            })
             .navigationDestination(for: MainRoute.self, destination: { destination in
                 switch destination {
                 case .alarmSetting(let alarm):
