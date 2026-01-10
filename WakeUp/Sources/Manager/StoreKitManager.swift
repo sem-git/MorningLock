@@ -12,6 +12,15 @@ import Combine
 @MainActor
 class StoreKitManager: ObservableObject {
     
+    static let shared = StoreKitManager()
+    
+    // 구독 상태를 나타냄
+    enum SubscriptionStatus {
+        case subscribed      // 구독중
+        case notSubscribed   // 미구독
+        case unknown         // 로딩
+    }
+    
     // App Store Connect에 등록한 상품 ID
     private let productIDs: [String] = [
         "com.awayke.subscription.monthly",
@@ -22,9 +31,9 @@ class StoreKitManager: ObservableObject {
     @Published var products: [Product] = []
     
     // 지금 유저가 구독 중인지
-    @Published var isSubscribed: Bool = false
+    @Published var subscriptionStatus: SubscriptionStatus = .unknown
     
-    init() {
+    private init() {
         Task {
             await requestProducts()
             await updateSubscriptionStatus()
@@ -82,21 +91,19 @@ class StoreKitManager: ObservableObject {
     }
     
     /// 이전에 구독 중이었는지 확인 (앱 재설치 / 기기 변경 대응)
-    func updateSubscriptionStatus() async {
-        isSubscribed = false
+    func updateSubscriptionStatus() async {        
         
         for await result in Transaction.currentEntitlements {
             guard case .verified(let transaction) = result else { continue }
-            
             guard productIDs.contains(transaction.productID) else { continue }
             
             if isValidSubscription(transaction) {
-                isSubscribed = true
+                subscriptionStatus = .subscribed                
                 print("현재 활성 구독:", transaction.productID)
                 return
             }
         }
-        
+        subscriptionStatus = .notSubscribed
         print("활성 구독 없음")
     }
     
@@ -113,6 +120,11 @@ class StoreKitManager: ObservableObject {
                 print("구독 만료:", expirationDate)
                 return false
             }
+        }
+        
+        if transaction.isUpgraded {
+            print("업그레이드된 구독")
+            return false
         }
         
         return true
@@ -135,12 +147,6 @@ class StoreKitManager: ObservableObject {
     func restorePurchases() async {
         print("구매 복원 시도")
 
-        await updateSubscriptionStatus()
-
-        if isSubscribed {
-            print("구독 복원 완료")
-        } else {
-            print("복원할 구독 없음")
-        }
+        await updateSubscriptionStatus()       
     }
 }

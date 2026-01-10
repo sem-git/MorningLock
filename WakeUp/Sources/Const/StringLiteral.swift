@@ -15,6 +15,8 @@ enum StringLiteral {
         static let appLockStateKey = "appLockStateKey"
         /// 온보딩 완료 여부
         static let hasCompletedOnboarding = "hasCompletedOnboarding"
+        
+        static let isPremiumSubscriber = "isPremiumSubscriber"
     }
     
     enum SubscriptionNotice {

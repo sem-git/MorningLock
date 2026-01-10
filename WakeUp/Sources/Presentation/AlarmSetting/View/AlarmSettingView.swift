@@ -10,6 +10,8 @@ import SwiftUI
 struct AlarmSettingView: View {
     @StateObject var viewModel: AlarmSettingViewModel
     @StateObject private var nativeViewModel = NativeAdViewModel()
+    @StateObject private var store = StoreKitManager.shared
+    
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -51,7 +53,7 @@ struct AlarmSettingView: View {
                 NativeAdMobView(nativeViewModel: nativeViewModel)
                     .frame(maxHeight: 64)
                     .padding(.horizontal, 16)
-                    .opacity(nativeViewModel.isLoading ? 0 : 1)
+                
                 MainButton(title: NSLocalizedString("saveButtonText", comment: "저장하기"), disabled: viewModel.buttonDisabled) {
                     if viewModel.isEditing {
                         updateAlarm()
@@ -63,6 +65,11 @@ struct AlarmSettingView: View {
             }
             })
         .background(.gray800)
+        .onReceive(store.$subscriptionStatus, perform: { subscriptionStatus in
+            if subscriptionStatus == .notSubscribed {
+                nativeViewModel.loadAd()
+            }
+        })
     }
     
     private var backButton: some View {

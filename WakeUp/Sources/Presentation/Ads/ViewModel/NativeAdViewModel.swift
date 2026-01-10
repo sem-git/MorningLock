@@ -19,10 +19,11 @@ class NativeAdViewModel: NSObject, ObservableObject, NativeAdLoaderDelegate, Nat
     
     override init() {
         super.init()
-        self.refreshAd()
+        self.initAd()
     }
     
-    func refreshAd() {
+    /// 로더 초기화
+    func initAd() {
         guard let adUnitID = Bundle.main.infoDictionary?["AdUnitID"] as? String else { return }
         
         adLoader = AdLoader(
@@ -30,6 +31,10 @@ class NativeAdViewModel: NSObject, ObservableObject, NativeAdLoaderDelegate, Nat
             rootViewController: nil,
             adTypes: [.native], options: nil)
         adLoader.delegate = self
+    }
+    
+    /// 광고 표시
+    func loadAd() {
         adLoader.load(Request())
     }
     

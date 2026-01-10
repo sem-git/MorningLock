@@ -22,7 +22,11 @@ struct NativeAdMobView: UIViewRepresentable {
     }
     
     func updateUIView(_ nativeAdView: NativeAdView, context: Context) {
-        guard let nativeAd = nativeViewModel.nativeAd else { return }
+        guard let nativeAd = nativeViewModel.nativeAd else {
+            nativeAdView.isHidden = true
+            return
+        }
+        nativeAdView.isHidden = false
         
         // Each UI property is configurable using your native ad.
         (nativeAdView.headlineView as? UILabel)?.text = nativeAd.headline

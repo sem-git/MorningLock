@@ -30,7 +30,7 @@ struct MainView: View {
     @State private var canSave: Bool = false
     
     @State private var selectedSubscription: SubscriptionType? = nil
-    @StateObject private var store = StoreKitManager()
+    @StateObject private var store = StoreKitManager.shared
     
     @Environment(\.openURL) private var openURL
     
@@ -125,25 +125,26 @@ struct MainView: View {
                 }
                 .padding(16)
                 
-                Button(action: {
-                    isSubscriptionSheetPresented = true
-                }) {
-                    Text("광고없이 사용하기")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.gray300)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(.gray300, lineWidth: 1)
-                        )
+                if store.subscriptionStatus == .notSubscribed {
+                    Button(action: {
+                        isSubscriptionSheetPresented = true
+                    }) {
+                        Text(NSLocalizedString("RemoveAdsButtonText", comment: "RemoveAdsButtonText"))
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.gray300)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(.gray300, lineWidth: 1)
+                            )
+                    }
                 }
             }
             .overlay(alignment: .bottom, content: {
                 NativeAdMobView(nativeViewModel: nativeViewModel)
                     .frame(maxHeight: 64)
                     .padding(.horizontal, 16)
-                    .opacity(nativeViewModel.isLoading ? 0 : 1)
             })
             .animation(.default, value: viewModel.alarmList.count)
             .sheet(isPresented: $viewModel.isWebViewPresented, content: {
@@ -224,8 +225,12 @@ struct MainView: View {
             .onAppear {
                 viewModel.fetchAlarm()
                 viewModel.requestTrackingAuthorization()
-                
             }
+            .onReceive(store.$subscriptionStatus, perform: { subscriptionStatus in
+                if subscriptionStatus == .notSubscribed {
+                    nativeViewModel.loadAd()
+                }
+            })
             .navigationDestination(for: MainRoute.self, destination: { destination in
                 switch destination {
                 case .alarmSetting(let alarm):
@@ -342,11 +347,12 @@ extension MainView {
             
             ScrollView {
                 VStack(spacing: 8) {
-                    Text("커피 한 잔 가격으로 광고 없이 사용하세요")
+                    Text(NSLocalizedString("PromotionSheetTitle", comment: "커피 한 잔 가격으로 광고 없이 사용하세요"))
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundStyle(.gray50)
+                        .multilineTextAlignment(.center)
                     
-                    Text("효율적인 아침을 앞으로도 도와드릴게요")
+                    Text(NSLocalizedString("PromotionSheetSubTitle", comment: "효율적인 아침을 앞으로도 도와드릴게요"))
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(.gray200)
                         .multilineTextAlignment(.center)
@@ -356,10 +362,10 @@ extension MainView {
                 
                 VStack(spacing: 16) {
                     SubscriptionCardView(
-                        title: "월 구독",
+                        title: NSLocalizedString("Monthly", comment: "월 구독"),
                         discountText: "-25%",
-                        originalPrice: "3,900원",
-                        discountedPrice: "2,900원",
+                        originalPrice: "3,900₩",
+                        discountedPrice: "2,900₩",
                         isHighlighted: false,
                         isSelected: selectedSubscription == .monthly
                     )
@@ -368,10 +374,10 @@ extension MainView {
                     }
                     
                     SubscriptionCardView(
-                        title: "연 구독",
+                        title: NSLocalizedString("Yearly", comment: "연 구독"),
                         discountText: "-38%",
-                        originalPrice: "46,800원",
-                        discountedPrice: "29,000원",
+                        originalPrice: "46,800₩",
+                        discountedPrice: "29,000₩",
                         isHighlighted: true,
                         isSelected: selectedSubscription == .yearly
                     )
@@ -382,12 +388,12 @@ extension MainView {
                 
                 VStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 0) {
-                        BulletText(text: StringLiteral.SubscriptionNotice.limitedPrice)
-                        BulletText(text: StringLiteral.SubscriptionNotice.appleBilling)
-                        BulletText(text: StringLiteral.SubscriptionNotice.autoRenewal)
-                        BulletText(text: StringLiteral.SubscriptionNotice.renewalCharge)
-                        BulletText(text: StringLiteral.SubscriptionNotice.manageSubscription)
-                        BulletText(text: StringLiteral.SubscriptionNotice.termsAndPrivacy)
+                        BulletText(text: NSLocalizedString("SubscriptionLimitedPrice", comment: "SubscriptionLimitedPrice"))
+                        BulletText(text: NSLocalizedString("SubscriptionAppleBilling", comment: "SubscriptionAppleBilling"))
+                        BulletText(text: NSLocalizedString("SubscriptionAutoRenewal", comment: "SubscriptionAutoRenewal"))
+                        BulletText(text: NSLocalizedString("SubscriptionRenewalCharge", comment: "SubscriptionRenewalCharge"))
+                        BulletText(text: NSLocalizedString("SubscriptionManageSubscription", comment: "SubscriptionManageSubscription"))
+                        BulletText(text: NSLocalizedString("SubscriptionTermsAndPrivacy", comment: "SubscriptionTermsAndPrivacy"))
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
@@ -397,7 +403,7 @@ extension MainView {
                                 await store.restorePurchases()
                             }
                         } label: {
-                            Text("구매 복원")
+                            Text(NSLocalizedString("RestorePurchaseButtonText", comment: "RestorePurchaseButtonText"))
                                 .underline()
                         }
                         
@@ -406,7 +412,7 @@ extension MainView {
                                 openURL(url)
                             }
                         } label: {
-                            Text("이용약관")
+                            Text(NSLocalizedString("TermsOfUseButtonText", comment: "TermsOfUseButtonText"))
                                 .underline()
                         }
                         
@@ -415,7 +421,7 @@ extension MainView {
                                 openURL(url)
                             }
                         } label: {
-                            Text("개인정보처리방침")
+                            Text(NSLocalizedString("PrivacyPolicyButtonText", comment: "PrivacyPolicyButtonText"))
                                 .underline()
                         }
                     }
@@ -432,12 +438,12 @@ extension MainView {
             
             HStack(spacing: 16) {
                 MainButton(
-                    title: "다음에 하기",
+                    title: NSLocalizedString("SubscribeLaterButtonText", comment: "SubscribeLaterButtonText"),
                     buttonStyle: .text
                 ) {
                     isSubscriptionSheetPresented = false;
                 }
-                MainButton(title: "구입하기") {
+                MainButton(title: NSLocalizedString("SubscribeButtonText", comment: "SubscribeButtonText")) {
                     Task {
                         await purchaseSelectedSubscription()
                     }

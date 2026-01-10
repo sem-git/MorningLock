@@ -80,10 +80,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             task.setTaskCompleted(success: false)
         }
         
-        //        alarmManager.updateAlarmSchedule() {
-        //            Analytics.logEvent("UpdateQueue", parameters: nil)
-        //        }
-        
         task.setTaskCompleted(success: true)
     }
     
@@ -94,10 +90,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             Analytics.logEvent("BackgroundProcessing Failed", parameters: nil)
             task.setTaskCompleted(success: false)
         }
-        
-        //        alarmManager.updateAlarmSchedule() {
-        //            Analytics.logEvent("UpdateQueue", parameters: nil)
-        //        }
         
         task.setTaskCompleted(success: true)
     }

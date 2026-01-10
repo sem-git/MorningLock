@@ -16,8 +16,8 @@
 		006E18032ED5FDF500BB576C /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 006E18022ED5FDF500BB576C /* FirebaseCrashlytics */; };
 		006E18052ED5FDF500BB576C /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 006E18042ED5FDF500BB576C /* FirebaseRemoteConfig */; };
 		00D99DF72EF992B20012C0E7 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 00D99DF62EF992B20012C0E7 /* GoogleMobileAds */; };
-		765A2A782EF5AB24008EE4FD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 765A2A772EF5AB24008EE4FD /* StoreKit.framework */; };
 		00E93BE02EFC022A00EE22FE /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 00E93BDF2EFC022A00EE22FE /* FirebaseMessaging */; };
+		765A2A782EF5AB24008EE4FD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 765A2A772EF5AB24008EE4FD /* StoreKit.framework */; };
 		76874F8E2ED9A70F0067C086 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76E681B42ED705FC00E94EEF /* ManagedSettings.framework */; };
 		76874F8F2ED9A70F0067C086 /* ManagedSettingsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76E681B62ED705FC00E94EEF /* ManagedSettingsUI.framework */; };
 		76874F972ED9A70F0067C086 /* ShieldConfiguration.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 76874F8D2ED9A70F0067C086 /* ShieldConfiguration.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
