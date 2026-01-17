@@ -31,7 +31,7 @@ struct AlarmItem: View {
                 }))
             }
             
-            HStack {
+            HStack(spacing: 12) {
                 ForEach(Weekday.allCases, id: \.self) {
                     Text($0.dayName)
                         .foregroundStyle(alarm.repeatDay.contains($0) ? .gray50 : .gray300)
