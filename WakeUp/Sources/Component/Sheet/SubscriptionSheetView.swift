@@ -23,7 +23,7 @@ enum SubscriptionType {
 
 struct SubscriptionSheetView: View {
     @Binding var isPresented: Bool
-    @Binding var selectedSubscription: SubscriptionType?
+    @Binding var isSelected: SubscriptionType?
     
     let onSubscribe: () async -> Void
     let onRestorePurchases: () async -> Void
@@ -65,10 +65,10 @@ struct SubscriptionSheetView: View {
                         originalPrice: "3,900₩",
                         discountedPrice: "2,900₩",
                         isHighlighted: false,
-                        isSelected: selectedSubscription == .monthly
+                        isSelected: isSelected == .monthly
                     )
                     .onTapGesture {
-                        selectedSubscription = selectedSubscription == .monthly ? nil : .monthly
+                        isSelected = isSelected == .monthly ? nil : .monthly
                     }
                     
                     SubscriptionCell(
@@ -77,10 +77,10 @@ struct SubscriptionSheetView: View {
                         originalPrice: "46,800₩",
                         discountedPrice: "29,000₩",
                         isHighlighted: true,
-                        isSelected: selectedSubscription == .yearly
+                        isSelected: isSelected == .yearly
                     )
                     .onTapGesture {
-                        selectedSubscription = selectedSubscription == .yearly ? nil : .yearly
+                        isSelected = isSelected == .yearly ? nil : .yearly
                     }
                 }
                 
@@ -144,8 +144,8 @@ struct SubscriptionSheetView: View {
                         await onSubscribe()
                     }
                 }
-                .disabled(selectedSubscription == nil)
-                .opacity(selectedSubscription == nil ? 0.5 : 1)
+                .disabled(isSelected == nil)
+                .opacity(isSelected == nil ? 0.5 : 1)
             }
         }
     }

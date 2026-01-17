@@ -17,33 +17,38 @@ enum MainRoute: Hashable {
 @MainActor
 class MainViewModel: ObservableObject {
     @Published var alarmList: [AlarmEntity] = []
-    @Published var path: [MainRoute] = []
     @Published var isAlarmSheetPresented = false
     @Published var snoozeCount = 1
     @Published var snoozeTime: TimeInterval = .minutes(5)
     @Published var snoozeDisabled: Bool = false
-    @Published var isWebViewPresented: Bool = false
-    @Published var isAppSelectionPresented: Bool = false
     
-    private let dataManager: CoreDataManager
+    @Published var path: [MainRoute] = []
+    
+    @Published var isContactFormPresented: Bool = false
+    @Published var requiresAppSelectionSheet: Bool = false
+    
+    private let coreDataManager: CoreDataManager
     private let alarmManager: AlarmManager
     private let notificationManager: NotificationManager
     private let deviceActivityManager: DeviceActivityManager
-    private let store: StoreKitManager
+    private let storeKitManager: StoreKitManager
     
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-        self.dataManager = .shared
+        self.coreDataManager = .shared
         self.alarmManager = .shared
         self.notificationManager = .shared
         self.deviceActivityManager = .shared
-        self.store = .shared
+        self.storeKitManager = .shared
+        
         bind()
     }
     
+    // MARK: - 알람
+    
     func bind() {
-        // 알람이 재생중이면서 isOpenSheet 보임여부에 따라서 Sheet열기
+        // 알람이 재생 중이면서 isOpenSheet 보임 여부에 따라서 Sheet 열기
         alarmManager.$isAlarmPlaying
             .receive(on: RunLoop.main)
             .assign(to: \.isAlarmSheetPresented, on: self)
@@ -55,7 +60,7 @@ class MainViewModel: ObservableObject {
             .assign(to: \.snoozeCount, on: self)
             .store(in: &cancellables)
         
-        // 알람이 울리는 중이거나 스누즈 횟수가 3회이상 초과시 버튼 disable
+        // 알람이 울리는 중이거나 스누즈 횟수가 3회 이상 초과 시 버튼 disabled
         Publishers.CombineLatest(
             alarmManager.$isSnoozeActive,
             alarmManager.$snoozeCount
@@ -68,13 +73,9 @@ class MainViewModel: ObservableObject {
         .store(in: &cancellables)
     }
     
-    func navigateToAlarmSetting(_ alarm: AlarmEntity? = nil) {
-        path.append(.alarmSetting(alarm))
-    }
-    
-    // 데이터를 가져왔을 때 isActive 상태에 따라서 초기값 바인딩
+    /// 데이터를 가져왔을 때 isActive 상태에 따라서 초기 값 바인딩
     func fetchAlarm() {
-        alarmList = dataManager
+        alarmList = coreDataManager
             .fetchAlarm()
             .toEntities()
             .sorted { $0.fireDate.nextOccurrenceIncludingSeconds < $1.fireDate.nextOccurrenceIncludingSeconds }
@@ -82,7 +83,7 @@ class MainViewModel: ObservableObject {
     
     func updateAlarm(_ alarm: AlarmEntity) {
         if alarm.isActive, deviceActivityManager.selectedApp == nil {
-            isAppSelectionPresented = true
+            requiresAppSelectionSheet = true
         }
         alarmManager.updateAlarm(alarm)
     }
@@ -107,12 +108,10 @@ class MainViewModel: ObservableObject {
         alarmManager.snoozeAlarm(by: snoozeTime)
     }
     
-    func toggleWebView() {
-        isWebViewPresented.toggle()
-    }
+    // MARK: - 그 외
     
-    func toggleAppSelection() {
-        isAppSelectionPresented.toggle()
+    func navigateToAlarmSetting(_ alarm: AlarmEntity? = nil) {
+        path.append(.alarmSetting(alarm))
     }
     
     func requestTrackingAuthorization() {
@@ -135,10 +134,7 @@ class MainViewModel: ObservableObject {
     }
     
     @MainActor
-    func handleAppLockTap(
-        permissionManager: PermissionManager,
-        onAuthorized: @escaping () -> Void
-    ) async {
+    func handleAppLockTap(permissionManager: PermissionManager, onAuthorized: @escaping () -> Void) async {
         switch permissionManager.screenTimeStatus {
         case .authorized:
             onAuthorized()
@@ -155,14 +151,13 @@ class MainViewModel: ObservableObject {
     func purchaseSubscription(type: SubscriptionType?) async {
         guard let type else { return }
         
-        guard let product = store.products.first(
+        guard let product = storeKitManager.products.first(
             where: { $0.id == type.productId }
         ) else {
             print("Product 없음:", type.productId)
             return
         }
         
-        await store.purchase(product)
+        await storeKitManager.purchase(product)
     }
 }
-

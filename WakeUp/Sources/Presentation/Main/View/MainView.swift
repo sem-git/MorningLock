@@ -13,20 +13,18 @@ import StoreKit
 
 struct MainView: View {
     @StateObject var viewModel: MainViewModel = MainViewModel()
-    @StateObject private var nativeViewModel = NativeAdViewModel()
-    @State private var sheetHeight: CGFloat = .zero
+    @StateObject private var nativeAdViewModel = NativeAdViewModel()
+    @StateObject var deviceActivityManager: DeviceActivityManager = .shared
+    @StateObject private var storeKitManager = StoreKitManager.shared
     
-    @StateObject var deviceManager: DeviceActivityManager = .shared
     @EnvironmentObject var permissionManager: PermissionManager
     
-    @State private var isPickerPresented = false
+    @State private var sheetHeight: CGFloat = .zero
+    @State private var isAppLockPickerSheetPresented = false
     @State private var isSubscriptionSheetPresented = false
     @State private var canSave: Bool = false
     
-    @State private var selectedSubscription: SubscriptionType? = nil
-    @StateObject private var store = StoreKitManager.shared
-    
-    @Environment(\.openURL) private var openURL
+    @State private var selectedSubscriptionType: SubscriptionType? = nil
     
     var body: some View {
         NavigationStack(path: $viewModel.path) {
@@ -37,7 +35,7 @@ struct MainView: View {
                             // alarmList가 바뀔 때까지 업데이트 안 됨
                             AlarmItem(alarm: Binding(get: {
                                 // 삭제 시 인덱스 오류 방지
-                                if index > viewModel.alarmList.count-1 {
+                                if index > viewModel.alarmList.count - 1 {
                                     return AlarmEntity()
                                 } else {
                                     return alarm
@@ -63,7 +61,7 @@ struct MainView: View {
                                     .padding(.bottom, 16)
                                 
                                 HStack {
-                                    if let selection = deviceManager.selectedApp {
+                                    if let selection = deviceActivityManager.selectedApp {
                                         ForEach(Array(selection.enumerated()).prefix(5), id: \.self.element) { index, token in
                                             if index >= 4 && selection.count > 5 {
                                                 Rectangle()
@@ -103,7 +101,7 @@ struct MainView: View {
                                     await viewModel.handleAppLockTap(
                                         permissionManager: permissionManager
                                     ) {
-                                        isPickerPresented = true
+                                        isAppLockPickerSheetPresented = true
                                     }
                                 }
                             }
@@ -112,7 +110,7 @@ struct MainView: View {
                 }
                 .padding(16)
                 
-                if store.subscriptionStatus == .notSubscribed {
+                if storeKitManager.subscriptionStatus == .notSubscribed {
                     Button(action: {
                         isSubscriptionSheetPresented = true
                     }) {
@@ -129,24 +127,24 @@ struct MainView: View {
                 }
             }
             .overlay(alignment: .bottom, content: {
-                NativeAdMobView(nativeViewModel: nativeViewModel)
+                NativeAdMobView(nativeViewModel: nativeAdViewModel)
                     .frame(maxHeight: 64)
                     .padding(.horizontal, 16)
             })
             .animation(.default, value: viewModel.alarmList.count)
             
             // Sheet 1: 문의
-            .sheet(isPresented: $viewModel.isWebViewPresented, content: {
+            .sheet(isPresented: $viewModel.isContactFormPresented, content: {
                 WebView(url: "https://docs.google.com/forms/d/e/1FAIpQLSduOHAV4hz962dKI66QEk8KmBkxgmQaT7hFD8xJQgCX4TQr8w/viewform?usp=dialog")
             })
             
             // Sheet 2: 잠금 앱 설정 안 한 상태로 알람을 켰을 때
-            .sheet(isPresented: $viewModel.isAppSelectionPresented) {
+            .sheet(isPresented: $viewModel.requiresAppSelectionSheet) {
                 AppSelectionSheetView(
-                    onSkip: { viewModel.toggleAppSelection() },
+                    onSkip: { viewModel.requiresAppSelectionSheet.toggle() },
                     onConfigure: {
-                        viewModel.toggleAppSelection()
-                        isPickerPresented = true
+                        viewModel.requiresAppSelectionSheet.toggle()
+                        isAppLockPickerSheetPresented = true
                     }
                 )
                 .presentationDetents([.height(sheetHeight)])
@@ -164,27 +162,27 @@ struct MainView: View {
             }
             
             // Sheet 3: 잠금 앱 선택
-            .sheet(isPresented: $isPickerPresented) {
+            .sheet(isPresented: $isAppLockPickerSheetPresented) {
                 NavigationStack {
-                    AppLockPickerSheetView(selection: $deviceManager.selection, canSave: $canSave) {
-                        if deviceManager.isLockingNow {
-                            deviceManager.commitSelectionWhileLocking()
+                    AppLockPickerSheetView(selection: $deviceActivityManager.selection, canSave: $canSave) {
+                        if deviceActivityManager.isLockingNow {
+                            deviceActivityManager.commitSelectionWhileLocking()
                         } else {
-                            deviceManager.save()
+                            deviceActivityManager.save()
                         }
                         
-                        isPickerPresented = false
+                        isAppLockPickerSheetPresented = false
                     }
                     .onAppear {
-                        if deviceManager.isLockingNow {
-                            canSave = deviceManager.canSaveSelectionWhileLocking
+                        if deviceActivityManager.isLockingNow {
+                            canSave = deviceActivityManager.canSaveSelectionWhileLocking
                         } else {
                             canSave = true
                         }
                     }
-                    .onChange(of: deviceManager.selection.applicationTokens) { _, _ in
-                        if deviceManager.isLockingNow {
-                            canSave = deviceManager.canSaveSelectionWhileLocking
+                    .onChange(of: deviceActivityManager.selection.applicationTokens) { _, _ in
+                        if deviceActivityManager.isLockingNow {
+                            canSave = deviceActivityManager.canSaveSelectionWhileLocking
                         } else {
                             canSave = true
                         }
@@ -199,7 +197,7 @@ struct MainView: View {
             ) {
                 AlarmSheetView(
                     snoozeCount: viewModel.snoozeCount,
-                    snoozeMinutes: Int(viewModel.snoozeTime / 60),
+                    snoozeTime: Int(viewModel.snoozeTime / 60),
                     snoozeDisabled: viewModel.snoozeDisabled,
                     onSnooze: { viewModel.snoozeAlarm() },
                     onDeactivate: { viewModel.deactiveAlarm() }
@@ -224,14 +222,14 @@ struct MainView: View {
             .sheet(isPresented: $isSubscriptionSheetPresented, content: {
                 SubscriptionSheetView(
                     isPresented: $isSubscriptionSheetPresented,
-                    selectedSubscription: $selectedSubscription,
+                    isSelected: $selectedSubscriptionType,
                     onSubscribe: {
                         await viewModel.purchaseSubscription(
-                            type: selectedSubscription
+                            type: selectedSubscriptionType
                         )
                     },
                     onRestorePurchases: {
-                        await store.restorePurchases()
+                        await storeKitManager.restorePurchases()
                     }
                 )
                 .presentationDetents([.large])
@@ -242,9 +240,9 @@ struct MainView: View {
                 viewModel.fetchAlarm()
                 viewModel.requestTrackingAuthorization()
             }
-            .onReceive(store.$subscriptionStatus, perform: { subscriptionStatus in
+            .onReceive(storeKitManager.$subscriptionStatus, perform: { subscriptionStatus in
                 if subscriptionStatus == .notSubscribed {
-                    nativeViewModel.loadAd()
+                    nativeAdViewModel.loadAd()
                 }
             })
             .navigationBarItems(trailing: contactButton)
@@ -268,13 +266,9 @@ struct InnerHeightPreferenceKey: PreferenceKey {
 // MARK: - SubViews
 
 extension MainView {
-    private func removeRows(at offsets: IndexSet) {
-        viewModel.alarmList.remove(atOffsets: offsets)
-    }
-    
     private var contactButton: some View {
         Button(action: {
-            viewModel.toggleWebView()
+            viewModel.isContactFormPresented.toggle()
         }, label: {
             Text(NSLocalizedString("contactButtonText", comment: "comment"))
                 .foregroundStyle(.gray50)

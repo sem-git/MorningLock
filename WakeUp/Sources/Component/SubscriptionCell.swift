@@ -65,7 +65,6 @@ struct SubscriptionCell: View {
 
 #Preview {
     VStack(spacing: 16) {
-        
         // 월 구독 - 선택 x
         SubscriptionCell(
             title: "월 구독",

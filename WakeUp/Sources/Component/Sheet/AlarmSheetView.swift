@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AlarmSheetView: View {
     let snoozeCount: Int
-    let snoozeMinutes: Int
+    let snoozeTime: Int
     let snoozeDisabled: Bool
     
     let onSnooze: () -> Void
@@ -38,7 +38,7 @@ struct AlarmSheetView: View {
             
             HStack(spacing: 16) {
                 MainButton(
-                    title: String(format: NSLocalizedString("snoozeButtonText", comment: "스누즈 버튼"), snoozeMinutes),
+                    title: String(format: NSLocalizedString("snoozeButtonText", comment: "스누즈 버튼"), snoozeTime),
                     disabled: snoozeDisabled,
                     buttonStyle: .text
                 ) {
