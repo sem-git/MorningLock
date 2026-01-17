@@ -49,11 +49,10 @@ struct AlarmSettingView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .overlay(alignment: .bottom, content: {
-            VStack {
+            VStack(spacing: 16) {
                 NativeAdMobView(nativeViewModel: nativeViewModel)
                     .frame(maxHeight: 64)
-                    .padding(.horizontal, 16)
-                
+                    
                 MainButton(title: NSLocalizedString("saveButtonText", comment: "저장하기"), disabled: viewModel.buttonDisabled) {
                     if viewModel.isEditing {
                         updateAlarm()
@@ -61,8 +60,8 @@ struct AlarmSettingView: View {
                         saveAlarm()
                     }
                 }
-                .padding(.horizontal, 16)
             }
+            .padding(.horizontal, 16)
             })
         .background(.gray800)
         .onReceive(store.$subscriptionStatus, perform: { subscriptionStatus in

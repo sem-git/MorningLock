@@ -20,8 +20,9 @@ struct TimerView: View {
             Color.gray800.ignoresSafeArea(.all)
             
             VStack(spacing: 0) {
-                HStack {
+                HStack(spacing: 0) {
                     Spacer()
+                    
                     Button {
                         dismiss()
                     } label: {
@@ -55,6 +56,7 @@ struct TimerView: View {
                 .padding(.top, 137)
                 
                 Spacer()
+                
                 NativeAdMobView(nativeViewModel: nativeViewModel)
                     .frame(maxHeight: 64)
                     .padding(.horizontal, 16)

@@ -13,8 +13,9 @@ import ExtensionKit
 
 struct AppLockSelectionView: View {
     @EnvironmentObject var viewModel: OnboardingViewModel
-    @StateObject var deviceManager: DeviceActivityManager = .shared
     @EnvironmentObject var permissionManager: PermissionManager
+    
+    @StateObject var deviceManager: DeviceActivityManager = .shared
     
     @State private var isPickerPresented = false
     

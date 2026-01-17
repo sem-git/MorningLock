@@ -24,8 +24,6 @@ struct PermissionGuideView: View {
                     }
                     .frame(width: 145, height: 55)
                 }
-
-            
             
             VStack(spacing: 0) {
                 VStack(spacing: 12) {
