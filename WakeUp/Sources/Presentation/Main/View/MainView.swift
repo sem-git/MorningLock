@@ -148,12 +148,12 @@ struct MainView: View {
             })
             .animation(.default, value: viewModel.alarmList.count)
             
-            // MARK: - Sheet
-            // 문의
+            // Sheet 1: 문의
             .sheet(isPresented: $viewModel.isWebViewPresented, content: {
                 WebView(url: "https://docs.google.com/forms/d/e/1FAIpQLSduOHAV4hz962dKI66QEk8KmBkxgmQaT7hFD8xJQgCX4TQr8w/viewform?usp=dialog")
             })
-            // 잠금 앱 설정 안 한 상태로 알람을 켰을 때
+            
+            // Sheet 2: 잠금 앱 설정 안 한 상태로 알람을 켰을 때
             .sheet(isPresented: $viewModel.isAppSelectionPresented) {
                 AppSelectionSheetView(
                     onSkip: { viewModel.toggleAppSelection() },
@@ -176,7 +176,7 @@ struct MainView: View {
                 }
             }
 
-            // 잠금 앱 선택
+            // Sheet 3: 잠금 앱 선택
             .sheet(isPresented: $isPickerPresented) {
                 NavigationStack {
                     AppLockPickerSheet(deviceManager: deviceManager, canSave: $canSave) {
@@ -205,7 +205,7 @@ struct MainView: View {
                 }
             }
             
-            // 알람이 울렸을 때
+            // Sheet 4: 알람 울렸을 때
             .sheet(
                 isPresented: $viewModel.isAlarmSheetPresented,
                 onDismiss: { viewModel.fetchAlarm() }
@@ -232,10 +232,21 @@ struct MainView: View {
                     sheetHeight = newHeight
                 }
             }
+            
+            // Sheet 5: 구독
             .sheet(isPresented: $isSubscriptionSheetPresented, content: {
-                subscriptionSheetView
-                    .presentationDetents([.large])
-                    .padding(.horizontal, 16)
+                SubscriptionSheetView(
+                    isPresented: $isSubscriptionSheetPresented,
+                    selectedSubscription: $selectedSubscription,
+                    onSubscribe: {
+                        await purchaseSelectedSubscription()
+                    },
+                    onRestorePurchases: {
+                        await store.restorePurchases()
+                    }
+                )
+                .presentationDetents([.large])
+                .padding(.horizontal, 16)
             })
             .navigationBarItems(trailing: contactButton)
             .background(.gray800)
@@ -282,132 +293,6 @@ extension MainView {
         })
     }
     
-    private var subscriptionSheetView: some View {
-        VStack(spacing: 16) {
-            HStack(spacing: 0) {
-                Spacer()
-                
-                Button {
-                    isSubscriptionSheetPresented = false
-                } label: {
-                    Image(.icX)
-                }
-            }
-            .padding(.top, 16)
-            
-            ScrollView {
-                VStack(spacing: 8) {
-                    Text(NSLocalizedString("PromotionSheetTitle", comment: "커피 한 잔 가격으로 광고 없이 사용하세요"))
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundStyle(.gray50)
-                        .multilineTextAlignment(.center)
-                    
-                    Text(NSLocalizedString("PromotionSheetSubTitle", comment: "효율적인 아침을 앞으로도 도와드릴게요"))
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(.gray200)
-                        .multilineTextAlignment(.center)
-                }
-                
-                Image(.imgSubscription)
-                
-                VStack(spacing: 16) {
-                    SubscriptionCell(
-                        title: NSLocalizedString("Monthly", comment: "월 구독"),
-                        discountText: "-25%",
-                        originalPrice: "3,900₩",
-                        discountedPrice: "2,900₩",
-                        isHighlighted: false,
-                        isSelected: selectedSubscription == .monthly
-                    )
-                    .onTapGesture {
-                        toggleSubscription(.monthly)
-                    }
-                    
-                    SubscriptionCell(
-                        title: NSLocalizedString("Yearly", comment: "연 구독"),
-                        discountText: "-38%",
-                        originalPrice: "46,800₩",
-                        discountedPrice: "29,000₩",
-                        isHighlighted: true,
-                        isSelected: selectedSubscription == .yearly
-                    )
-                    .onTapGesture {
-                        toggleSubscription(.yearly)
-                    }
-                }
-                
-                VStack(spacing: 12) {
-                    VStack(alignment: .leading, spacing: 0) {
-                        BulletText(text: NSLocalizedString("SubscriptionLimitedPrice", comment: "SubscriptionLimitedPrice"))
-                        BulletText(text: NSLocalizedString("SubscriptionAppleBilling", comment: "SubscriptionAppleBilling"))
-                        BulletText(text: NSLocalizedString("SubscriptionAutoRenewal", comment: "SubscriptionAutoRenewal"))
-                        BulletText(text: NSLocalizedString("SubscriptionRenewalCharge", comment: "SubscriptionRenewalCharge"))
-                        BulletText(text: NSLocalizedString("SubscriptionManageSubscription", comment: "SubscriptionManageSubscription"))
-                        BulletText(text: NSLocalizedString("SubscriptionTermsAndPrivacy", comment: "SubscriptionTermsAndPrivacy"))
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    HStack(spacing: 24) {
-                        Button {
-                            Task {
-                                await store.restorePurchases()
-                            }
-                        } label: {
-                            Text(NSLocalizedString("RestorePurchaseButtonText", comment: "RestorePurchaseButtonText"))
-                                .underline()
-                        }
-                        
-                        Button {
-                            if let url = URL(string: "https://www.notion.so/2db236ba320180e58611c0e508826405?source=copy_link") {
-                                openURL(url)
-                            }
-                        } label: {
-                            Text(NSLocalizedString("TermsOfUseButtonText", comment: "TermsOfUseButtonText"))
-                                .underline()
-                        }
-                        
-                        Button {
-                            if let url = URL(string: "https://www.notion.so/2d2236ba320180c8a09ef58dce97639b?source=copy_link") {
-                                openURL(url)
-                            }
-                        } label: {
-                            Text(NSLocalizedString("PrivacyPolicyButtonText", comment: "PrivacyPolicyButtonText"))
-                                .underline()
-                        }
-                    }
-                    .font(.system(size: 13, weight: .regular))
-                    .foregroundStyle(.gray50)
-                }
-                .padding(16)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(.black)
-                )
-            }
-            .scrollIndicators(.hidden)
-            
-            HStack(spacing: 16) {
-                MainButton(
-                    title: NSLocalizedString("SubscribeLaterButtonText", comment: "SubscribeLaterButtonText"),
-                    buttonStyle: .text
-                ) {
-                    isSubscriptionSheetPresented = false;
-                }
-                MainButton(title: NSLocalizedString("SubscribeButtonText", comment: "SubscribeButtonText")) {
-                    Task {
-                        await purchaseSelectedSubscription()
-                    }
-                }
-                .disabled(selectedSubscription == nil)
-                .opacity(selectedSubscription == nil ? 0.5 : 1)
-            }
-        }
-    }
-    
-    private func toggleSubscription(_ type: SubscriptionType) {
-        selectedSubscription = selectedSubscription == type ? nil : type
-    }
-    
     @MainActor
     private func purchaseSelectedSubscription() async {
         guard let selectedSubscription else {
@@ -443,8 +328,3 @@ struct AppIconLabelStyle: LabelStyle {
             .scaleEffect(2.5)
     }
 }
-
-#Preview {
-    MainView()
-}
-
