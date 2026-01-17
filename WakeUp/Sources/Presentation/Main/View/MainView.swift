@@ -361,7 +361,7 @@ extension MainView {
                 Image(.imgSubscription)
                 
                 VStack(spacing: 16) {
-                    SubscriptionCardView(
+                    SubscriptionCell(
                         title: NSLocalizedString("Monthly", comment: "월 구독"),
                         discountText: "-25%",
                         originalPrice: "3,900₩",
@@ -373,7 +373,7 @@ extension MainView {
                         toggleSubscription(.monthly)
                     }
                     
-                    SubscriptionCardView(
+                    SubscriptionCell(
                         title: NSLocalizedString("Yearly", comment: "연 구독"),
                         discountText: "-38%",
                         originalPrice: "46,800₩",

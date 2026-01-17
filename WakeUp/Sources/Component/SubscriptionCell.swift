@@ -1,5 +1,5 @@
 //
-//  SubscriptionCardView.swift
+//  SubscriptionCell.swift
 //  WakeUp
 //
 //  Created by 이세민 on 12/20/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SubscriptionCardView: View {
+struct SubscriptionCell: View {
     let title: String
     let discountText: String
     let originalPrice: String
@@ -61,4 +61,40 @@ struct SubscriptionCardView: View {
         )
         .animation(.easeInOut, value: isSelected)
     }
+}
+
+#Preview {
+    VStack(spacing: 16) {
+        
+        // 월 구독 - 선택 x
+        SubscriptionCell(
+            title: "월 구독",
+            discountText: "-25%",
+            originalPrice: "3,900원",
+            discountedPrice: "2,900원",
+            isHighlighted: false,
+            isSelected: false
+        )
+        
+        // 월 구독 - 선택
+        SubscriptionCell(
+            title: "월 구독",
+            discountText: "-25%",
+            originalPrice: "3,900원",
+            discountedPrice: "2,900원",
+            isHighlighted: false,
+            isSelected: true
+        )
+        
+        // 연 구독 - 선택
+        SubscriptionCell(
+            title: "연 구독",
+            discountText: "-38%",
+            originalPrice: "46,800원",
+            discountedPrice: "29,000원",
+            isHighlighted: true,
+            isSelected: true
+        )
+    }
+    .padding(16)
 }
