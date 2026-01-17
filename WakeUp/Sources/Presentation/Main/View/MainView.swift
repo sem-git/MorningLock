@@ -203,23 +203,30 @@ struct MainView: View {
             }
             .sheet(
                 isPresented: $viewModel.isAlarmSheetPresented,
-                onDismiss: {
-                    viewModel.fetchAlarm()
-                },
-                content: {
-                    alarmSheetView
-                        .presentationDetents([.height(sheetHeight)])
-                        .interactiveDismissDisabled(true)
-                        .padding(.horizontal, 16)
-                        .overlay {
-                            GeometryReader { geometry in
-                                Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
-                            }
-                        }
-                        .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-                            sheetHeight = newHeight
-                        }
-                })
+                onDismiss: { viewModel.fetchAlarm() }
+            ) {
+                AlarmSheetView(
+                    snoozeCount: viewModel.snoozeCount,
+                    snoozeMinutes: Int(viewModel.snoozeTime / 60),
+                    snoozeDisabled: viewModel.snoozeDisabled,
+                    onSnooze: { viewModel.snoozeAlarm() },
+                    onDeactivate: { viewModel.deactiveAlarm() }
+                )
+                .presentationDetents([.height(sheetHeight)])
+                .interactiveDismissDisabled(true)
+                .padding(.horizontal, 16)
+                .overlay {
+                    GeometryReader { geometry in
+                        Color.clear.preference(
+                            key: InnerHeightPreferenceKey.self,
+                            value: geometry.size.height
+                        )
+                    }
+                }
+                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                    sheetHeight = newHeight
+                }
+            }
             .navigationBarItems(trailing: contactButton)
             .background(.gray800)
             .onAppear {
@@ -294,42 +301,6 @@ extension MainView {
                 .foregroundStyle(.gray50)
                 .font(Font.system(size: 15, weight: .regular))
         })
-    }
-    
-    private var alarmSheetView: some View {
-        VStack(spacing: 0) {
-            Text(NSLocalizedString("alarmRiningTitle", comment: "알람이 울렸습니다."))
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(.primary)
-                .padding(.top, 24)
-            
-            Text(NSLocalizedString("alarmRiningSubTitle", comment: "알람 횟수 표시"))
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.top, 8)
-            
-            Text(String(format: NSLocalizedString("alarmRingingCount", comment: "알람 횟수 표시"), viewModel.snoozeCount))
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-            
-            Image(.imgLock)
-                .padding(.top, 16)
-            
-            HStack(spacing: 16) {
-                MainButton(
-                    title: String(format: NSLocalizedString("snoozeButtonText", comment: "스누즈 버튼"), Int(viewModel.snoozeTime / 60)),
-                    disabled: viewModel.snoozeDisabled,
-                    buttonStyle: .text
-                ) {
-                    viewModel.snoozeAlarm()
-                }
-                MainButton(title: NSLocalizedString("deactiveAlarmText", comment: "알람 끄기")) {
-                    viewModel.deactiveAlarm()
-                }
-            }
-        }
     }
     
     private var subscriptionSheetView: some View {
