@@ -93,11 +93,11 @@ struct MainView: View {
             })
             
             // Sheet 2: 잠금 앱 설정 안 한 상태로 알람을 켰을 때
-            .sheet(isPresented: $viewModel.requiresAppSelectionSheet) {
-                AppSelectionSheetView(
-                    onSkip: { viewModel.requiresAppSelectionSheet.toggle() },
+            .sheet(isPresented: $viewModel.showLockSuggestionSheet) {
+                LockSuggestionSheetView(
+                    onSkip: { viewModel.showLockSuggestionSheet.toggle() },
                     onConfigure: {
-                        viewModel.requiresAppSelectionSheet.toggle()
+                        viewModel.showLockSuggestionSheet.toggle()
                         isAppLockPickerSheetPresented = true
                     }
                 )

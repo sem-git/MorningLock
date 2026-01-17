@@ -25,7 +25,7 @@ class MainViewModel: ObservableObject {
     @Published var path: [MainRoute] = []
     
     @Published var isContactFormPresented: Bool = false
-    @Published var requiresAppSelectionSheet: Bool = false
+    @Published var showLockSuggestionSheet: Bool = false
     
     private let coreDataManager: CoreDataManager
     private let alarmManager: AlarmManager
@@ -83,7 +83,7 @@ class MainViewModel: ObservableObject {
     
     func updateAlarm(_ alarm: AlarmEntity) {
         if alarm.isActive, deviceActivityManager.selectedApp == nil {
-            requiresAppSelectionSheet = true
+            showLockSuggestionSheet = true
         }
         alarmManager.updateAlarm(alarm)
     }
