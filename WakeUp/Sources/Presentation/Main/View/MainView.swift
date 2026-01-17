@@ -147,22 +147,32 @@ struct MainView: View {
                     .padding(.horizontal, 16)
             })
             .animation(.default, value: viewModel.alarmList.count)
+            // 문의
             .sheet(isPresented: $viewModel.isWebViewPresented, content: {
                 WebView(url: "https://docs.google.com/forms/d/e/1FAIpQLSduOHAV4hz962dKI66QEk8KmBkxgmQaT7hFD8xJQgCX4TQr8w/viewform?usp=dialog")
             })
-            .sheet(isPresented: $viewModel.isAppSelectionPresented, content: {
-                appSelectionSheet
-                    .presentationDetents([.height(sheetHeight)])
-                    .padding(.horizontal, 16)
-                    .overlay {
-                        GeometryReader { geometry in
-                            Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
-                        }
+            // 잠금 앱 설정 안 한 상태로 알람을 켰을 때
+            .sheet(isPresented: $viewModel.isAppSelectionPresented) {
+                AppSelectionSheetView(
+                    onSkip: { viewModel.toggleAppSelection() },
+                    onConfigure: {
+                        viewModel.toggleAppSelection()
+                        isPickerPresented = true
                     }
-                    .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-                        sheetHeight = newHeight
+                )
+                .presentationDetents([.height(sheetHeight)])
+                .overlay {
+                    GeometryReader { geometry in
+                        Color.clear.preference(
+                            key: InnerHeightPreferenceKey.self,
+                            value: geometry.size.height
+                        )
                     }
-            })
+                }
+                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                    sheetHeight = newHeight
+                }
+            }
             // TODO: 컴포넌트로 분리
             .sheet(isPresented: $isPickerPresented) {
                 NavigationStack {
@@ -201,6 +211,7 @@ struct MainView: View {
                         }
                 }
             }
+            // 알람이 울렸을 때
             .sheet(
                 isPresented: $viewModel.isAlarmSheetPresented,
                 onDismiss: { viewModel.fetchAlarm() }
@@ -227,6 +238,11 @@ struct MainView: View {
                     sheetHeight = newHeight
                 }
             }
+            .sheet(isPresented: $isSubscriptionSheetPresented, content: {
+                subscriptionSheetView
+                    .presentationDetents([.large])
+                    .padding(.horizontal, 16)
+            })
             .navigationBarItems(trailing: contactButton)
             .background(.gray800)
             .onAppear {
@@ -244,11 +260,6 @@ struct MainView: View {
                     AlarmSettingView(viewModel: AlarmSettingViewModel(alarm: alarm))
                 }
             })
-            .sheet(isPresented: $isSubscriptionSheetPresented, content: {
-                subscriptionSheetView
-                    .presentationDetents([.large])
-                    .padding(.horizontal, 16)
-            })
         }
     }
 }
@@ -265,32 +276,6 @@ struct InnerHeightPreferenceKey: PreferenceKey {
 extension MainView {
     private func removeRows(at offsets: IndexSet) {
         viewModel.alarmList.remove(atOffsets: offsets)
-    }
-    
-    private var appSelectionSheet: some View {
-        VStack(spacing: 0) {
-                Text("알람을 키셨네요")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(.gray50)
-                    .padding(.top, 24)
-                Text("알람이 울릴 때 잠글 앱을 설정해볼까요")
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.gray200)
-                    .padding(.top, 8)
-            
-            HStack(spacing: 16) {
-                MainButton(
-                    title: "알람만 키기" ,
-                    buttonStyle: .text,
-                    action: viewModel.toggleAppSelection
-                )
-                MainButton(title: "설정하기") {
-                    viewModel.toggleAppSelection()
-                    isPickerPresented = true
-                }
-            }
-            .padding(.top, 28)
-        }
     }
     
     private var contactButton: some View {
