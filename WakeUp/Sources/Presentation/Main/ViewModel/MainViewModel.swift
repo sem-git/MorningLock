@@ -8,11 +8,13 @@
 import Combine
 import SwiftUI
 import AppTrackingTransparency
+import StoreKit
 
 enum MainRoute: Hashable {
     case alarmSetting(AlarmEntity?)
 }
 
+@MainActor
 class MainViewModel: ObservableObject {
     @Published var alarmList: [AlarmEntity] = []
     @Published var path: [MainRoute] = []
@@ -27,35 +29,32 @@ class MainViewModel: ObservableObject {
     private let alarmManager: AlarmManager
     private let notificationManager: NotificationManager
     private let deviceActivityManager: DeviceActivityManager
+    private let store: StoreKitManager
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(
-        dataManager: CoreDataManager = .shared,
-        alarmManager: AlarmManager = .shared,
-        notificationManager: NotificationManager = .shared,
-        deviceActivityManager: DeviceActivityManager = .shared
-    ) {
-        self.dataManager = dataManager
-        self.alarmManager = alarmManager
-        self.notificationManager = notificationManager
-        self.deviceActivityManager = deviceActivityManager
+    init() {
+        self.dataManager = .shared
+        self.alarmManager = .shared
+        self.notificationManager = .shared
+        self.deviceActivityManager = .shared
+        self.store = .shared
         bind()
     }
     
     func bind() {
         // 알람이 재생중이면서 isOpenSheet 보임여부에 따라서 Sheet열기
         alarmManager.$isAlarmPlaying
-        .receive(on: RunLoop.main)
-        .assign(to: \.isAlarmSheetPresented, on: self)
-        .store(in: &cancellables)
+            .receive(on: RunLoop.main)
+            .assign(to: \.isAlarmSheetPresented, on: self)
+            .store(in: &cancellables)
         
         // 스누즈 횟수
         alarmManager.$snoozeCount
             .receive(on: RunLoop.main)
             .assign(to: \.snoozeCount, on: self)
             .store(in: &cancellables)
-                        
+        
         // 알람이 울리는 중이거나 스누즈 횟수가 3회이상 초과시 버튼 disable
         Publishers.CombineLatest(
             alarmManager.$isSnoozeActive,
@@ -66,7 +65,7 @@ class MainViewModel: ObservableObject {
             isSnoozeActive || snoozeCount >= 3
         }
         .assign(to: \.snoozeDisabled, on: self)
-        .store(in: &cancellables)        
+        .store(in: &cancellables)
     }
     
     func navigateToAlarmSetting(_ alarm: AlarmEntity? = nil) {
@@ -91,7 +90,7 @@ class MainViewModel: ObservableObject {
     func deleteAlarm(withId id: UUID) {
         alarmManager.removeAlarm(withId: id)
     }
-        
+    
     func deactiveAlarm() {
         alarmManager.deactiveAlarm()
         if deviceActivityManager.selectedApp != nil {
@@ -128,11 +127,42 @@ class MainViewModel: ObservableObject {
                     print("App Tracking Transparency: denied")
                 case .authorized:
                     print("App Tracking Transparency: authorized")
-                @unknown default:         
+                @unknown default:
                     print("Unknow")
                 }
             }
         }
+    }
+    
+    @MainActor
+    func handleAppLockTap(
+        permissionManager: PermissionManager,
+        onAuthorized: @escaping () -> Void
+    ) async {
+        switch permissionManager.screenTimeStatus {
+        case .authorized:
+            onAuthorized()
+            
+        case .unknown, .denied:
+            await permissionManager.requestScreenTime()
+            if permissionManager.screenTimeStatus == .authorized {
+                onAuthorized()
+            }
+        }
+    }
+    
+    @MainActor
+    func purchaseSubscription(type: SubscriptionType?) async {
+        guard let type else { return }
+        
+        guard let product = store.products.first(
+            where: { $0.id == type.productId }
+        ) else {
+            print("Product 없음:", type.productId)
+            return
+        }
+        
+        await store.purchase(product)
     }
 }
 

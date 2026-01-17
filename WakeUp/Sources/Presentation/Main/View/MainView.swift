@@ -100,17 +100,10 @@ struct MainView: View {
                             .cornerRadius(16)
                             .onTapGesture {
                                 Task {
-                                    switch permissionManager.screenTimeStatus {
-                                        
-                                    case .authorized:
+                                    await viewModel.handleAppLockTap(
+                                        permissionManager: permissionManager
+                                    ) {
                                         isPickerPresented = true
-                                        
-                                    case .unknown, .denied:
-                                        await permissionManager.requestScreenTime()
-                                        
-                                        if permissionManager.screenTimeStatus == .authorized {
-                                            isPickerPresented = true
-                                        }
                                     }
                                 }
                             }
@@ -233,7 +226,9 @@ struct MainView: View {
                     isPresented: $isSubscriptionSheetPresented,
                     selectedSubscription: $selectedSubscription,
                     onSubscribe: {
-                        await purchaseSelectedSubscription()
+                        await viewModel.purchaseSubscription(
+                            type: selectedSubscription
+                        )
                     },
                     onRestorePurchases: {
                         await store.restorePurchases()
@@ -285,34 +280,6 @@ extension MainView {
                 .foregroundStyle(.gray50)
                 .font(Font.system(size: 15, weight: .regular))
         })
-    }
-    
-    @MainActor
-    private func purchaseSelectedSubscription() async {
-        guard let selectedSubscription else {
-            return
-        }
-        
-        let product: Product?
-        
-        switch selectedSubscription {
-        case .monthly:
-            product = store.products.first {
-                $0.id == "com.awayke.subscription.monthly"
-            }
-            
-        case .yearly:
-            product = store.products.first {
-                $0.id == "com.awayke.subscription.yearly"
-            }
-        }
-        
-        guard let product else {
-            print("선택된 Product 없음:", store.products.map { $0.id })
-            return
-        }
-        
-        await store.purchase(product)
     }
 }
 
