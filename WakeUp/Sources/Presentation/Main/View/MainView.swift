@@ -50,7 +50,7 @@ struct MainView: View {
                                 }
                             }, set: {
                                 viewModel.alarmList[index] = $0
-                                viewModel.updateAlarm($0)                                
+                                viewModel.updateAlarm($0)
                             }))
                             .onTapGesture {
                                 viewModel.navigateToAlarmSetting(alarm)
@@ -175,11 +175,11 @@ struct MainView: View {
                     sheetHeight = newHeight
                 }
             }
-
+            
             // Sheet 3: 잠금 앱 선택
             .sheet(isPresented: $isPickerPresented) {
                 NavigationStack {
-                    AppLockPickerSheet(deviceManager: deviceManager, canSave: $canSave) {
+                    AppLockPickerSheetView(selection: $deviceManager.selection, canSave: $canSave) {
                         if deviceManager.isLockingNow {
                             deviceManager.commitSelectionWhileLocking()
                         } else {
@@ -248,7 +248,6 @@ struct MainView: View {
                 .presentationDetents([.large])
                 .padding(.horizontal, 16)
             })
-            .navigationBarItems(trailing: contactButton)
             .background(.gray800)
             .onAppear {
                 viewModel.fetchAlarm()
@@ -259,6 +258,7 @@ struct MainView: View {
                     nativeViewModel.loadAd()
                 }
             })
+            .navigationBarItems(trailing: contactButton)
             .navigationDestination(for: MainRoute.self, destination: { destination in
                 switch destination {
                 case .alarmSetting(let alarm):
