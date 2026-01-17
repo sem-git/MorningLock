@@ -11,12 +11,6 @@ import DeviceActivity
 import GoogleMobileAds
 import StoreKit
 
-// 임시로 MainView에
-enum SubscriptionType {
-    case monthly
-    case yearly
-}
-
 struct MainView: View {
     @StateObject var viewModel: MainViewModel = MainViewModel()
     @StateObject private var nativeViewModel = NativeAdViewModel()

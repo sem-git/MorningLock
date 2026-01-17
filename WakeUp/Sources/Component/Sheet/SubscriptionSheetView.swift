@@ -7,6 +7,20 @@
 
 import SwiftUI
 
+enum SubscriptionType {
+    case monthly
+    case yearly
+    
+    var productId: String {
+        switch self {
+        case .monthly:
+            return "com.awayke.subscription.monthly"
+        case .yearly:
+            return "com.awayke.subscription.yearly"
+        }
+    }
+}
+
 struct SubscriptionSheetView: View {
     @Binding var isPresented: Bool
     @Binding var selectedSubscription: SubscriptionType?
