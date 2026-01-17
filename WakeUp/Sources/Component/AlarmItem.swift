@@ -14,12 +14,10 @@ struct AlarmItem: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .lastTextBaseline) {
                 Text("\(alarm.meridiem)")
-                    .font(.system(size: 20, weight: .regular))
-                    .foregroundStyle(.gray50)
+                    .regular20()
                 
                 Text("\(alarm.dateString)")
-                    .font(.system(size: 48, weight: .bold))
-                    .foregroundStyle(.gray50)
+                    .bold48()
                     .fixedSize(horizontal: true, vertical: false)
                 
                 Spacer()

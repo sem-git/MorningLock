@@ -18,20 +18,18 @@ struct AlarmSheetView: View {
     var body: some View {
         VStack(spacing: 0) {
             Text(NSLocalizedString("alarmRiningTitle", comment: "알람이 울렸습니다."))
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(.gray50)
+                .semiBold20()
                 .padding(.top, 24)
             
             Text(NSLocalizedString("alarmRiningSubTitle", comment: "알람 횟수 표시"))
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(.gray200)
+                .semiBold17(color: .gray200)
                 .multilineTextAlignment(.center)
                 .padding(.top, 8)
             
             Text(String(format: NSLocalizedString("alarmRingingCount", comment: "알람 횟수 표시"), snoozeCount))
-            .font(.system(size: 17, weight: .semibold))
-            .foregroundStyle(.gray200)
-            .multilineTextAlignment(.center)
+                .semiBold17(color: .gray200)
+                .foregroundStyle(.gray200)
+                .multilineTextAlignment(.center)
             
             Image(.imgLock)
                 .padding(.top, 16)

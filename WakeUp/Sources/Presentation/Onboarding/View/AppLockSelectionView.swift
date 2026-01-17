@@ -22,13 +22,11 @@ struct AppLockSelectionView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             Text(NSLocalizedString("appSelectTitle", comment: "comment"))
-                .font(.system(size: 22, weight: .bold))
-                .foregroundColor(.gray50)
+                .bold22()
                 .padding(.top, 48)
             
             Text(NSLocalizedString("appSelectSubTitle", comment: "comment"))
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundColor(.gray200)
+                .semiBold17(color: .gray200)
                 .padding(.top, 12)
                 .multilineTextAlignment(.center)
             

@@ -25,8 +25,7 @@ struct AlarmSettingView: View {
             // 요일 설정
             VStack(alignment: .leading, spacing: 14) {
                 Text(NSLocalizedString("repeatTitle", comment: "반복"))
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.gray50)
+                    .semiBold17()
                 
                 HStack(alignment: .center, spacing: 8) {
                     ForEach(Weekday.allCases, id: \.self) { day in
@@ -74,8 +73,6 @@ struct AlarmSettingView: View {
     private var backButton: some View {
         Button(action: { dismiss() }) {
             Image(.icBack)
-                .font(.system(size: 16, weight: .bold))
-                .foregroundStyle(.white)
         }
     }
     

@@ -28,13 +28,11 @@ struct PermissionGuideView: View {
             VStack(spacing: 0) {
                 VStack(spacing: 12) {
                     Text(NSLocalizedString("requestScreenTimeTitle", comment: "comment"))
-                        .font(.system(size: 22, weight: .bold))
-                        .foregroundColor(.gray50)
+                        .bold22()
                         .multilineTextAlignment(.center)
                     
                     Text(NSLocalizedString("requestScreenTimeSubTitle", comment: "comment"))
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundColor(.gray200)
+                        .semiBold17(color: .gray200)
                         .multilineTextAlignment(.center)
                 }
                 .padding(.top, 48)

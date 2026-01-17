@@ -19,7 +19,7 @@ struct AppLockPickerSheetView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text(NSLocalizedString("SelectApps", comment: "앱 선택"))
-                        .font(.system(size: 20, weight: .bold))
+                        .bold20()
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {

@@ -14,13 +14,11 @@ struct AppSelectionSheetView: View {
     var body: some View {
         VStack(spacing: 0) {
             Text("알람을 키셨네요")
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(.gray50)
+                .semiBold20()
                 .padding(.top, 24)
             
             Text("알람이 울릴 때 잠글 앱을 설정해볼까요")
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(.gray200)
+                .semiBold17(color: .gray200)
                 .padding(.top, 8)
             
             HStack(spacing: 16) {

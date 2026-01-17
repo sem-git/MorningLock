@@ -51,13 +51,11 @@ struct MainView: View {
                             // TODO: 컴포넌트로 분리 예정
                             VStack(alignment: .leading, spacing: 0) {
                                 Text(NSLocalizedString("appLockTitle", comment: "앱 잠금"))
-                                    .font(.system(size: 17, weight: .semibold))
-                                    .foregroundStyle(.gray50)
+                                    .semiBold17()
                                     .padding(.bottom, 8)
                                 
                                 Text(NSLocalizedString("appLockSubTitle", comment: "알람 후 15분동안 잠글게요"))
-                                    .font(.system(size: 15, weight: .regular))
-                                    .foregroundStyle(.gray200)
+                                    .regular15(color: .gray200)
                                     .padding(.bottom, 16)
                                 
                                 HStack {
@@ -70,8 +68,7 @@ struct MainView: View {
                                                     .cornerRadius(16)
                                                     .overlay(
                                                         Text("+\(selection.count - 4)")
-                                                            .font(.system(size: 17, weight: .semibold))
-                                                            .foregroundStyle(.gray50)
+                                                            .semiBold17()
                                                     )
                                             } else {
                                                 Label(token)
@@ -115,8 +112,7 @@ struct MainView: View {
                         isSubscriptionSheetPresented = true
                     }) {
                         Text(NSLocalizedString("RemoveAdsButtonText", comment: "RemoveAdsButtonText"))
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.gray300)
+                            .semiBold16(color: .gray300)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 12)
                             .overlay(
@@ -271,8 +267,7 @@ extension MainView {
             viewModel.isContactFormPresented.toggle()
         }, label: {
             Text(NSLocalizedString("contactButtonText", comment: "comment"))
-                .foregroundStyle(.gray50)
-                .font(Font.system(size: 15, weight: .regular))
+                .regular15()
         })
     }
 }

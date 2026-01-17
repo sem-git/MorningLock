@@ -23,7 +23,7 @@ struct SubscriptionCell: View {
                 .padding(.trailing, 16)
             
             Text(title)
-                .font(.system(size: 17, weight: .semibold))
+                .font(.semiBold17)
                 .foregroundColor(isHighlighted ? .neon : .white)
                 .padding(.trailing, 12)
             
@@ -33,20 +33,17 @@ struct SubscriptionCell: View {
                     .frame(width: 56, height: 29)
                 
                 Text(discountText)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.black)
+                    .semiBold16(color: .black)
             }
             
             Spacer()
             
             VStack(alignment: .trailing, spacing: 0) {
                 Text(discountedPrice)
-                    .font(.system(size: 17, weight: .heavy))
-                    .foregroundColor(.neon)
+                    .heavy17(color: .neon)
                 
                 Text(originalPrice)
-                    .font(.system(size: 15, weight: .regular))
-                    .foregroundColor(.gray200)
+                    .regular15(color: .gray200)
                     .strikethrough()
             }
         }

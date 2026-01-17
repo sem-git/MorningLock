@@ -32,13 +32,11 @@ struct TimerView: View {
                 }
                 
                 Text(NSLocalizedString("lockingAppTitle", comment: "아침 준비를 기다리는 중이에요"))
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundStyle(.gray50)
+                    .bold22()
                     .padding(.top, 48)
                 
                 Text(NSLocalizedString("lockingAppSubTitle", comment: "아침 준비를 기다리는 중이에요"))
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.gray200)
+                    .semiBold17(color: .gray200)
                     .padding(.top, 12)
                 
                 RoundProgressView(
@@ -50,8 +48,7 @@ struct TimerView: View {
                 )
                 .overlay(
                     Text(deviceManager.remainingTime.formatToHourMinute)
-                        .foregroundStyle(.gray50)
-                        .font(.system(size: 40, weight: .bold))
+                        .bold40()
                 )
                 .padding(.top, 137)
                 

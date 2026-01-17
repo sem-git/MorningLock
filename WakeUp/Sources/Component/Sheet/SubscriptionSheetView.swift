@@ -46,13 +46,11 @@ struct SubscriptionSheetView: View {
             ScrollView {
                 VStack(spacing: 8) {
                     Text(NSLocalizedString("PromotionSheetTitle", comment: "커피 한 잔 가격으로 광고 없이 사용하세요"))
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundStyle(.gray50)
+                        .semiBold20()
                         .multilineTextAlignment(.center)
                     
                     Text(NSLocalizedString("PromotionSheetSubTitle", comment: "효율적인 아침을 앞으로도 도와드릴게요"))
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(.gray200)
+                        .semiBold17(color: .gray200)
                         .multilineTextAlignment(.center)
                 }
                 
@@ -121,7 +119,7 @@ struct SubscriptionSheetView: View {
                                 .underline()
                         }
                     }
-                    .font(.system(size: 13, weight: .regular))
+                    .font(.regular13)
                     .foregroundStyle(.gray50)
                 }
                 .padding(16)

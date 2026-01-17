@@ -15,8 +15,7 @@ struct NotificationPermissionView: View {
         ZStack {
             VStack(alignment: .center, spacing: 0) {
                 Text(NSLocalizedString("requestNotificationProgess", comment: "comment"))
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(.gray50)
+                    .bold22()
                     .padding(.top, 48)
                     .multilineTextAlignment(.center)
                 

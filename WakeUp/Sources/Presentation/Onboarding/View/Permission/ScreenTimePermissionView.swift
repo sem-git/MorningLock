@@ -15,8 +15,7 @@ struct ScreenTimePermissionView: View {
         ZStack {
             VStack(alignment: .center, spacing: 0) {
                 Text(NSLocalizedString("requestScreenTimeProgess", comment: "comment"))
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(.gray50)
+                    .bold22()
                     .padding(.top, 48)
                     .multilineTextAlignment(.center)
                 

@@ -42,7 +42,7 @@ struct MainButton: View {
             action?()
         } label: {
             Text(title)
-                .font(.system(size: 17, weight: .semibold))
+                .font(.semiBold17)
                 .foregroundStyle(buttonStyle.textColor(disabled: disabled))
                 .frame(maxWidth: .infinity, minHeight: 62)
         }
