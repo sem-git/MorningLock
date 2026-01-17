@@ -147,6 +147,8 @@ struct MainView: View {
                     .padding(.horizontal, 16)
             })
             .animation(.default, value: viewModel.alarmList.count)
+            
+            // MARK: - Sheet
             // 문의
             .sheet(isPresented: $viewModel.isWebViewPresented, content: {
                 WebView(url: "https://docs.google.com/forms/d/e/1FAIpQLSduOHAV4hz962dKI66QEk8KmBkxgmQaT7hFD8xJQgCX4TQr8w/viewform?usp=dialog")
@@ -173,44 +175,36 @@ struct MainView: View {
                     sheetHeight = newHeight
                 }
             }
-            // TODO: 컴포넌트로 분리
+
+            // 잠금 앱 선택
             .sheet(isPresented: $isPickerPresented) {
                 NavigationStack {
-                    FamilyActivityPicker(selection: $deviceManager.selection)
-                        .onAppear {
-                            if deviceManager.isLockingNow {
-                                canSave = deviceManager.canSaveSelectionWhileLocking
-                            } else {
-                                canSave = true
-                            }
+                    AppLockPickerSheet(deviceManager: deviceManager, canSave: $canSave) {
+                        if deviceManager.isLockingNow {
+                            deviceManager.commitSelectionWhileLocking()
+                        } else {
+                            deviceManager.save()
                         }
-                        .onChange(of: deviceManager.selection.applicationTokens) { _, _ in
-                            if deviceManager.isLockingNow {
-                                canSave = deviceManager.canSaveSelectionWhileLocking
-                            } else {
-                                canSave = true
-                            }
+                        
+                        isPickerPresented = false
+                    }
+                    .onAppear {
+                        if deviceManager.isLockingNow {
+                            canSave = deviceManager.canSaveSelectionWhileLocking
+                        } else {
+                            canSave = true
                         }
-                        .toolbar {
-                            ToolbarItem(placement: .principal) {
-                                Text(NSLocalizedString("SelectApps", comment: "앱 선택"))
-                                    .font(.system(size: 20, weight: .bold))
-                            }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button(NSLocalizedString("Complete", comment: "완료")) {
-                                    if deviceManager.isLockingNow {
-                                        deviceManager.commitSelectionWhileLocking()
-                                    } else {
-                                        deviceManager.save()
-                                    }
-                                    
-                                    isPickerPresented = false
-                                }
-                                .disabled(!canSave)
-                            }
+                    }
+                    .onChange(of: deviceManager.selection.applicationTokens) { _, _ in
+                        if deviceManager.isLockingNow {
+                            canSave = deviceManager.canSaveSelectionWhileLocking
+                        } else {
+                            canSave = true
                         }
+                    }
                 }
             }
+            
             // 알람이 울렸을 때
             .sheet(
                 isPresented: $viewModel.isAlarmSheetPresented,

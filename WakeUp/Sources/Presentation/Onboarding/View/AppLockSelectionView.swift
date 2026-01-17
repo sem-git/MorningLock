@@ -66,23 +66,13 @@ struct AppLockSelectionView: View {
         .background(.gray800)
         .sheet(isPresented: $isPickerPresented) {
             NavigationStack {
-                FamilyActivityPicker(selection: $deviceManager.selection)
-                    .toolbar {
-                        ToolbarItem(placement: .principal) {
-                            Text("앱 선택")
-                                .font(.system(size: 20, weight: .bold))
-                        }
-                        
-                        ToolbarItem(placement: .confirmationAction) {
-                            Button("완료") {
-                                withAnimation {
-                                    deviceManager.save()
-                                    addDefaultAlarm()
-                                    isPickerPresented = false
-                                }
-                            }
-                        }
+                AppLockPickerSheet(deviceManager: deviceManager, canSave: .constant(true)) {
+                    withAnimation {
+                        deviceManager.save()
+                        addDefaultAlarm()
+                        isPickerPresented = false
                     }
+                }
             }
         }
     }
