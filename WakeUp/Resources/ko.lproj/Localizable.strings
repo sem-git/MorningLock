@@ -60,6 +60,9 @@
 "MorningUnlockedNotificationTitle" = "의지가 깨어나는 시간 🔥";
 "MorningUnlockedNotificationSubTitle" = "설정된 시간이 지나 앱 잠금이 해제되었습니다. 오늘의 시작을 응원할게요.";
 
+"AppTerminationNotificationTitle" = "앱이 종료되었어요";
+"AppTerminationNotificationSubTitle" = "앱을 종료하면 설정한 알람이 울리지 않아요.";
+
 // 앱잠금 화면
 "appLockScreenTitle" = "아침 준비를 기다리는 중이에요\n오늘의 시작에 집중해볼까요?";
 "appLockScreenSubTitle" = "잠금 상태입니다";

@@ -50,6 +50,17 @@ struct WakeUpApp: App {
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
     private let alarmManager: AlarmManager = .shared
+    private let notificationManager: NotificationManager = .shared
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        if alarmManager.isAlarmScheduled() {
+            notificationManager.postImmediateNotification(
+                title: NSLocalizedString("AppTerminationNotificationTitle",comment: "알람 종료시 타이틀"),
+                body: NSLocalizedString("AppTerminationNotificationSubTitle",comment: "알람 종료시 서브타이틀")
+            )
+            sleep(3)
+        }
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         

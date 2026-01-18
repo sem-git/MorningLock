@@ -15,10 +15,10 @@ final class NotificationManager {
     
     private init() {}
     
-    func postImmediateNotification() {
+    func postImmediateNotification(title: String, body: String) {
         let content = UNMutableNotificationContent()
-        content.title = NSLocalizedString("AlarmRingingNotificationTitle", comment: "알람 타이틀")
-        content.body = NSLocalizedString("AlarmRingingNotificationSubTitle", comment: "알람 서브 타이틀")
+        content.title = title
+        content.body = body
         content.sound = nil
         
         let request = UNNotificationRequest(

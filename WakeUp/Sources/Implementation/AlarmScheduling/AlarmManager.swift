@@ -138,6 +138,10 @@ extension AlarmManager {
 // MARK: - Alarm Scheduling
 extension AlarmManager {
     
+    func isAlarmScheduled() -> Bool {
+        return scheduler.scheduledAlarm.value != nil
+    }
+    
     /// 알람 스케줄러에 데이터를 추가
     private func syncAlarmSchedule() {
         scheduler.buildQueue(with: dataManager.fetchAlarm().toEntities())
