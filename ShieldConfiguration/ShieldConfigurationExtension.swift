@@ -15,9 +15,9 @@ class ShieldConfigurationExtension: ShieldConfigurationDataSource {
             backgroundBlurStyle: .dark,
             backgroundColor: .black,
             icon: UIImage(named: ""),
-            title: .init(text: NSLocalizedString("appLockScreenSubTitle", comment: "잠금화면 타이틀"), color: .white),
-            subtitle: .init(text: NSLocalizedString("appLockScreenTitle", comment: "잠금화면 서브타이틀"), color: .gray200),
-            primaryButtonLabel: .init(text: NSLocalizedString("remainingTimeButtonText", comment: "잠금화면 서브타이틀"), color: .gray50),
+            title: .init(text: String(localized: "잠금 상태입니다"), color: .white),
+            subtitle: .init(text: String(localized: "아침 준비를 기다리는 중이에요\n오늘의 시작에 집중해볼까요?"), color: .gray200),
+            primaryButtonLabel: .init(text: String(localized: "남은 시간은?"), color: .gray50),
             primaryButtonBackgroundColor: .gray500,
             secondaryButtonLabel: nil
         )
@@ -28,9 +28,9 @@ class ShieldConfigurationExtension: ShieldConfigurationDataSource {
             backgroundBlurStyle: .dark,
             backgroundColor: .black,
             icon: UIImage(named: ""),
-            title: .init(text: NSLocalizedString("appLockScreenSubTitle", comment: "잠금화면 타이틀"), color: .white),
-            subtitle: .init(text: NSLocalizedString("appLockScreenTitle", comment: "잠금화면 서브타이틀"), color: .gray200),
-            primaryButtonLabel: .init(text: NSLocalizedString("remainingTimeButtonText", comment: "잠금화면 서브타이틀"), color: .gray50),
+            title: .init(text: String(localized: "잠금 상태입니다"), color: .white),
+            subtitle: .init(text: String(localized: "아침 준비를 기다리는 중이에요\n오늘의 시작에 집중해볼까요?"), color: .gray200),
+            primaryButtonLabel: .init(text: String(localized: "남은 시간은?"), color: .gray50),
             primaryButtonBackgroundColor: .gray500,
             secondaryButtonLabel: nil
         )

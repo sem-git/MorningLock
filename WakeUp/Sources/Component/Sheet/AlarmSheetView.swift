@@ -17,16 +17,16 @@ struct AlarmSheetView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            Text(NSLocalizedString("alarmRiningTitle", comment: "알람이 울렸습니다."))
+            Text("알람이 울렸습니다")
                 .semiBold20()
                 .padding(.top, 24)
             
-            Text(NSLocalizedString("alarmRiningSubTitle", comment: "알람 횟수 표시"))
+            Text("지금부터 15분 동안 설정한 앱들을 잠글게요")
                 .semiBold17(color: .gray200)
                 .multilineTextAlignment(.center)
                 .padding(.top, 8)
             
-            Text(String(format: NSLocalizedString("alarmRingingCount", comment: "알람 횟수 표시"), snoozeCount))
+            Text(String(localized: "*3회 중 \(snoozeCount)회 울림"))
                 .semiBold17(color: .gray200)
                 .foregroundStyle(.gray200)
                 .multilineTextAlignment(.center)
@@ -36,14 +36,14 @@ struct AlarmSheetView: View {
             
             HStack(spacing: 16) {
                 MainButton(
-                    title: String(format: NSLocalizedString("snoozeButtonText", comment: "스누즈 버튼"), snoozeTime),
+                    title: String(localized: "5분 후 다시 알림"),
                     disabled: snoozeDisabled,
                     buttonStyle: .text
                 ) {
                     onSnooze()
                 }
                 
-                MainButton(title: NSLocalizedString("deactiveAlarmText", comment: "알람 끄기")) {
+                MainButton(title: String(localized: "알람 끄기")) {
                     onDeactivate()
                 }
             }

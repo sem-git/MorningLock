@@ -15,11 +15,11 @@ struct AppLockItems: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(NSLocalizedString("appLockTitle", comment: "앱 잠금"))
+            Text("잠글 앱")
                 .semiBold17()
                 .padding(.bottom, 8)
             
-            Text(NSLocalizedString("appLockSubTitle", comment: "알람 후 15분동안 잠글게요"))
+            Text("알람 후 15분 동안 잠글게요")
                 .regular15(color: .gray200)
                 .padding(.bottom, 16)
             

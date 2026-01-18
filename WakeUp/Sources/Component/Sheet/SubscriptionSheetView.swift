@@ -45,11 +45,11 @@ struct SubscriptionSheetView: View {
             
             ScrollView {
                 VStack(spacing: 8) {
-                    Text(NSLocalizedString("PromotionSheetTitle", comment: "커피 한 잔 가격으로 광고 없이 사용하세요"))
+                    Text("커피 한 잔 가격으로 광고 없이 사용하세요")
                         .semiBold20()
                         .multilineTextAlignment(.center)
                     
-                    Text(NSLocalizedString("PromotionSheetSubTitle", comment: "효율적인 아침을 앞으로도 도와드릴게요"))
+                    Text("효율적인 아침을 앞으로도 도와드릴게요")
                         .semiBold17(color: .gray200)
                         .multilineTextAlignment(.center)
                 }
@@ -58,7 +58,7 @@ struct SubscriptionSheetView: View {
                 
                 VStack(spacing: 16) {
                     SubscriptionCell(
-                        title: NSLocalizedString("Monthly", comment: "월 구독"),
+                        title: String(localized: "월 구독"),
                         discountText: "-25%",
                         originalPrice: "3,900₩",
                         discountedPrice: "2,900₩",
@@ -70,7 +70,7 @@ struct SubscriptionSheetView: View {
                     }
                     
                     SubscriptionCell(
-                        title: NSLocalizedString("Yearly", comment: "연 구독"),
+                        title: String(localized: "연 구독"),
                         discountText: "-38%",
                         originalPrice: "46,800₩",
                         discountedPrice: "29,000₩",
@@ -84,12 +84,12 @@ struct SubscriptionSheetView: View {
                 
                 VStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 0) {
-                        BulletText(text: NSLocalizedString("SubscriptionLimitedPrice", comment: "SubscriptionLimitedPrice"))
-                        BulletText(text: NSLocalizedString("SubscriptionAppleBilling", comment: "SubscriptionAppleBilling"))
-                        BulletText(text: NSLocalizedString("SubscriptionAutoRenewal", comment: "SubscriptionAutoRenewal"))
-                        BulletText(text: NSLocalizedString("SubscriptionRenewalCharge", comment: "SubscriptionRenewalCharge"))
-                        BulletText(text: NSLocalizedString("SubscriptionManageSubscription", comment: "SubscriptionManageSubscription"))
-                        BulletText(text: NSLocalizedString("SubscriptionTermsAndPrivacy", comment: "SubscriptionTermsAndPrivacy"))
+                        BulletText(text: String(localized: "상기 가격은 앱 출시 기념 한정 혜택가이며, 서비스 운영 정책 및 내부 사정에 따라 사전 고지 없이 변경될 수 있습니다."))
+                        BulletText(text: String(localized: "구매를 확정하면 결제 금액이 Apple ID 계정으로 청구됩니다."))
+                        BulletText(text: String(localized: "구독은 현재 이용 기간 종료 24시간 전까지 취소하지 않을 경우 자동으로 갱신됩니다."))
+                        BulletText(text: String(localized: "갱신 요금은 현재 기간 종료 24시간 이내에 청구됩니다."))
+                        BulletText(text: String(localized: "구독 관리 및 취소는 App Store 계정 설정에서 직접 변경할 수 있습니다."))
+                        BulletText(text: String(localized: "자세한 내용은 이용약관 및 개인정보처리방침에서 확인하실 수 있습니다."))
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
@@ -97,7 +97,7 @@ struct SubscriptionSheetView: View {
                         Button {
                             Task { await onRestorePurchases() }
                         } label: {
-                            Text(NSLocalizedString("RestorePurchaseButtonText", comment: "RestorePurchaseButtonText"))
+                            Text("구매 복원하기")
                                 .underline()
                         }
                         
@@ -106,7 +106,7 @@ struct SubscriptionSheetView: View {
                                 openURL(url)
                             }
                         } label: {
-                            Text(NSLocalizedString("TermsOfUseButtonText", comment: "TermsOfUseButtonText"))
+                            Text("이용약관")
                                 .underline()
                         }
                         
@@ -115,7 +115,7 @@ struct SubscriptionSheetView: View {
                                 openURL(url)
                             }
                         } label: {
-                            Text(NSLocalizedString("PrivacyPolicyButtonText", comment: "PrivacyPolicyButtonText"))
+                            Text("개인정보처리방침")
                                 .underline()
                         }
                     }
@@ -132,12 +132,12 @@ struct SubscriptionSheetView: View {
             
             HStack(spacing: 16) {
                 MainButton(
-                    title: NSLocalizedString("SubscribeLaterButtonText", comment: "SubscribeLaterButtonText"),
+                    title: String(localized: "다음에 하기"),
                     buttonStyle: .text
                 ) {
                     isPresented = false
                 }
-                MainButton(title: NSLocalizedString("SubscribeButtonText", comment: "SubscribeButtonText")) {
+                MainButton(title: String(localized: "구입하기")) {
                     Task {
                         await onSubscribe()
                     }

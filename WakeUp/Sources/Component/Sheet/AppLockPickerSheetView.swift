@@ -18,12 +18,12 @@ struct AppLockPickerSheetView: View {
         FamilyActivityPicker(selection: $selection)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text(NSLocalizedString("SelectApps", comment: "앱 선택"))
+                    Text("앱 선택")
                         .bold20()
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(NSLocalizedString("Complete", comment: "완료")) {
+                    Button("완료") {
                         onComplete()
                     }
                     .disabled(!canSave)

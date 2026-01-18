@@ -98,8 +98,8 @@ class MainViewModel: ObservableObject {
             deviceActivityManager.startMonitoring(startAt: .now)
             notificationManager.postDelayNotification(
                 after: .minutes(15),
-                title: NSLocalizedString("MorningUnlockedNotificationTitle", comment: "의지가 깨어나는 시간"),
-                body: NSLocalizedString("MorningUnlockedNotificationSubTitle", comment: "설정된 시간이 지나 앱 잠금이 해제되었습니다. 오늘의 시작을 응원할게요.")
+                title: String(localized: "의지가 깨어나는 시간"),
+                body: String(localized: "설정된 시간이 지나 앱 잠금이 해제되었습니다 오늘의 시작을 응원할게요")
             )
         }
     }

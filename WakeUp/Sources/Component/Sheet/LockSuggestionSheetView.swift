@@ -20,14 +20,15 @@ struct LockSuggestionSheetView: View {
             Text("알람이 울릴 때 잠글 앱을 설정해볼까요")
                 .semiBold17(color: .gray200)
                 .padding(.top, 8)
+                .multilineTextAlignment(.center)
             
             HStack(spacing: 16) {
                 MainButton(
-                    title: "알람만 키기",
+                    title: String(localized: "알람만 키기"),
                     buttonStyle: .text
                 ) { onSkip() }
                 
-                MainButton(title: "설정하기") { onConfigure() }
+                MainButton(title: String(localized: "설정하기")) { onConfigure() }
             }
             .padding(.top, 28)
         }

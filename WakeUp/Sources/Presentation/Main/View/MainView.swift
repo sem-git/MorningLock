@@ -69,7 +69,7 @@ struct MainView: View {
                     Button(action: {
                         isSubscriptionSheetPresented = true
                     }) {
-                        Text(NSLocalizedString("RemoveAdsButtonText", comment: "RemoveAdsButtonText"))
+                        Text("광고 없이 사용하기")
                             .semiBold16(color: .gray300)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 12)
@@ -226,7 +226,7 @@ extension MainView {
         Button(action: {
             viewModel.isContactFormPresented.toggle()
         }, label: {
-            Text(NSLocalizedString("contactButtonText", comment: "comment"))
+            Text("문의")
                 .regular15()
         })
     }
