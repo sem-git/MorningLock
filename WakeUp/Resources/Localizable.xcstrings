@@ -270,6 +270,29 @@
         }
       }
     },
+    "다시 시도하기" : {
+      "comment" : "ErrorView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try again"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再読み込み"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "다시 시도하기"
+          }
+        }
+      }
+    },
     "다음에 하기" : {
       "comment" : "SubscriptionSheetView, UpdateSheetView",
       "extractionState" : "manual",
@@ -925,6 +948,52 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "오늘의 시작에 집중해볼까요?"
+          }
+        }
+      }
+    },
+    "오류가 계속된다면\n오른쪽 위의 ‘문의’를 통해 알려주세요." : {
+      "comment" : "ErrorView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If the error persists, please let us know via 'Help' at the top right. "
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "もしくは右上の「ヘルプ」からお知らせください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오류가 계속된다면\n오른쪽 위의 ‘문의’를 통해 알려주세요."
+          }
+        }
+      }
+    },
+    "오류가 발생했습니다\n잠시 후 다시 시도해주세요" : {
+      "comment" : "ErrorView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An error occurred\nPlease try again later"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "エラーが発生しました\nしばらくしてからもう一度お試しください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오류가 발생했습니다\n잠시 후 다시 시도해주세요"
           }
         }
       }
