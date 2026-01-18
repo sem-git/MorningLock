@@ -15,19 +15,25 @@ struct AppLockPickerSheetView: View {
     let onComplete: () -> Void
     
     var body: some View {
-        FamilyActivityPicker(selection: $selection)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("앱 선택")
-                        .bold20()
-                }
-                
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("완료") {
-                        onComplete()
+        VStack(spacing: 0) {
+            Text("앱을 20개 이하로 선택해주세요 ( \(selection.applicationTokens.count) / 20 )")
+                .font(.medium14)
+                .foregroundStyle(selection.applicationTokens.count > 20 ? .danger : .gray50)
+            
+            FamilyActivityPicker(selection: $selection)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Text("앱 선택")
+                            .bold20()
                     }
-                    .disabled(!canSave)
+                    
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("완료") {
+                            onComplete()
+                        }
+                        .disabled(!canSave)
+                    }
                 }
-            }
+        }
     }
 }

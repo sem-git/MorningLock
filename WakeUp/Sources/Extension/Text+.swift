@@ -53,6 +53,11 @@ extension Text {
             .foregroundStyle(color)
     }
     
+    func medium14(color: Color = .gray50) -> some View {
+        self.font(.medium14)
+            .foregroundStyle(color)
+    }
+    
     func regular20(color: Color = .gray50) -> some View {
         self.font(.regular20)
             .foregroundStyle(color)

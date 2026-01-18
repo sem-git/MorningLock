@@ -24,6 +24,8 @@ extension Font {
     static let semiBold17 = Font.systemFont(size: 17, weight: .semibold)
     static let semiBold16 = Font.systemFont(size: 16, weight: .semibold)
     
+    static let medium14 = Font.systemFont(size: 14, weight: .medium)
+    
     static let regular20 = Font.systemFont(size: 20, weight: .regular)
     static let regular15 = Font.systemFont(size: 15, weight: .regular)
     static let regular13 = Font.systemFont(size: 13, weight: .regular)
