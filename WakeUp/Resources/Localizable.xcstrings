@@ -271,7 +271,7 @@
       }
     },
     "다음에 하기" : {
-      "comment" : "SubscriptionSheetView",
+      "comment" : "SubscriptionSheetView, UpdateSheetView",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -366,6 +366,23 @@
         }
       }
     },
+    "방해 앱을 잠그고 외출 준비에 집중해보세요" : {
+      "comment" : "AlarmManager, NotificationManager",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lock distracting apps. Focus on getting ready."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "邪魔なアプリをロックして、朝活に集中しましょう"
+          }
+        }
+      }
+    },
     "불필요한 앱을 아침에 잠궈드릴게요\n후다닥 외출 준비에 집중할 수 있어요" : {
       "comment" : "OnboardingView",
       "extractionState" : "manual",
@@ -410,30 +427,6 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "상기 가격은 앱 출시 기념 한정 혜택가이며, 서비스 운영 정책 및 내부 사정에 따라 사전 고지 없이 변경될 수 있습니다."
-          }
-        }
-      }
-    },
-    "상쾌한 아침을 보내세요!" : {
-      "comment" : "AlarmManager",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Have a refreshing morning!"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "爽やかな朝をお過ごしください！"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "상쾌한 아침을 보내세요!"
           }
         }
       }
@@ -602,6 +595,23 @@
         }
       }
     },
+    "아침잠금을 업데이트 해주세요" : {
+      "comment" : "UpdateSheetView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update Awayke"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Awaykeのアップデートが必要です"
+          }
+        }
+      }
+    },
     "알람 끄기" : {
       "comment" : "AlarmSheetView",
       "extractionState" : "manual",
@@ -721,7 +731,7 @@
       }
     },
     "알람이 울렸습니다" : {
-      "comment" : "AlarmSheetView",
+      "comment" : "AlarmSheetView, AlarmManager, NotificationManager",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -837,26 +847,36 @@
         }
       }
     },
-    "앱에서 알람 끄기" : {
-      "comment" : "AlarmManager",
-      "extractionState" : "manual",
+    "앱의 원활한 이용을 위해\n최신 버전으로 업데이트해 주세요" : {
+      "comment" : "UpdateSheetView",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Turn Off the Alarm in the App"
+            "value" : "Please update to the latest version for\na smoother experience"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "アプリでアラームを停止"
+            "state" : "translated",
+            "value" : "より快適にご利用いただくために\n最新版へアップデートしてください"
+          }
+        }
+      }
+    },
+    "업데이트하기" : {
+      "comment" : "UpdateSheetView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update"
           }
         },
-        "ko" : {
+        "ja" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "앱에서 알람 끄기"
+            "state" : "translated",
+            "value" : "アップデートする"
           }
         }
       }

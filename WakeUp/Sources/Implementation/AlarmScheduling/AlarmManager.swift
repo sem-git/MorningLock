@@ -167,8 +167,8 @@ extension AlarmManager {
         // 노티피케이션 등록
         notificationManager.postDelayNotification(
             after: interval,
-            title: String(localized: "앱에서 알람 끄기"),
-            body: String(localized: "상쾌한 아침을 보내세요!")
+            title: String(localized: "알람이 울렸습니다"),
+            body: String(localized: "방해 앱을 잠그고 외출 준비에 집중해보세요")
         )
         // 타이머 등록
         alarmTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { _ in
