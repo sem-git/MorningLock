@@ -128,19 +128,28 @@ struct MainView: View {
                         isAppLockPickerSheetPresented = false
                     }
                     .onAppear {
-                        if deviceActivityManager.isLockingNow {
+                        let count = deviceActivityManager.selection.applicationTokens.count
+                        
+                        if count > 20 {
+                            canSave = false
+                        } else if deviceActivityManager.isLockingNow {
                             canSave = deviceActivityManager.canSaveSelectionWhileLocking
                         } else {
                             canSave = true
                         }
                     }
                     .onChange(of: deviceActivityManager.selection.applicationTokens) { _, _ in
-                        if deviceActivityManager.isLockingNow {
+                        let count = deviceActivityManager.selection.applicationTokens.count
+                        
+                        if count > 20 {
+                            canSave = false
+                        } else if deviceActivityManager.isLockingNow {
                             canSave = deviceActivityManager.canSaveSelectionWhileLocking
                         } else {
                             canSave = true
                         }
                     }
+                    
                 }
             }
             
