@@ -167,8 +167,8 @@ extension AlarmManager {
         // 노티피케이션 등록
         notificationManager.postDelayNotification(
             after: interval,
-            title: NSLocalizedString("AlarmRingingNotificationTitle", comment: "알람 타이틀"),
-            body: NSLocalizedString("AlarmRingingNotificationSubTitle", comment: "알람 서브 타이틀")
+            title: String(localized: "알람이 울렸습니다"),
+            body: String(localized: "방해 앱을 잠그고 외출 준비에 집중해보세요")
         )
         // 타이머 등록
         alarmTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { _ in

@@ -1,0 +1,52 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "남은 시간 확인하기" : {
+      "comment" : "ShieldAction",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check Remaining Time"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残り時間を確認"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "남은 시간 확인하기"
+          }
+        }
+      }
+    },
+    "남은 시간을 앱에서 확인해보세요!" : {
+      "comment" : "ShieldAction",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check the remaining time in the app!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "アプリで残り時間を確認してみてください！"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "남은 시간을 앱에서 확인해보세요!"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}

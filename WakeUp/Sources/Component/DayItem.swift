@@ -18,7 +18,7 @@ struct DayItem: View {
             action?()
         } label: {
             Text(title)
-                .font(.system(size: 16, weight: .semibold))
+                .font(.semiBold16)
                 .foregroundColor(isSelected ? .gray50 : .gray400)
                 .frame(width: 39, height: 37)
                 .background(isSelected ? .gray500 : .clear)

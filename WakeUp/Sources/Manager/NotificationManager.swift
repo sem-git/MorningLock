@@ -17,8 +17,8 @@ final class NotificationManager {
     
     func postImmediateNotification() {
         let content = UNMutableNotificationContent()
-        content.title = NSLocalizedString("AlarmRingingNotificationTitle", comment: "알람 타이틀")
-        content.body = NSLocalizedString("AlarmRingingNotificationSubTitle", comment: "알람 서브 타이틀")
+        content.title = String(localized: "알람이 울렸습니다")
+        content.body = String(localized: "방해 앱을 잠그고 외출 준비에 집중해보세요")
         content.sound = nil
         
         let request = UNNotificationRequest(

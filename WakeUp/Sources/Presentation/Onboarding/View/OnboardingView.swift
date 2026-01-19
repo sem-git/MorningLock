@@ -14,14 +14,12 @@ struct OnboardingView: View {
         NavigationStack(path: $viewModel.navigationPath) {
             VStack(alignment: .center, spacing: 0) {
                 
-                Text(NSLocalizedString("onboardingTitle", comment: "comment"))
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(.gray50)
+                Text("의지가 깨어나는 시간")
+                    .bold22()
                     .padding(.top, 48)
                 
-                Text(NSLocalizedString("onboardingSubTitle", comment: "comment"))
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundColor(.gray200)
+                Text("불필요한 앱을 아침에 잠궈드릴게요\n후다닥 외출 준비에 집중할 수 있어요")
+                    .semiBold17(color: .gray200)
                     .padding(.top, 12)
                     .multilineTextAlignment(.center)
                 
@@ -31,7 +29,7 @@ struct OnboardingView: View {
                 
                 Spacer()
                 
-                MainButton(title: NSLocalizedString("StartButtonText", comment: "comment")) {
+                MainButton(title: String(localized: "시작하기")) {
                     viewModel.navigate(to: .permissionGuide)
                 }
             }

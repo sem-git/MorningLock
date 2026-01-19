@@ -20,8 +20,9 @@ struct TimerView: View {
             Color.gray800.ignoresSafeArea(.all)
             
             VStack(spacing: 0) {
-                HStack {
+                HStack(spacing: 0) {
                     Spacer()
+                    
                     Button {
                         dismiss()
                     } label: {
@@ -30,14 +31,12 @@ struct TimerView: View {
                     .padding()
                 }
                 
-                Text(NSLocalizedString("lockingAppTitle", comment: "아침 준비를 기다리는 중이에요"))
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundStyle(.gray50)
+                Text("아침 준비를 기다리는 중이에요")
+                    .bold22()
                     .padding(.top, 48)
                 
-                Text(NSLocalizedString("lockingAppSubTitle", comment: "아침 준비를 기다리는 중이에요"))
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.gray200)
+                Text("오늘의 시작에 집중해볼까요?")
+                    .semiBold17(color: .gray200)
                     .padding(.top, 12)
                 
                 RoundProgressView(
@@ -49,12 +48,12 @@ struct TimerView: View {
                 )
                 .overlay(
                     Text(deviceManager.remainingTime.formatToHourMinute)
-                        .foregroundStyle(.gray50)
-                        .font(.system(size: 40, weight: .bold))
+                        .bold40()
                 )
                 .padding(.top, 137)
                 
                 Spacer()
+                
                 NativeAdMobView(nativeViewModel: nativeViewModel)
                     .frame(maxHeight: 64)
                     .padding(.horizontal, 16)

@@ -13,21 +13,21 @@ import ExtensionKit
 
 struct AppLockSelectionView: View {
     @EnvironmentObject var viewModel: OnboardingViewModel
-    @StateObject var deviceManager: DeviceActivityManager = .shared
     @EnvironmentObject var permissionManager: PermissionManager
+    
+    @StateObject var deviceManager: DeviceActivityManager = .shared
     
     @State private var isPickerPresented = false
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            Text(NSLocalizedString("appSelectTitle", comment: "comment"))
-                .font(.system(size: 22, weight: .bold))
-                .foregroundColor(.gray50)
+            Text("알람이 울리면 잠글 앱을 설정해주세요")
+                .bold22()
                 .padding(.top, 48)
+                .multilineTextAlignment(.center)
             
-            Text(NSLocalizedString("appSelectSubTitle", comment: "comment"))
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundColor(.gray200)
+            Text("추가하기를 누르면 앱 선택 화면이 뜰 거예요")
+                .semiBold17(color: .gray200)
                 .padding(.top, 12)
                 .multilineTextAlignment(.center)
             
@@ -35,13 +35,13 @@ struct AppLockSelectionView: View {
             
             HStack(spacing: 16) {
                 MainButton(
-                    title: NSLocalizedString("skipButtonText", comment: "comment"),
+                    title: String(localized: "건너뛰기"),
                     buttonStyle: .text
                 ) {
                     addDefaultAlarm()
                 }
                 
-                MainButton(title: NSLocalizedString("addButtonText", comment: "comment")) {
+                MainButton(title: String(localized: "추가하기")) {
                     Task {
                         switch permissionManager.screenTimeStatus {
                             
@@ -65,23 +65,13 @@ struct AppLockSelectionView: View {
         .background(.gray800)
         .sheet(isPresented: $isPickerPresented) {
             NavigationStack {
-                FamilyActivityPicker(selection: $deviceManager.selection)
-                    .toolbar {
-                        ToolbarItem(placement: .principal) {
-                            Text("앱 선택")
-                                .font(.system(size: 20, weight: .bold))
-                        }
-                        
-                        ToolbarItem(placement: .confirmationAction) {
-                            Button("완료") {
-                                withAnimation {
-                                    deviceManager.save()
-                                    addDefaultAlarm()
-                                    isPickerPresented = false
-                                }
-                            }
-                        }
+                AppLockPickerSheetView(selection: $deviceManager.selection, canSave: .constant(true)) {
+                    withAnimation {
+                        deviceManager.save()
+                        addDefaultAlarm()
+                        isPickerPresented = false
                     }
+                }
             }
         }
     }

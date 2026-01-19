@@ -1,0 +1,1319 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+      "comment" : "AlarmItem, AlarmSettingView"
+    },
+    "*3회 중 %lld회 울림" : {
+      "comment" : "AlarmSheetView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*3 out of %d rings"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*3回中、%d回目"
+          }
+        }
+      }
+    },
+    "%@" : {
+      "comment" : "AlarmItem"
+    },
+    "•" : {
+
+    },
+    "+%lld" : {
+      "comment" : "AppLockItems"
+    },
+    "5분 후 다시 알림" : {
+      "comment" : "AlarmSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snooze 5 min"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "5分後にスヌーズ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "5분 후 다시 알림"
+          }
+        }
+      }
+    },
+    "개인정보처리방침" : {
+      "comment" : "SubscriptionSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy Policy"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "プライバシーポリシー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "개인정보처리방침"
+          }
+        }
+      }
+    },
+    "갱신 요금은 현재 기간 종료 24시간 이내에 청구됩니다." : {
+      "comment" : "SubscriptionSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The renewal fee will be charged within 24 hours prior to the end of the current period."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "更新料金は、現在の期間終了の24時間以内に請求されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "갱신 요금은 현재 기간 종료 24시간 이내에 청구됩니다."
+          }
+        }
+      }
+    },
+    "건너뛰기" : {
+      "comment" : "AppLockSelectionView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skip"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "スキップ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "건너뛰기"
+          }
+        }
+      }
+    },
+    "광고 없이 사용하기" : {
+      "comment" : "MainView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove Ads"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "広告なしで利用する"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "광고 없이 사용하기"
+          }
+        }
+      }
+    },
+    "구독 관리 및 취소는 App Store 계정 설정에서 직접 변경할 수 있습니다." : {
+      "comment" : "SubscriptionSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can manage and cancel your subscriptions in your App Store account settings."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "定期購読の管理および解約は、App Storeのアカウント設定から直接変更できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "구독 관리 및 취소는 App Store 계정 설정에서 직접 변경할 수 있습니다."
+          }
+        }
+      }
+    },
+    "구독은 현재 이용 기간 종료 24시간 전까지 취소하지 않을 경우 자동으로 갱신됩니다." : {
+      "comment" : "SubscriptionSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscription automatically renews unless it is canceled at least 24 hours before the end of the current period."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "定期購読は、現在の利用期間終了の24時間前までに解約しない限り、自動的に更新されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "구독은 현재 이용 기간 종료 24시간 전까지 취소하지 않을 경우 자동으로 갱신됩니다."
+          }
+        }
+      }
+    },
+    "구매 복원하기" : {
+      "comment" : "SubscriptionSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restore Purchase"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "購入を復元する"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "구매 복원하기"
+          }
+        }
+      }
+    },
+    "구매를 확정하면 결제 금액이 Apple ID 계정으로 청구됩니다." : {
+      "comment" : "SubscriptionSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Payment will be charged to your Apple ID account at confirmation of purchase."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "購入を確定すると、お支払い金額がApple IDアカウントに請求されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "구매를 확정하면 결제 금액이 Apple ID 계정으로 청구됩니다."
+          }
+        }
+      }
+    },
+    "구입하기" : {
+      "comment" : "SubscriptionSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscribe"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "購入する"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "구입하기"
+          }
+        }
+      }
+    },
+    "다시 시도하기" : {
+      "comment" : "ErrorView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try again"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再読み込み"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "다시 시도하기"
+          }
+        }
+      }
+    },
+    "다음에 하기" : {
+      "comment" : "SubscriptionSheetView, UpdateSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Later"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "後で"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "다음에 하기"
+          }
+        }
+      }
+    },
+    "다음으로" : {
+      "comment" : "PermissionGuideView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "次へ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "다음으로"
+          }
+        }
+      }
+    },
+    "문의" : {
+      "comment" : "MainView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Help"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "へルプ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "문의"
+          }
+        }
+      }
+    },
+    "반복" : {
+      "comment" : "AlarmSettingView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "繰り返し"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "반복"
+          }
+        }
+      }
+    },
+    "방해 앱을 잠그고 외출 준비에 집중해보세요" : {
+      "comment" : "AlarmManager, NotificationManager",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lock distracting apps. Focus on getting ready."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "邪魔なアプリをロックして、朝活に集中しましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "방해 앱을 잠그고 외출 준비에 집중해보세요"
+          }
+        }
+      }
+    },
+    "불필요한 앱을 아침에 잠궈드릴게요\n후다닥 외출 준비에 집중할 수 있어요" : {
+      "comment" : "OnboardingView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lock unnecessary apps in the morning \nFocus on getting ready without distractions"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "朝の準備中に不要なアプリをロックさっと朝の用意に集中できます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "불필요한 앱을 아침에 잠궈드릴게요\n후다닥 외출 준비에 집중할 수 있어요"
+          }
+        }
+      }
+    },
+    "상기 가격은 앱 출시 기념 한정 혜택가이며, 서비스 운영 정책 및 내부 사정에 따라 사전 고지 없이 변경될 수 있습니다." : {
+      "comment" : "SubscriptionSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The prices above are limited-time offers to celebrate the app launch and are subject to change without prior notice depending on service policies."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "上記の価格はアプリのリリースを記念した期間限定の特典価格であり、サービスの運営方針や内部事情により、事前の告知なしに変更される場合があります。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "상기 가격은 앱 출시 기념 한정 혜택가이며, 서비스 운영 정책 및 내부 사정에 따라 사전 고지 없이 변경될 수 있습니다."
+          }
+        }
+      }
+    },
+    "설정된 시간이 지나 앱 잠금이 해제되었습니다 오늘의 시작을 응원할게요" : {
+      "comment" : "MainViewModel",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The set time has passed and app restrictions have been lifted. We’re cheering you on as you start your day."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "設定された時間が過ぎ、アプリのロックが解除されました。今日の始まりを応援します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "설정된 시간이 지나 앱 잠금이 해제되었습니다 오늘의 시작을 응원할게요"
+          }
+        }
+      }
+    },
+    "설정하기" : {
+      "comment" : "LockSuggestionSheetView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set up"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定する"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설정하기"
+          }
+        }
+      }
+    },
+    "스크린타임 권한을\n요청하고 있어요" : {
+      "comment" : "ScreenTimePermissionView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requesting screen time permission"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スクリーンタイムの権限を\nリクエストしています"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스크린타임 권한을\n요청하고 있어요"
+          }
+        }
+      }
+    },
+    "스크린타임과 알람 권한을 꼭 허용해주세요" : {
+      "comment" : "PermissionGuideView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow screen time and \nalarm permissions"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "スクリーンタイムとアラームの \n権限を必ず許可してください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "스크린타임과 알람 권한을 꼭 허용해주세요"
+          }
+        }
+      }
+    },
+    "시작하기" : {
+      "comment" : "OnboardingView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Started"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "始める"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "시작하기"
+          }
+        }
+      }
+    },
+    "아침 잠금을 사용하기 위해서 꼭 필요해요\n아래의 화면이 뜨면 계속을 눌러주세요" : {
+      "comment" : "PermissionGuideView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Awayke needs these to work properly \nTap Continue when the next screen appears"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Awaykeを使うには必要です 。\n次の画面が出たら「続ける」をタップしてください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아침 잠금을 사용하기 위해서 꼭 필요해요\n아래의 화면이 뜨면 계속을 눌러주세요"
+          }
+        }
+      }
+    },
+    "아침 준비를 기다리는 중이에요" : {
+      "comment" : "TimerView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting for your morning prep"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "朝の準備が終わるまでロック中です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아침 준비를 기다리는 중이에요"
+          }
+        }
+      }
+    },
+    "아침잠금을 업데이트 해주세요" : {
+      "comment" : "UpdateSheetView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update Awayke"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Awaykeのアップデートが必要です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아침잠금을 업데이트 해주세요"
+          }
+        }
+      }
+    },
+    "알람 끄기" : {
+      "comment" : "AlarmSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dismiss"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "停止する"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "알람 끄기"
+          }
+        }
+      }
+    },
+    "알람 설정" : {
+      "comment" : "AlarmSettingView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alarm Settings"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "アラーム設定"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "알람 설정"
+          }
+        }
+      }
+    },
+    "알람 후 15분 동안 잠글게요" : {
+      "comment" : "AppLockItems",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locking for 15 mins after the alarm"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "アラーム後15分間ロックされます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "알람 후 15분 동안 잠글게요"
+          }
+        }
+      }
+    },
+    "알람만 키기" : {
+      "comment" : "LockSuggestionSheetView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alarm Only"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あとで"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알람만 키기"
+          }
+        }
+      }
+    },
+    "알람을 키셨네요" : {
+      "comment" : "LockSuggestionSheetView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You've turned on the alarm"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アラームが設定されました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알람을 키셨네요"
+          }
+        }
+      }
+    },
+    "알람이 울렸습니다" : {
+      "comment" : "AlarmSheetView, AlarmManager, NotificationManager",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alarm Ringing"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アラームが鳴りました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "알람이 울렸습니다"
+          }
+        }
+      }
+    },
+    "알람이 울리면 잠글 앱을 설정해주세요" : {
+      "comment" : "AppLockSelectionView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set the apps to lock \nwhen your alarm goes off"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "アラームが鳴ったときに \nロックするアプリを設定します"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알람이 울리면 잠글 앱을 설정해주세요"
+          }
+        }
+      }
+    },
+    "알람이 울릴 때 잠글 앱을 설정해볼까요" : {
+      "comment" : "LockSuggestionSheetView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shall we set the apps to lock when the alarm rings?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アラームが鳴ったときに\nロックするアプリも設定しませんか"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알람이 울릴 때 잠글 앱을 설정해볼까요"
+          }
+        }
+      }
+    },
+    "알림 권한을\n요청하고 있어요" : {
+      "comment" : "NotificationPermissionView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requesting notification permission"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知の権限を\nリクエストしています"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알림 권한을 \n요청하고 있어요"
+          }
+        }
+      }
+    },
+    "앱 선택" : {
+      "comment" : "AppLockPickerSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select Apps"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "アプリを選択"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "앱 선택"
+          }
+        }
+      }
+    },
+    "앱을 20개 이하로 선택해주세요 ( %lld / 20 )" : {
+      "comment" : "A label below the picker that shows the number of apps selected and a hint to the user about the selection limit.",
+      "isCommentAutoGenerated" : true
+    },
+    "앱의 원활한 이용을 위해\n최신 버전으로 업데이트해 주세요" : {
+      "comment" : "UpdateSheetView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please update to the latest version for\na smoother experience"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "より快適にご利用いただくために\n最新版へアップデートしてください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "앱의 원활한 이용을 위해\n최신 버전으로 업데이트해 주세요"
+          }
+        }
+      }
+    },
+    "업데이트하기" : {
+      "comment" : "UpdateSheetView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アップデートする"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "업데이트하기"
+          }
+        }
+      }
+    },
+    "연 구독" : {
+      "comment" : "SubscriptionSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yearly"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "年間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "연 구독"
+          }
+        }
+      }
+    },
+    "오늘의 시작에 집중해볼까요?" : {
+      "comment" : "TimerView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stay focused and start strong!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "この時間に、今日の準備に集中しましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "오늘의 시작에 집중해볼까요?"
+          }
+        }
+      }
+    },
+    "오류가 계속된다면\n오른쪽 위의 ‘문의’를 통해 알려주세요." : {
+      "comment" : "ErrorView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If the error persists, please let us know via 'Help' at the top right. "
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "もしくは右上の「ヘルプ」からお知らせください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오류가 계속된다면\n오른쪽 위의 ‘문의’를 통해 알려주세요."
+          }
+        }
+      }
+    },
+    "오류가 발생했습니다\n잠시 후 다시 시도해주세요" : {
+      "comment" : "ErrorView",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An error occurred\nPlease try again later"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "エラーが発生しました\nしばらくしてからもう一度お試しください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오류가 발생했습니다\n잠시 후 다시 시도해주세요"
+          }
+        }
+      }
+    },
+    "완료" : {
+      "comment" : "AppLockPickerSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "完了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "완료"
+          }
+        }
+      }
+    },
+    "월 구독" : {
+      "comment" : "SubscriptionSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monthly"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "月間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "월 구독"
+          }
+        }
+      }
+    },
+    "의지가 깨어나는 시간" : {
+      "comment" : "OnboardingView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wake up your willpower"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "意志が目覚める時間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "의지가 깨어나는 시간"
+          }
+        }
+      }
+    },
+    "이용약관" : {
+      "comment" : "SubscriptionSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terms of Use"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "利用規約"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "이용약관"
+          }
+        }
+      }
+    },
+    "자세한 내용은 이용약관 및 개인정보처리방침에서 확인하실 수 있습니다." : {
+      "comment" : "SubscriptionSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For more information, please check our Terms of Use and Privacy Policy."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "詳細については、利用規約およびプライバシーポリシーでご確認いただけます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "자세한 내용은 이용약관 및 개인정보처리방침에서 확인하실 수 있습니다."
+          }
+        }
+      }
+    },
+    "잠글 앱" : {
+      "comment" : "AppLockItems",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apps to Lock"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "ロックするアプリ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "잠글 앱"
+          }
+        }
+      }
+    },
+    "저장하기" : {
+      "comment" : "AlarmSettingView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "保存する"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "저장하기"
+          }
+        }
+      }
+    },
+    "지금부터 15분 동안 설정한 앱들을 잠글게요" : {
+      "comment" : "AlarmSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locking selected apps for the next 15 mins"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今から15分間、設定したアプリをロックします"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "지금부터 15분 동안 설정한 앱들을 잠글게요"
+          }
+        }
+      }
+    },
+    "추가하기" : {
+      "comment" : "AppLockSelectionView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "追加する"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "추가하기"
+          }
+        }
+      }
+    },
+    "추가하기를 누르면 앱 선택 화면이 뜰 거예요" : {
+      "comment" : "AppLockSelectionView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap ‘Add’ to choose which apps to lock"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "「追加する」をタップすると、\nアプリを選べます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "추가하기를 누르면 앱 선택 화면이 뜰 거예요"
+          }
+        }
+      }
+    },
+    "커피 한 잔 가격으로 광고 없이 사용하세요" : {
+      "comment" : "SubscriptionSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ad-free for the price of a cup of coffee"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "コーヒー1杯の値段で広告なしに"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "커피 한 잔 가격으로 광고 없이 사용하세요"
+          }
+        }
+      }
+    },
+    "효율적인 아침을 앞으로도 도와드릴게요" : {
+      "comment" : "SubscriptionSheetView",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We'll keep helping you have efficient mornings"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "これからも効率的な朝をサポートします"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "효율적인 아침을 앞으로도 도와드릴게요"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}

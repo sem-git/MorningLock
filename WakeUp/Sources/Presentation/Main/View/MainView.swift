@@ -11,28 +11,20 @@ import DeviceActivity
 import GoogleMobileAds
 import StoreKit
 
-// 임시로 MainView에
-enum SubscriptionType {
-    case monthly
-    case yearly
-}
-
 struct MainView: View {
     @StateObject var viewModel: MainViewModel = MainViewModel()
-    @StateObject private var nativeViewModel = NativeAdViewModel()
-    @State private var sheetHeight: CGFloat = .zero
+    @StateObject private var nativeAdViewModel = NativeAdViewModel()
+    @StateObject var deviceActivityManager: DeviceActivityManager = .shared
+    @StateObject private var storeKitManager = StoreKitManager.shared
     
-    @StateObject var deviceManager: DeviceActivityManager = .shared
     @EnvironmentObject var permissionManager: PermissionManager
     
-    @State private var isPickerPresented = false
+    @State private var sheetHeight: CGFloat = .zero
+    @State private var isAppLockPickerSheetPresented = false
     @State private var isSubscriptionSheetPresented = false
     @State private var canSave: Bool = false
     
-    @State private var selectedSubscription: SubscriptionType? = nil
-    @StateObject private var store = StoreKitManager.shared
-    
-    @Environment(\.openURL) private var openURL
+    @State private var selectedSubscriptionType: SubscriptionType? = nil
     
     var body: some View {
         NavigationStack(path: $viewModel.path) {
@@ -43,95 +35,42 @@ struct MainView: View {
                             // alarmList가 바뀔 때까지 업데이트 안 됨
                             AlarmItem(alarm: Binding(get: {
                                 // 삭제 시 인덱스 오류 방지
-                                if index > viewModel.alarmList.count-1 {
+                                if index > viewModel.alarmList.count - 1 {
                                     return AlarmEntity()
                                 } else {
                                     return alarm
                                 }
                             }, set: {
                                 viewModel.alarmList[index] = $0
-                                viewModel.updateAlarm($0)                                
+                                viewModel.updateAlarm($0)
                             }))
                             .onTapGesture {
                                 viewModel.navigateToAlarmSetting(alarm)
                             }
                             
-                            // TODO: 컴포넌트로 분리 예정
-                            VStack(alignment: .leading, spacing: 0) {
-                                Text(NSLocalizedString("appLockTitle", comment: "앱 잠금"))
-                                    .font(.system(size: 17, weight: .semibold))
-                                    .foregroundStyle(.gray50)
-                                    .padding(.bottom, 8)
-                                
-                                Text(NSLocalizedString("appLockSubTitle", comment: "알람 후 15분동안 잠글게요"))
-                                    .font(.system(size: 15, weight: .regular))
-                                    .foregroundStyle(.gray200)
-                                    .padding(.bottom, 16)
-                                
-                                HStack {
-                                    if let selection = deviceManager.selectedApp {
-                                        ForEach(Array(selection.enumerated()).prefix(5), id: \.self.element) { index, token in
-                                            if index >= 4 && selection.count > 5 {
-                                                Rectangle()
-                                                    .frame(width: 56, height: 56)
-                                                    .foregroundStyle(.gray700)
-                                                    .cornerRadius(16)
-                                                    .overlay(
-                                                        Text("+\(selection.count - 4)")
-                                                            .font(.system(size: 17, weight: .semibold))
-                                                            .foregroundStyle(.gray50)
-                                                    )
-                                            } else {
-                                                Label(token)
-                                                    .labelStyle(AppIconLabelStyle())
-                                                    .frame(width: 56, height: 56)
-                                            }
-                                            
-                                        }
-                                    } else {
-                                        ZStack {
-                                            RoundedRectangle(cornerRadius: 16)
-                                                .stroke(style: StrokeStyle(lineWidth: 1, dash: [2]))
-                                                .foregroundColor(.white)
-                                                .frame(width: 56, height: 56)
-                                            
-                                            Image(.icPlus)
+                            AppLockItems(
+                                selectedApps: deviceActivityManager.selectedApp,
+                                onTap: {
+                                    Task {
+                                        await viewModel.handleAppLockTap(
+                                            permissionManager: permissionManager
+                                        ) {
+                                            isAppLockPickerSheetPresented = true
                                         }
                                     }
                                 }
-                            }
-                            .padding(16)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(.gray600)
-                            .cornerRadius(16)
-                            .onTapGesture {
-                                Task {
-                                    switch permissionManager.screenTimeStatus {
-                                        
-                                    case .authorized:
-                                        isPickerPresented = true
-                                        
-                                    case .unknown, .denied:
-                                        await permissionManager.requestScreenTime()
-                                        
-                                        if permissionManager.screenTimeStatus == .authorized {
-                                            isPickerPresented = true
-                                        }
-                                    }
-                                }
-                            }
+                            )
                         }
                     }
                 }
                 .padding(16)
                 
-                if store.subscriptionStatus == .notSubscribed {
+                if storeKitManager.subscriptionStatus == .notSubscribed {
                     Button(action: {
                         isSubscriptionSheetPresented = true
                     }) {
-                        Text(NSLocalizedString("RemoveAdsButtonText", comment: "RemoveAdsButtonText"))
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.gray300)
+                        Text("광고 없이 사용하기")
+                            .semiBold16(color: .gray300)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 12)
                             .overlay(
@@ -142,109 +81,145 @@ struct MainView: View {
                 }
             }
             .overlay(alignment: .bottom, content: {
-                NativeAdMobView(nativeViewModel: nativeViewModel)
+                NativeAdMobView(nativeViewModel: nativeAdViewModel)
                     .frame(maxHeight: 64)
                     .padding(.horizontal, 16)
             })
             .animation(.default, value: viewModel.alarmList.count)
-            .sheet(isPresented: $viewModel.isWebViewPresented, content: {
+            
+            // Sheet 1: 문의
+            .sheet(isPresented: $viewModel.isContactFormPresented, content: {
                 WebView(url: "https://docs.google.com/forms/d/e/1FAIpQLSduOHAV4hz962dKI66QEk8KmBkxgmQaT7hFD8xJQgCX4TQr8w/viewform?usp=dialog")
             })
-            .sheet(isPresented: $viewModel.isAppSelectionPresented, content: {
-                appSelectionSheet
-                    .presentationDetents([.height(sheetHeight)])
-                    .padding(.horizontal, 16)
-                    .overlay {
-                        GeometryReader { geometry in
-                            Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
-                        }
+            
+            // Sheet 2: 잠금 앱 설정 안 한 상태로 알람을 켰을 때
+            .sheet(isPresented: $viewModel.showLockSuggestionSheet) {
+                LockSuggestionSheetView(
+                    onSkip: { viewModel.showLockSuggestionSheet.toggle() },
+                    onConfigure: {
+                        viewModel.showLockSuggestionSheet.toggle()
+                        isAppLockPickerSheetPresented = true
                     }
-                    .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-                        sheetHeight = newHeight
+                )
+                .presentationDetents([.height(sheetHeight)])
+                .overlay {
+                    GeometryReader { geometry in
+                        Color.clear.preference(
+                            key: InnerHeightPreferenceKey.self,
+                            value: geometry.size.height
+                        )
                     }
-            })
-            // TODO: 컴포넌트로 분리
-            .sheet(isPresented: $isPickerPresented) {
-                NavigationStack {
-                    FamilyActivityPicker(selection: $deviceManager.selection)
-                        .onAppear {
-                            if deviceManager.isLockingNow {
-                                canSave = deviceManager.canSaveSelectionWhileLocking
-                            } else {
-                                canSave = true
-                            }
-                        }
-                        .onChange(of: deviceManager.selection.applicationTokens) { _, _ in
-                            if deviceManager.isLockingNow {
-                                canSave = deviceManager.canSaveSelectionWhileLocking
-                            } else {
-                                canSave = true
-                            }
-                        }
-                        .toolbar {
-                            ToolbarItem(placement: .principal) {
-                                Text(NSLocalizedString("SelectApps", comment: "앱 선택"))
-                                    .font(.system(size: 20, weight: .bold))
-                            }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button(NSLocalizedString("Complete", comment: "완료")) {
-                                    if deviceManager.isLockingNow {
-                                        deviceManager.commitSelectionWhileLocking()
-                                    } else {
-                                        deviceManager.save()
-                                    }
-                                    
-                                    isPickerPresented = false
-                                }
-                                .disabled(!canSave)
-                            }
-                        }
+                }
+                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                    sheetHeight = newHeight
                 }
             }
+            
+            // Sheet 3: 잠금 앱 선택
+            .sheet(isPresented: $isAppLockPickerSheetPresented) {
+                NavigationStack {
+                    AppLockPickerSheetView(selection: $deviceActivityManager.selection, canSave: $canSave) {
+                        if deviceActivityManager.isLockingNow {
+                            deviceActivityManager.commitSelectionWhileLocking()
+                        } else {
+                            deviceActivityManager.save()
+                        }
+                        
+                        isAppLockPickerSheetPresented = false
+                    }
+                    .onAppear {
+                        let count = deviceActivityManager.selection.applicationTokens.count
+                        
+                        if count > 20 {
+                            canSave = false
+                        } else if deviceActivityManager.isLockingNow {
+                            canSave = deviceActivityManager.canSaveSelectionWhileLocking
+                        } else {
+                            canSave = true
+                        }
+                    }
+                    .onChange(of: deviceActivityManager.selection.applicationTokens) { _, _ in
+                        let count = deviceActivityManager.selection.applicationTokens.count
+                        
+                        if count > 20 {
+                            canSave = false
+                        } else if deviceActivityManager.isLockingNow {
+                            canSave = deviceActivityManager.canSaveSelectionWhileLocking
+                        } else {
+                            canSave = true
+                        }
+                    }
+                    
+                }
+            }
+            
+            // Sheet 4: 알람 울렸을 때
             .sheet(
                 isPresented: $viewModel.isAlarmSheetPresented,
-                onDismiss: {
-                    viewModel.fetchAlarm()
-                },
-                content: {
-                    alarmSheetView
-                        .presentationDetents([.height(sheetHeight)])
-                        .interactiveDismissDisabled(true)
-                        .padding(.horizontal, 16)
-                        .overlay {
-                            GeometryReader { geometry in
-                                Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
-                            }
-                        }
-                        .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-                            sheetHeight = newHeight
-                        }
-                })
-            .navigationBarItems(trailing: contactButton)
+                onDismiss: { viewModel.fetchAlarm() }
+            ) {
+                AlarmSheetView(
+                    snoozeCount: viewModel.snoozeCount,
+                    snoozeTime: Int(viewModel.snoozeTime / 60),
+                    snoozeDisabled: viewModel.snoozeDisabled,
+                    onSnooze: { viewModel.snoozeAlarm() },
+                    onDeactivate: { viewModel.deactiveAlarm() }
+                )
+                .presentationDetents([.height(sheetHeight)])
+                .interactiveDismissDisabled(true)
+                .padding(.horizontal, 16)
+                .overlay {
+                    GeometryReader { geometry in
+                        Color.clear.preference(
+                            key: InnerHeightPreferenceKey.self,
+                            value: geometry.size.height
+                        )
+                    }
+                }
+                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                    sheetHeight = newHeight
+                }
+            }
+            
+            // Sheet 5: 구독
+            .sheet(isPresented: $isSubscriptionSheetPresented, content: {
+                SubscriptionSheetView(
+                    isPresented: $isSubscriptionSheetPresented,
+                    isSelected: $selectedSubscriptionType,
+                    onSubscribe: {
+                        await viewModel.purchaseSubscription(
+                            type: selectedSubscriptionType
+                        )
+                    },
+                    onRestorePurchases: {
+                        await storeKitManager.restorePurchases()
+                    }
+                )
+                .presentationDetents([.large])
+                .padding(.horizontal, 16)
+            })
             .background(.gray800)
             .onAppear {
                 viewModel.fetchAlarm()
                 viewModel.requestTrackingAuthorization()
             }
-            .onReceive(store.$subscriptionStatus, perform: { subscriptionStatus in
+            .onReceive(storeKitManager.$subscriptionStatus, perform: { subscriptionStatus in
                 if subscriptionStatus == .notSubscribed {
-                    nativeViewModel.loadAd()
+                    nativeAdViewModel.loadAd()
                 }
             })
+            .navigationBarItems(trailing: contactButton)
             .navigationDestination(for: MainRoute.self, destination: { destination in
                 switch destination {
                 case .alarmSetting(let alarm):
                     AlarmSettingView(viewModel: AlarmSettingViewModel(alarm: alarm))
                 }
             })
-            .sheet(isPresented: $isSubscriptionSheetPresented, content: {
-                subscriptionSheetView
-                    .presentationDetents([.large])
-                    .padding(.horizontal, 16)
-            })
         }
     }
 }
+
+// MARK: - Preference Key
 
 struct InnerHeightPreferenceKey: PreferenceKey {
     static let defaultValue: CGFloat = .zero
@@ -256,234 +231,13 @@ struct InnerHeightPreferenceKey: PreferenceKey {
 // MARK: - SubViews
 
 extension MainView {
-    private func removeRows(at offsets: IndexSet) {
-        viewModel.alarmList.remove(atOffsets: offsets)
-    }
-    
-    private var appSelectionSheet: some View {
-        VStack(spacing: 0) {
-                Text("알람을 키셨네요")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(.gray50)
-                    .padding(.top, 24)
-                Text("알람이 울릴 때 잠글 앱을 설정해볼까요")
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.gray200)
-                    .padding(.top, 8)
-            
-            HStack(spacing: 16) {
-                MainButton(
-                    title: "알람만 키기" ,
-                    buttonStyle: .text,
-                    action: viewModel.toggleAppSelection
-                )
-                MainButton(title: "설정하기") {
-                    viewModel.toggleAppSelection()
-                    isPickerPresented = true
-                }
-            }
-            .padding(.top, 28)
-        }
-    }
-    
     private var contactButton: some View {
         Button(action: {
-            viewModel.toggleWebView()
+            viewModel.isContactFormPresented.toggle()
         }, label: {
-            Text(NSLocalizedString("contactButtonText", comment: "comment"))
-                .foregroundStyle(.gray50)
-                .font(Font.system(size: 15, weight: .regular))
+            Text("문의")
+                .regular15()
         })
-    }
-    
-    private var alarmSheetView: some View {
-        VStack(spacing: 0) {
-            Text(NSLocalizedString("alarmRiningTitle", comment: "알람이 울렸습니다."))
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(.primary)
-                .padding(.top, 24)
-            
-            Text(NSLocalizedString("alarmRiningSubTitle", comment: "알람 횟수 표시"))
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.top, 8)
-            
-            Text(String(format: NSLocalizedString("alarmRingingCount", comment: "알람 횟수 표시"), viewModel.snoozeCount))
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-            
-            Image(.imgLock)
-                .padding(.top, 16)
-            
-            HStack(spacing: 16) {
-                MainButton(
-                    title: String(format: NSLocalizedString("snoozeButtonText", comment: "스누즈 버튼"), Int(viewModel.snoozeTime / 60)),
-                    disabled: viewModel.snoozeDisabled,
-                    buttonStyle: .text
-                ) {
-                    viewModel.snoozeAlarm()
-                }
-                MainButton(title: NSLocalizedString("deactiveAlarmText", comment: "알람 끄기")) {
-                    viewModel.deactiveAlarm()
-                }
-            }
-        }
-    }
-    
-    private var subscriptionSheetView: some View {
-        VStack(spacing: 16) {
-            HStack(spacing: 0) {
-                Spacer()
-                
-                Button {
-                    isSubscriptionSheetPresented = false
-                } label: {
-                    Image(.icX)
-                }
-            }
-            .padding(.top, 16)
-            
-            ScrollView {
-                VStack(spacing: 8) {
-                    Text(NSLocalizedString("PromotionSheetTitle", comment: "커피 한 잔 가격으로 광고 없이 사용하세요"))
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundStyle(.gray50)
-                        .multilineTextAlignment(.center)
-                    
-                    Text(NSLocalizedString("PromotionSheetSubTitle", comment: "효율적인 아침을 앞으로도 도와드릴게요"))
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(.gray200)
-                        .multilineTextAlignment(.center)
-                }
-                
-                Image(.imgSubscription)
-                
-                VStack(spacing: 16) {
-                    SubscriptionCardView(
-                        title: NSLocalizedString("Monthly", comment: "월 구독"),
-                        discountText: "-25%",
-                        originalPrice: "3,900₩",
-                        discountedPrice: "2,900₩",
-                        isHighlighted: false,
-                        isSelected: selectedSubscription == .monthly
-                    )
-                    .onTapGesture {
-                        toggleSubscription(.monthly)
-                    }
-                    
-                    SubscriptionCardView(
-                        title: NSLocalizedString("Yearly", comment: "연 구독"),
-                        discountText: "-38%",
-                        originalPrice: "46,800₩",
-                        discountedPrice: "29,000₩",
-                        isHighlighted: true,
-                        isSelected: selectedSubscription == .yearly
-                    )
-                    .onTapGesture {
-                        toggleSubscription(.yearly)
-                    }
-                }
-                
-                VStack(spacing: 12) {
-                    VStack(alignment: .leading, spacing: 0) {
-                        BulletText(text: NSLocalizedString("SubscriptionLimitedPrice", comment: "SubscriptionLimitedPrice"))
-                        BulletText(text: NSLocalizedString("SubscriptionAppleBilling", comment: "SubscriptionAppleBilling"))
-                        BulletText(text: NSLocalizedString("SubscriptionAutoRenewal", comment: "SubscriptionAutoRenewal"))
-                        BulletText(text: NSLocalizedString("SubscriptionRenewalCharge", comment: "SubscriptionRenewalCharge"))
-                        BulletText(text: NSLocalizedString("SubscriptionManageSubscription", comment: "SubscriptionManageSubscription"))
-                        BulletText(text: NSLocalizedString("SubscriptionTermsAndPrivacy", comment: "SubscriptionTermsAndPrivacy"))
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    HStack(spacing: 24) {
-                        Button {
-                            Task {
-                                await store.restorePurchases()
-                            }
-                        } label: {
-                            Text(NSLocalizedString("RestorePurchaseButtonText", comment: "RestorePurchaseButtonText"))
-                                .underline()
-                        }
-                        
-                        Button {
-                            if let url = URL(string: "https://www.notion.so/2db236ba320180e58611c0e508826405?source=copy_link") {
-                                openURL(url)
-                            }
-                        } label: {
-                            Text(NSLocalizedString("TermsOfUseButtonText", comment: "TermsOfUseButtonText"))
-                                .underline()
-                        }
-                        
-                        Button {
-                            if let url = URL(string: "https://www.notion.so/2d2236ba320180c8a09ef58dce97639b?source=copy_link") {
-                                openURL(url)
-                            }
-                        } label: {
-                            Text(NSLocalizedString("PrivacyPolicyButtonText", comment: "PrivacyPolicyButtonText"))
-                                .underline()
-                        }
-                    }
-                    .font(.system(size: 13, weight: .regular))
-                    .foregroundStyle(.gray50)
-                }
-                .padding(16)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(.black)
-                )
-            }
-            .scrollIndicators(.hidden)
-            
-            HStack(spacing: 16) {
-                MainButton(
-                    title: NSLocalizedString("SubscribeLaterButtonText", comment: "SubscribeLaterButtonText"),
-                    buttonStyle: .text
-                ) {
-                    isSubscriptionSheetPresented = false;
-                }
-                MainButton(title: NSLocalizedString("SubscribeButtonText", comment: "SubscribeButtonText")) {
-                    Task {
-                        await purchaseSelectedSubscription()
-                    }
-                }
-                .disabled(selectedSubscription == nil)
-                .opacity(selectedSubscription == nil ? 0.5 : 1)
-            }
-        }
-    }
-    
-    private func toggleSubscription(_ type: SubscriptionType) {
-        selectedSubscription = selectedSubscription == type ? nil : type
-    }
-    
-    @MainActor
-    private func purchaseSelectedSubscription() async {
-        guard let selectedSubscription else {
-            return
-        }
-        
-        let product: Product?
-        
-        switch selectedSubscription {
-        case .monthly:
-            product = store.products.first {
-                $0.id == "com.awayke.subscription.monthly"
-            }
-            
-        case .yearly:
-            product = store.products.first {
-                $0.id == "com.awayke.subscription.yearly"
-            }
-        }
-        
-        guard let product else {
-            print("선택된 Product 없음:", store.products.map { $0.id })
-            return
-        }
-        
-        await store.purchase(product)
     }
 }
 
@@ -493,8 +247,3 @@ struct AppIconLabelStyle: LabelStyle {
             .scaleEffect(2.5)
     }
 }
-
-#Preview {
-    MainView()
-}
-

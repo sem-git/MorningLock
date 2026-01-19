@@ -14,12 +14,10 @@ struct AlarmItem: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .lastTextBaseline) {
                 Text("\(alarm.meridiem)")
-                    .font(.system(size: 20, weight: .regular))
-                    .foregroundStyle(.gray50)
+                    .regular20()
                 
                 Text("\(alarm.dateString)")
-                    .font(.system(size: 48, weight: .bold))
-                    .foregroundStyle(.gray50)
+                    .bold48()
                     .fixedSize(horizontal: true, vertical: false)
                 
                 Spacer()
@@ -31,7 +29,7 @@ struct AlarmItem: View {
                 }))
             }
             
-            HStack {
+            HStack(spacing: 12) {
                 ForEach(Weekday.allCases, id: \.self) {
                     Text($0.dayName)
                         .foregroundStyle(alarm.repeatDay.contains($0) ? .gray50 : .gray300)

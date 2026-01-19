@@ -18,15 +18,13 @@ struct AlarmSettingView: View {
         VStack(spacing: 16) {
             // 시간 설정
             DatePicker("", selection: $viewModel.alarm.fireDate, displayedComponents: .hourAndMinute)
-                .environment(\.locale, Locale(identifier: "en_US"))
                 .datePickerStyle(.wheel)
                 .labelsHidden()
             
             // 요일 설정
             VStack(alignment: .leading, spacing: 14) {
-                Text(NSLocalizedString("repeatTitle", comment: "반복"))
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.gray50)
+                Text("반복")
+                    .semiBold17()
                 
                 HStack(alignment: .center, spacing: 8) {
                     ForEach(Weekday.allCases, id: \.self) { day in
@@ -45,24 +43,23 @@ struct AlarmSettingView: View {
         }
         .padding(.horizontal, 16)
         .navigationBarItems(leading: backButton)
-        .navigationTitle(NSLocalizedString("alarmSettingScreenTitle", comment: "네비게이션 타이틀"))
+        .navigationTitle(String(localized: "알람 설정"))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .overlay(alignment: .bottom, content: {
-            VStack {
+            VStack(spacing: 16) {
                 NativeAdMobView(nativeViewModel: nativeViewModel)
                     .frame(maxHeight: 64)
-                    .padding(.horizontal, 16)
-                
-                MainButton(title: NSLocalizedString("saveButtonText", comment: "저장하기"), disabled: viewModel.buttonDisabled) {
+                    
+                MainButton(title: String(localized: "저장하기"), disabled: viewModel.buttonDisabled) {
                     if viewModel.isEditing {
                         updateAlarm()
                     } else {
                         saveAlarm()
                     }
                 }
-                .padding(.horizontal, 16)
             }
+            .padding(.horizontal, 16)
             })
         .background(.gray800)
         .onReceive(store.$subscriptionStatus, perform: { subscriptionStatus in
@@ -75,8 +72,6 @@ struct AlarmSettingView: View {
     private var backButton: some View {
         Button(action: { dismiss() }) {
             Image(.icBack)
-                .font(.system(size: 16, weight: .bold))
-                .foregroundStyle(.white)
         }
     }
     
