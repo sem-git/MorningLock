@@ -119,20 +119,6 @@
 			);
 			target = 00CD949E2E9D3FD4001C47CD /* WakeUp */;
 		};
-		00D99E092EF9C0E40012C0E7 /* Exceptions for "WakeUp" folder in "ShieldConfiguration" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"/Localized: Resources/Localizable.strings",
-			);
-			target = 76874F8C2ED9A70F0067C086 /* ShieldConfiguration */;
-		};
-		00D99E0A2EF9C0E40012C0E7 /* Exceptions for "WakeUp" folder in "ShieldAction" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"/Localized: Resources/Localizable.strings",
-			);
-			target = 0045135D2EE76A9900E6CF51 /* ShieldAction */;
-		};
 		76874F9B2ED9A70F0067C086 /* Exceptions for "ShieldConfiguration" folder in "ShieldConfiguration" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -186,8 +172,6 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				009CE6402EAB8549005B0F5A /* Exceptions for "WakeUp" folder in "WakeUp" target */,
-				00D99E092EF9C0E40012C0E7 /* Exceptions for "WakeUp" folder in "ShieldConfiguration" target */,
-				00D99E0A2EF9C0E40012C0E7 /* Exceptions for "WakeUp" folder in "ShieldAction" target */,
 			);
 			path = WakeUp;
 			sourceTree = "<group>";
