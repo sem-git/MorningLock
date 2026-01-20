@@ -7,12 +7,14 @@
 
 import AVFoundation
 import MediaPlayer
+import Combine
 
 final class AudioPlayerManager: NSObject {
     static let shared = AudioPlayerManager()
     
     private var audioPlayer: AVAudioPlayer?
     private var volumeObservation: NSKeyValueObservation?
+    private var canellable: AnyCancellable?
     
     private let defaultVolume: Float = 1.0
     private let session = AVAudioSession.sharedInstance()
@@ -51,12 +53,12 @@ final class AudioPlayerManager: NSObject {
             try session.setActive(true)
             
             let player = try AVAudioPlayer(contentsOf: url)
-            player.numberOfLoops = -1
+            player.numberOfLoops = 1
             player.volume = defaultVolume
             player.prepareToPlay()
             player.play(atTime: player.deviceCurrentTime + atTime)
             self.audioPlayer = player
-            setupVolumeObservation()
+            
         } catch {
             print("Error loading audio: \(error)")
         }

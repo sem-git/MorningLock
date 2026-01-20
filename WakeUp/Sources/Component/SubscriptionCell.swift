@@ -1,5 +1,5 @@
 //
-//  SubscriptionCardView.swift
+//  SubscriptionCell.swift
 //  WakeUp
 //
 //  Created by 이세민 on 12/20/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SubscriptionCardView: View {
+struct SubscriptionCell: View {
     let title: String
     let discountText: String
     let originalPrice: String
@@ -23,7 +23,7 @@ struct SubscriptionCardView: View {
                 .padding(.trailing, 16)
             
             Text(title)
-                .font(.system(size: 17, weight: .semibold))
+                .font(.semiBold17)
                 .foregroundColor(isHighlighted ? .neon : .white)
                 .padding(.trailing, 12)
             
@@ -33,20 +33,17 @@ struct SubscriptionCardView: View {
                     .frame(width: 56, height: 29)
                 
                 Text(discountText)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.black)
+                    .semiBold16(color: .black)
             }
             
             Spacer()
             
             VStack(alignment: .trailing, spacing: 0) {
                 Text(discountedPrice)
-                    .font(.system(size: 17, weight: .heavy))
-                    .foregroundColor(.neon)
+                    .heavy17(color: .neon)
                 
                 Text(originalPrice)
-                    .font(.system(size: 15, weight: .regular))
-                    .foregroundColor(.gray200)
+                    .regular15(color: .gray200)
                     .strikethrough()
             }
         }
@@ -61,4 +58,39 @@ struct SubscriptionCardView: View {
         )
         .animation(.easeInOut, value: isSelected)
     }
+}
+
+#Preview {
+    VStack(spacing: 16) {
+        // 월 구독 - 선택 x
+        SubscriptionCell(
+            title: "월 구독",
+            discountText: "-25%",
+            originalPrice: "3,900원",
+            discountedPrice: "2,900원",
+            isHighlighted: false,
+            isSelected: false
+        )
+        
+        // 월 구독 - 선택
+        SubscriptionCell(
+            title: "월 구독",
+            discountText: "-25%",
+            originalPrice: "3,900원",
+            discountedPrice: "2,900원",
+            isHighlighted: false,
+            isSelected: true
+        )
+        
+        // 연 구독 - 선택
+        SubscriptionCell(
+            title: "연 구독",
+            discountText: "-38%",
+            originalPrice: "46,800원",
+            discountedPrice: "29,000원",
+            isHighlighted: true,
+            isSelected: true
+        )
+    }
+    .padding(16)
 }

@@ -13,12 +13,10 @@ struct BulletText: View {
     var body: some View {
         HStack(alignment: .top, spacing: 6) {
             Text("•")
-                .font(.system(size: 12))
-                .foregroundStyle(.gray200)
+                .regular12(color: .gray200)
             
             Text(text)
-                .font(.system(size: 12))
-                .foregroundStyle(.gray200)
+                .regular12(color: .gray200)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }

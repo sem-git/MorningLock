@@ -17,8 +17,8 @@ class ShieldActionExtension: ShieldActionDelegate {
         switch action {
         case .primaryButtonPressed:
             let content = UNMutableNotificationContent()
-            content.title = NSLocalizedString("CheckRemainingTimeNotificationTitle", comment: "")
-            content.body = NSLocalizedString("CheckRemainingTimeNotificationSubTitle", comment: "")
+            content.title = String(localized: "남은 시간 확인하기")
+            content.body = String(localized: "남은 시간을 앱에서 확인해보세요!")
             content.sound = nil
             content.userInfo = ["action": "openTimer"]
             let request = UNNotificationRequest(

@@ -55,8 +55,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         if alarmManager.isAlarmScheduled() {
             notificationManager.postImmediateNotification(
-                title: NSLocalizedString("AppTerminationNotificationTitle",comment: "알람 종료시 타이틀"),
-                body: NSLocalizedString("AppTerminationNotificationSubTitle",comment: "알람 종료시 서브타이틀")
+                title: String(localized: "앱이 종료되었어요"),
+                body: String(localized: "앱을 종료하면 설정한 알람이 울리지 않아요.")
             )
             sleep(3)
         }
