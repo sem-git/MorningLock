@@ -23,7 +23,7 @@ struct AppLockPickerSheetView: View {
             FamilyActivityPicker(selection: $selection)
                 .toolbar {
                     ToolbarItem(placement: .principal) {
-                        Text("앱 선택")
+                        Text("잠글 앱 선택")
                             .bold20()
                     }
                     
