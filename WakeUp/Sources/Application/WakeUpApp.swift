@@ -33,7 +33,7 @@ struct WakeUpApp: App {
                     TimerView()
                 })
                 .onChange(of: scenePhase) { _, newPhase in
-                    if newPhase == .background {
+                    if newPhase == .background {                        
                         Analytics.logEvent("EnterBackground", parameters: [
                             AnalyticsParameterItemID: "id",
                             AnalyticsParameterItemName: "enter-background",
