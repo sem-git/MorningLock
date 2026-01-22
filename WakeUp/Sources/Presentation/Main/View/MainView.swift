@@ -240,6 +240,17 @@ struct MainView: View {
                     sheetHeight = newHeight
                 }
             }
+            
+            // Sheet 7: 일정 시간 경과로 잠금 스킵
+            .sheet(isPresented: $viewModel.isLockSkipSheetPresented) {
+                LockSkipSheetView(
+                    onConfirm: {
+                        viewModel.isLockSkipSheetPresented = false
+                    }
+                )
+                .presentationDetents([.height(sheetHeight)])
+            }
+            
         }
     }
 }

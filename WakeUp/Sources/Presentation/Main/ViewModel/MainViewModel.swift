@@ -26,6 +26,7 @@ class MainViewModel: ObservableObject {
     
     @Published var isContactFormPresented: Bool = false
     @Published var showLockSuggestionSheet: Bool = false
+    @Published var isLockSkipSheetPresented: Bool = false
     
     private let coreDataManager: CoreDataManager
     private let alarmManager: AlarmManager
