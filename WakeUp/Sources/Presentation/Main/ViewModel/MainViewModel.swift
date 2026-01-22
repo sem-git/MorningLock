@@ -26,6 +26,7 @@ class MainViewModel: ObservableObject {
     
     @Published var isContactFormPresented: Bool = false
     @Published var showLockSuggestionSheet: Bool = false
+    @Published var isLockSkipSheetPresented: Bool = false
     
     private let coreDataManager: CoreDataManager
     private let alarmManager: AlarmManager
@@ -34,6 +35,9 @@ class MainViewModel: ObservableObject {
     private let storeKitManager: StoreKitManager
     
     private var cancellables = Set<AnyCancellable>()
+    
+    private var alarmTimeoutTask: Task<Void, Never>?
+    private let alarmMaxWaitingTime: TimeInterval = .minutes(20) // 1시간으로 변경 예정
     
     init() {
         self.coreDataManager = .shared
@@ -51,7 +55,16 @@ class MainViewModel: ObservableObject {
         // 알람이 재생 중이면서 isOpenSheet 보임 여부에 따라서 Sheet 열기
         alarmManager.$isAlarmPlaying
             .receive(on: RunLoop.main)
-            .assign(to: \.isAlarmSheetPresented, on: self)
+            .sink { [weak self] isPlaying in
+                guard let self else { return }
+                self.isAlarmSheetPresented = isPlaying
+                
+                if isPlaying {
+                    self.startAlarmTimeout()
+                } else {
+                    self.cancelAlarmTimeout()
+                }
+            }
             .store(in: &cancellables)
         
         // 스누즈 횟수
@@ -159,5 +172,33 @@ class MainViewModel: ObservableObject {
         }
         
         await storeKitManager.purchase(product)
+    }
+    
+    private func startAlarmTimeout() {
+        cancelAlarmTimeout()
+        
+        alarmTimeoutTask = Task { [weak self] in
+            guard let self else { return }
+            
+            try? await Task.sleep(
+                nanoseconds: UInt64(alarmMaxWaitingTime * 1_000_000_000)
+            )
+            
+            if self.isAlarmSheetPresented {
+                self.deactiveAlarmWithoutLock()
+            }
+        }
+    }
+    
+    private func cancelAlarmTimeout() {
+        alarmTimeoutTask?.cancel()
+        alarmTimeoutTask = nil
+    }
+    
+    private func deactiveAlarmWithoutLock() {
+        alarmManager.deactiveAlarm()
+        
+        isAlarmSheetPresented = false
+        isLockSkipSheetPresented = true
     }
 }

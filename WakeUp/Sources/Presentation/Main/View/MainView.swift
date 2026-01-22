@@ -22,6 +22,7 @@ struct MainView: View {
     @State private var sheetHeight: CGFloat = .zero
     @State private var isAppLockPickerSheetPresented = false
     @State private var isSubscriptionSheetPresented = false
+    @State private var isUpdateSheetPresented = false
     @State private var canSave: Bool = false
     
     @State private var selectedSubscriptionType: SubscriptionType? = nil
@@ -167,7 +168,6 @@ struct MainView: View {
                 )
                 .presentationDetents([.height(sheetHeight)])
                 .interactiveDismissDisabled(true)
-                .padding(.horizontal, 16)
                 .overlay {
                     GeometryReader { geometry in
                         Color.clear.preference(
@@ -196,7 +196,6 @@ struct MainView: View {
                     }
                 )
                 .presentationDetents([.large])
-                .padding(.horizontal, 16)
             })
             .background(.gray800)
             .onAppear {
@@ -215,6 +214,41 @@ struct MainView: View {
                     AlarmSettingView(viewModel: AlarmSettingViewModel(alarm: alarm))
                 }
             })
+            
+            // Sheet 6: 업데이트 안내
+            .sheet(isPresented: $isUpdateSheetPresented) {
+                UpdateSheetView(
+                    onSkip: {
+                        isUpdateSheetPresented = false
+                    },
+                    onUpdate: {
+                        isUpdateSheetPresented = false
+                    }
+                )
+                .presentationDetents([.height(sheetHeight)])
+                .overlay {
+                    GeometryReader { geometry in
+                        Color.clear.preference(
+                            key: InnerHeightPreferenceKey.self,
+                            value: geometry.size.height
+                        )
+                    }
+                }
+                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                    sheetHeight = newHeight
+                }
+            }
+            
+            // Sheet 7: 일정 시간 경과로 잠금 스킵
+            .sheet(isPresented: $viewModel.isLockSkipSheetPresented) {
+                LockSkipSheetView(
+                    onConfirm: {
+                        viewModel.isLockSkipSheetPresented = false
+                    }
+                )
+                .presentationDetents([.height(sheetHeight)])
+            }
+            
         }
     }
 }

@@ -17,13 +17,16 @@ struct UpdateSheetView: View {
                 .semiBold20()
                 .padding(.top, 24)
             
-            Text("앱의 원활한 이용을 위해\n최신 버전으로 업데이트해 주세요")
+            Text("앱의 원활한 이용을 위해")
                 .semiBold17(color: .gray200)
-                .multilineTextAlignment(.center)
                 .padding(.top, 8)
+            
+            Text("최신 버전으로 업데이트해 주세요")
+                .semiBold17(color: .gray200)
             
             Image(.imgUpdate)
                 .padding(.top, 16)
+                .padding(.bottom, 28)
             
             HStack(spacing: 16) {
                 MainButton(
@@ -38,5 +41,6 @@ struct UpdateSheetView: View {
                 }
             }
         }
+        .padding(.horizontal, 16)
     }
 }

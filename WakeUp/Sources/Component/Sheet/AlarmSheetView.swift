@@ -33,6 +33,7 @@ struct AlarmSheetView: View {
             
             Image(.imgLock)
                 .padding(.top, 16)
+                .padding(.bottom, 28)
             
             HStack(spacing: 16) {
                 MainButton(
@@ -48,5 +49,6 @@ struct AlarmSheetView: View {
                 }
             }
         }
+        .padding(.horizontal, 16)
     }
 }
