@@ -15,10 +15,10 @@ final class NotificationManager {
     
     private init() {}
     
-    func postImmediateNotification() {
+    func postImmediateNotification(title: String, body: String) {
         let content = UNMutableNotificationContent()
-        content.title = String(localized: "알람이 울렸습니다")
-        content.body = String(localized: "방해 앱을 잠그고 외출 준비에 집중해보세요")
+        content.title = title
+        content.body = body
         content.sound = nil
         
         let request = UNNotificationRequest(
