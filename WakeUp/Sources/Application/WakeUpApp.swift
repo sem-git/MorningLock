@@ -33,7 +33,7 @@ struct WakeUpApp: App {
                     TimerView()
                 })
                 .onChange(of: scenePhase) { _, newPhase in
-                    if newPhase == .background {
+                    if newPhase == .background {                        
                         Analytics.logEvent("EnterBackground", parameters: [
                             AnalyticsParameterItemID: "id",
                             AnalyticsParameterItemName: "enter-background",
@@ -50,6 +50,17 @@ struct WakeUpApp: App {
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
     private let alarmManager: AlarmManager = .shared
+    private let notificationManager: NotificationManager = .shared
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        if alarmManager.isAlarmScheduled() {
+            notificationManager.postImmediateNotification(
+                title: String(localized: "앱이 종료되었어요"),
+                body: String(localized: "앱을 종료하면 설정한 알람이 울리지 않아요.")
+            )
+            sleep(3)
+        }
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         
