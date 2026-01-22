@@ -15,9 +15,10 @@ struct AppLockSelectionView: View {
     @EnvironmentObject var viewModel: OnboardingViewModel
     @EnvironmentObject var permissionManager: PermissionManager
     
-    @StateObject var deviceManager: DeviceActivityManager = .shared
+    @StateObject var deviceActivityManager: DeviceActivityManager = .shared
     
     @State private var isPickerPresented = false
+    @State private var canSave: Bool = true
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -65,11 +66,21 @@ struct AppLockSelectionView: View {
         .background(.gray800)
         .sheet(isPresented: $isPickerPresented) {
             NavigationStack {
-                AppLockPickerSheetView(selection: $deviceManager.selection, canSave: .constant(true)) {
+                AppLockPickerSheetView(selection: $deviceActivityManager.selection, canSave: $canSave) {
                     withAnimation {
-                        deviceManager.save()
+                        deviceActivityManager.save()
                         addDefaultAlarm()
                         isPickerPresented = false
+                    }
+                }
+                .onChange(of: deviceActivityManager.selection.applicationTokens) {
+                    let count = deviceActivityManager.selection.applicationTokens.count
+                    
+                    if count > 20 {
+                        canSave = false
+                    }
+                    else {
+                        canSave = true
                     }
                 }
             }
@@ -77,7 +88,7 @@ struct AppLockSelectionView: View {
     }
     
     func addDefaultAlarm() {
-        Task {            
+        Task {
             let calendar = Calendar.current
             let now = Date()
             
