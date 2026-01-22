@@ -26,6 +26,7 @@ struct UpdateSheetView: View {
             
             Image(.imgUpdate)
                 .padding(.top, 16)
+                .padding(.bottom, 28)
             
             HStack(spacing: 16) {
                 MainButton(
@@ -39,7 +40,6 @@ struct UpdateSheetView: View {
                     onUpdate()
                 }
             }
-            .padding(.top, 28)
         }
         .padding(.horizontal, 16)
     }

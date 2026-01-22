@@ -168,7 +168,6 @@ struct MainView: View {
                 )
                 .presentationDetents([.height(sheetHeight)])
                 .interactiveDismissDisabled(true)
-                .padding(.horizontal, 16)
                 .overlay {
                     GeometryReader { geometry in
                         Color.clear.preference(
@@ -197,7 +196,6 @@ struct MainView: View {
                     }
                 )
                 .presentationDetents([.large])
-                .padding(.horizontal, 16)
             })
             .background(.gray800)
             .onAppear {

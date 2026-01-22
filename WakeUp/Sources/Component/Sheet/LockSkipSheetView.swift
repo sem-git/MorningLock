@@ -25,6 +25,7 @@ struct LockSkipSheetView: View {
             
             Image(.imgException)
                 .padding(.top, 16)
+                .padding(.bottom, 28)
             
             MainButton(title: String(localized: "확인하기")) {
                 onConfirm()

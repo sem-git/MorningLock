@@ -21,6 +21,7 @@ struct LockSuggestionSheetView: View {
                 .semiBold17(color: .gray200)
                 .padding(.top, 8)
                 .multilineTextAlignment(.center)
+                .padding(.bottom, 28)
             
             HStack(spacing: 16) {
                 MainButton(
@@ -30,7 +31,6 @@ struct LockSuggestionSheetView: View {
                 
                 MainButton(title: String(localized: "설정하기")) { onConfigure() }
             }
-            .padding(.top, 28)
         }
         .padding(.horizontal, 16)
     }

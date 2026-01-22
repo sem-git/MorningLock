@@ -137,6 +137,7 @@ struct SubscriptionSheetView: View {
                 ) {
                     isPresented = false
                 }
+                
                 MainButton(title: String(localized: "구입하기")) {
                     Task {
                         await onSubscribe()
@@ -146,5 +147,6 @@ struct SubscriptionSheetView: View {
                 .opacity(isSelected == nil ? 0.5 : 1)
             }
         }
+        .padding(.horizontal, 16)
     }
 }
