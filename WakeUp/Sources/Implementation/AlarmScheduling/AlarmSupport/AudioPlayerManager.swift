@@ -88,6 +88,7 @@ final class AudioPlayerManager: NSObject {
             timeObserverToken = player?.addBoundaryTimeObserver(forTimes: [NSValue(time: triggerTime)], queue: .global(qos: .background)) { [weak self] in
                 guard let self else { return }
                 systemVolume = defaultVolume
+                player?.seek(to: CMTime.zero)
                 player?.volume = 1.0
                 startVolumeMonitoring()
             }
