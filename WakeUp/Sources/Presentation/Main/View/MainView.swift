@@ -215,30 +215,6 @@ struct MainView: View {
                 }
             })
             
-            // Sheet 6: 업데이트 안내
-            .sheet(isPresented: $isUpdateSheetPresented) {
-                UpdateSheetView(
-                    onSkip: {
-                        isUpdateSheetPresented = false
-                    },
-                    onUpdate: {
-                        isUpdateSheetPresented = false
-                    }
-                )
-                .presentationDetents([.height(sheetHeight)])
-                .overlay {
-                    GeometryReader { geometry in
-                        Color.clear.preference(
-                            key: InnerHeightPreferenceKey.self,
-                            value: geometry.size.height
-                        )
-                    }
-                }
-                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-                    sheetHeight = newHeight
-                }
-            }
-            
             // Sheet 7: 일정 시간 경과로 잠금 스킵
             .sheet(isPresented: $viewModel.isLockSkipSheetPresented) {
                 LockSkipSheetView(

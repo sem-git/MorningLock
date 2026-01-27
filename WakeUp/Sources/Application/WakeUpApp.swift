@@ -22,10 +22,31 @@ struct WakeUpApp: App {
     @StateObject private var permissionManager = PermissionManager.shared
     
     @State private var isTimerPresented = false
+    @State private var isUpdateSheetPresented: Bool = false
+    @State private var sheetHeight: CGFloat = .zero
     
     var body: some Scene {
         WindowGroup {
             RootView()
+                .sheet(isPresented: $isUpdateSheetPresented) {
+                    UpdateSheetView(
+                        onSkip: skipUpdate,
+                        onUpdate: performUpdate
+                    )
+                    .presentationDetents([.height(sheetHeight)])
+                    .interactiveDismissDisabled(true)
+                    .overlay {
+                        GeometryReader { geometry in
+                            Color.clear.preference(
+                                key: InnerHeightPreferenceKey.self,
+                                value: geometry.size.height
+                            )
+                        }
+                    }
+                    .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                        sheetHeight = newHeight
+                    }
+                }
                 .onReceive(NotificationCenter.default.publisher(for: .openTimer)) { _ in
                     isTimerPresented = true
                 }
@@ -33,7 +54,7 @@ struct WakeUpApp: App {
                     TimerView()
                 })
                 .onChange(of: scenePhase) { _, newPhase in
-                    if newPhase == .background {                        
+                    if newPhase == .background {
                         Analytics.logEvent("EnterBackground", parameters: [
                             AnalyticsParameterItemID: "id",
                             AnalyticsParameterItemName: "enter-background",
@@ -43,7 +64,30 @@ struct WakeUpApp: App {
                         delegate.scheduleAppBackgroundProcessing()
                     }
                 }
+                .task(checkAppVersion)
                 .environmentObject(permissionManager)
+        }
+    }
+    
+    private func skipUpdate() {
+        isUpdateSheetPresented = false
+    }
+    
+    private func performUpdate() {
+        
+    }
+    
+    private func checkAppVersion() async {
+        guard let currentVersionString = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
+              let currentVersion = Int(currentVersionString.split(separator: ".").joined()),
+              let minimumVersion = await RemoteConfigManager.shared.getMinimumAppVersion() else {
+            return
+        }
+        
+        if currentVersion < minimumVersion {
+            isUpdateSheetPresented = true
+        } else {
+            isUpdateSheetPresented = false
         }
     }
 }
@@ -68,7 +112,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         FirebaseApp.configure()
         
         application.registerForRemoteNotifications()
-                        
+        
         Messaging.messaging().delegate = self
         MobileAds.shared.start()
         
@@ -150,8 +194,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     
     // foreground 상태에서 노티피케이션 전송
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-         completionHandler([.list, .banner])
-     }
+        completionHandler([.list, .banner])
+    }
 }
 
 extension AppDelegate: MessagingDelegate {
