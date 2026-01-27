@@ -46,8 +46,8 @@
             filePath = "WakeUp/Sources/Application/WakeUpApp.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "190"
-            endingLineNumber = "190"
+            startingLineNumber = "197"
+            endingLineNumber = "197"
             landmarkName = "userNotificationCenter(_:didReceive:)"
             landmarkType = "7">
          </BreakpointContent>

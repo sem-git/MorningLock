@@ -31,7 +31,7 @@ struct WakeUpApp: App {
                 .sheet(isPresented: $isUpdateSheetPresented) {
                     UpdateSheetView(
                         onSkip: skipUpdate,
-                        onUpdate: performUpdate
+                        onUpdate: openAppStore
                     )
                     .presentationDetents([.height(sheetHeight)])
                     .interactiveDismissDisabled(true)
@@ -69,14 +69,12 @@ struct WakeUpApp: App {
         }
     }
     
+    // 업데이트 무시
     private func skipUpdate() {
         isUpdateSheetPresented = false
     }
     
-    private func performUpdate() {
-        
-    }
-    
+    // 앱 버전 체크
     private func checkAppVersion() async {
         guard let currentVersionString = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
               let currentVersion = Int(currentVersionString.split(separator: ".").joined()),
@@ -88,6 +86,15 @@ struct WakeUpApp: App {
             isUpdateSheetPresented = true
         } else {
             isUpdateSheetPresented = false
+        }
+    }
+    
+    // 앱스토어 이동
+    private func openAppStore() {
+        if let url = URL(string: "https://apps.apple.com/app/id/6755328423") {
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
         }
     }
 }
