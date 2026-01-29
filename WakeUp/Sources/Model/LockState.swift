@@ -7,8 +7,9 @@
 
 import Foundation
 import ManagedSettings
+import FamilyControls
 
 struct LockState: Codable {
     let endTime: Date
-    let lockedApps: Set<ApplicationToken>
+    let selection: FamilyActivitySelection
 }

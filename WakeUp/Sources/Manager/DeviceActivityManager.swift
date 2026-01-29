@@ -190,9 +190,12 @@ final class DeviceActivityManager: ObservableObject {
     
     /// 잠금 상태를 앱그룹에 저장
     private func persistLockState() {
-        let appBlockState = AppModel(selection: selection)
+        let state = LockState(
+            endTime: endTime,
+            selection: selection
+        )
         
-        if let data = try? JSONEncoder().encode(appBlockState) {
+        if let data = try? JSONEncoder().encode(state) {
             sharedContainer?.set(data, forKey: StringLiteral.UserDefaultKeys.appLockStateKey)
         }
     }
@@ -210,8 +213,8 @@ final class DeviceActivityManager: ObservableObject {
         }
         
         endTime = state.endTime
-        currentLockedSnapshot = state.lockedApps
-        selection.applicationTokens = state.lockedApps
+        selection = state.selection
+        currentLockedSnapshot = state.selection.applicationTokens
     }
     
     // MARK: - 타이머 및 UI 표시
