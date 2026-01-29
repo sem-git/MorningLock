@@ -21,11 +21,7 @@ final class DeviceActivityManager: ObservableObject {
     //
     private let center = DeviceActivityCenter()
     private let store = ManagedSettingsStore()
-    private let events: [DeviceActivityEvent.Name: DeviceActivityEvent] = [
-        .encouraged: DeviceActivityEvent(
-            threshold: DateComponents(minute: 15)
-        )
-    ]
+    
     /// 기본 앱 잠금 시간
     private let appLockDurationMinutes = 15
     
@@ -59,11 +55,11 @@ final class DeviceActivityManager: ObservableObject {
     var selectedApps: [ApplicationToken] {
         Array(selection.applicationTokens)
     }
-
+    
     var hasSelectedApps: Bool {
         !selection.applicationTokens.isEmpty
     }
-
+    
     /// 사용자가 선택한 앱
     @Published var selection = FamilyActivitySelection(includeEntireCategory: true)
     /// 앱 잠금 남은 시간
@@ -145,7 +141,7 @@ final class DeviceActivityManager: ObservableObject {
                     intervalEnd: endComponents,
                     repeats: false
                 ),
-                events: events
+                events: [:]
             )
             endTime = end
         } catch {
