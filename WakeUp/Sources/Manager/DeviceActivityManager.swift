@@ -14,29 +14,50 @@ import ManagedSettings
 final class DeviceActivityManager: ObservableObject {
     static let shared = DeviceActivityManager()
     
-    // MARK: - AppGruop Store
+    // MARK: - App Gruop & Device Activity
     
-    // 앱그룹 저장소
     private let sharedContainer = UserDefaults(suiteName: "group.com.awayke")
-    //
     private let center = DeviceActivityCenter()
     private let store = ManagedSettingsStore()
     
-
-    var lockDuration: TimeInterval {
-        .minutes(15)
-    }
+    var lockDuration: TimeInterval { .minutes(15) }
     
-    // MARK: - Properties
+    // MARK: - Published State
     
-    /// 앱 잠금 종료 시간 기록
+    // 사용자가 선택 중인 상태
+    @Published var selection = FamilyActivitySelection(includeEntireCategory: true)
+    // 사용자 선택 확정 상태
+    @Published private(set) var committedSelection = FamilyActivitySelection()
+    // 남은 잠금 시간과 비율
+    @Published var remainingTime: TimeInterval = .zero
+    @Published var percent: Double = 0
+    
+    // MARK: - Private State
+    
+    // 잠금 종료 시간
     private var endTime = Date()
+    // 잠금 기준 스냅샷
+    private(set) var currentLockedSnapshot: Set<ApplicationToken> = []
+    
     private var cancellables = Set<AnyCancellable>()
     private var timer: AnyCancellable?
     
-    /// 앱 잠금 여부
+    // MARK: - Computed Properties
+    
+    /// 잠금 여부
     var isLockingNow: Bool { Date() < endTime }
-    /// 앱 잠금 저장 버튼 활성화 여부
+    
+    /// 확정 상태의 선택된 앱
+    var selectedApps: [ApplicationToken] {
+        Array(committedSelection.applicationTokens)
+    }
+    
+    /// 확정 상태의 선택된 앱 존재 여부
+    var hasSelectedApps: Bool {
+        !committedSelection.applicationTokens.isEmpty
+    }
+    
+    /// 잠금 중 selection 변경 시 완료 버튼 활성화 여부
     var canSaveSelectionWhileLocking: Bool {
         let current = selection.applicationTokens
         let base = currentLockedSnapshot
@@ -52,37 +73,17 @@ final class DeviceActivityManager: ObservableObject {
         return true
     }
     
-    // MARK: - State
-    
-    var selectedApps: [ApplicationToken] {
-        Array(committedSelection.applicationTokens)
-    }
-
-    var hasSelectedApps: Bool {
-        !committedSelection.applicationTokens.isEmpty
-    }
-    
-    @Published private(set) var committedSelection = FamilyActivitySelection()
-
-    
-    /// 사용자가 선택한 앱
-    @Published var selection = FamilyActivitySelection(includeEntireCategory: true)
-    /// 앱 잠금 남은 시간
-    @Published var remainingTime: TimeInterval = .zero
-    /// 앱 잠금 남은 시간 표시용
-    @Published var percent: Double = 0
-    /// 잠금 중 기준이 되는 현재 잠금 앱 스냅샷
-    private(set) var currentLockedSnapshot: Set<ApplicationToken> = []
+    // MARK: - Initializer
     
     private init() {
         restoreLockState()
-        dataBind()
+        bindAppGroupStorage()
     }
     
-    // MARK: - 선택 관리
+    // MARK: - 앱 선택 관리
     
-    /// 앱그룹 저장소에 잠금 앱 저장
-    func save() {
+    /// 사용자 선택 완료 시 잠금 앱 저장
+    func saveSelection() {
         let model = AppSelection(selection: selection)
         do {
             let data = try JSONEncoder().encode(model)
@@ -95,14 +96,14 @@ final class DeviceActivityManager: ObservableObject {
     }
     
     /// 잠금 앱 초기화
-    func clear() {
+    func clearSelection() {
         stopMonitoring()
         sharedContainer?.removeObject(forKey: StringLiteral.UserDefaultKeys.appGroupStorageKey)
         selection = .init()
     }
     
     /// 잠금 앱 불러오기
-    private func dataBind() {
+    private func bindAppGroupStorage() {
         if let container = sharedContainer {
             if container.value(forKey: StringLiteral.UserDefaultKeys.appGroupStorageKey) == nil {
                 // 처음에 저장소가 존재하지 않는 경우 초기화
@@ -126,24 +127,23 @@ final class DeviceActivityManager: ObservableObject {
         }
     }
     
-    // MARK: - 잠금 시작과 종료
+    // MARK: - 잠금 관리
     
     /// 모니터링 시작
     func startMonitoring(startAt date: Date) {
-        center.stopMonitoring([.testName])
-        let end = date.addingTimeInterval(lockDuration)
+        center.stopMonitoring([.appLockActivity])
         
+        let end = date.addingTimeInterval(lockDuration)
         let startComponents = fullDateComponents(from: date)
         let endComponents = fullDateComponents(from: end)
         
-        // 스냅샷에 현재 선택한 앱 토큰을 저장하고
         currentLockedSnapshot = selection.applicationTokens
         endTime = end
         persistLockState()
         
         do {
             try center.startMonitoring(
-                .testName,
+                .appLockActivity,
                 during: DeviceActivitySchedule(
                     intervalStart: startComponents,
                     intervalEnd: endComponents,
@@ -159,50 +159,29 @@ final class DeviceActivityManager: ObservableObject {
     
     /// 모니터링 중지
     func stopMonitoring() {
-        center.stopMonitoring([.testName])
-        timer = nil
+        center.stopMonitoring([.appLockActivity])
+        stopLockTimer()
         sharedContainer?.removeObject(forKey: StringLiteral.UserDefaultKeys.appLockStateKey)
         currentLockedSnapshot = []
         print("DeviceActivity 모니터링 중단")
     }
     
-    // MARK: - 잠금 중 앱 추가
-    
-    /// 추가 잠금 앱 스냅샷 갱신
-    func commitSelectionWhileLocking() {
-        save()
+    /// 잠금 중 앱 추가
+    func commitAdditionalApps() {
+        saveSelection()
         applyShieldImmediately()
         currentLockedSnapshot = selection.applicationTokens
         persistLockState()
     }
     
-    func unblockApps() {
-        store.shield.applications = nil
-        store.shield.applicationCategories = nil
-        store.shield.webDomains = nil
-    }
-    
-    /// 추가 잠금 앱 바로 적용
+    /// 앱 잠금 즉시 적용
     func applyShieldImmediately() {
-        store.shield.applications =
-        selection.applicationTokens.isEmpty
-        ? nil
-        : selection.applicationTokens
-        
-        store.shield.applicationCategories =
-        selection.categoryTokens.isEmpty
-        ? nil
-        : .specific(selection.categoryTokens)
-        
-        store.shield.webDomains =
-        selection.webDomainTokens.isEmpty
-        ? nil
-        : selection.webDomainTokens
+        store.shield.applications = selection.applicationTokens.isEmpty ? nil : selection.applicationTokens
+        store.shield.applicationCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
+        store.shield.webDomains = selection.webDomainTokens.isEmpty ? nil : selection.webDomainTokens
     }
     
-    // MARK: - 상태 저장 및 복구
-    
-    /// 잠금 상태를 앱그룹에 저장
+    /// 잠금 상태 지속
     private func persistLockState() {
         let state = AppLockState(
             endTime: endTime,
@@ -214,7 +193,7 @@ final class DeviceActivityManager: ObservableObject {
         }
     }
     
-    /// 앱 재실행 시 잠금 상태 복구
+    /// 잠금 상태 복구
     private func restoreLockState() {
         guard
             let data = sharedContainer?.data(forKey: StringLiteral.UserDefaultKeys.appLockStateKey),
@@ -233,7 +212,7 @@ final class DeviceActivityManager: ObservableObject {
     
     // MARK: - 타이머 및 UI 표시
     
-    /// 남은 잠금 시간 계산
+    /// 잠금 타이머 시작
     func startLockTimer() {
         stopLockTimer()
         
@@ -253,11 +232,13 @@ final class DeviceActivityManager: ObservableObject {
             }
     }
     
-    /// 타이머 종료
+    /// 잠금 타이머 종료
     func stopLockTimer() {
         timer?.cancel()
         timer = nil
     }
+    
+    // MARK: - Helpers
     
     private func fullDateComponents(from date: Date) -> DateComponents {
         Calendar.current.dateComponents(
@@ -268,11 +249,7 @@ final class DeviceActivityManager: ObservableObject {
 }
 
 extension DeviceActivityName {
-    static let testName = Self("testName")
-}
-
-extension DeviceActivityEvent.Name {
-    static let encouraged = Self("encouraged")
+    static let appLockActivity = Self("appLockActivity")
 }
 
 extension UserDefaults {

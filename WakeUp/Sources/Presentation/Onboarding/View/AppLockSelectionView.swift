@@ -68,7 +68,7 @@ struct AppLockSelectionView: View {
             NavigationStack {
                 AppLockPickerSheetView(selection: $deviceActivityManager.selection, canSave: $canSave) {
                     withAnimation {
-                        deviceActivityManager.save()
+                        deviceActivityManager.saveSelection()
                         addDefaultAlarm()
                         isPickerPresented = false
                     }

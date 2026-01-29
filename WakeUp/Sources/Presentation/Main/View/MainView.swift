@@ -122,9 +122,9 @@ struct MainView: View {
                 NavigationStack {
                     AppLockPickerSheetView(selection: $deviceActivityManager.selection, canSave: $canSave) {
                         if deviceActivityManager.isLockingNow {
-                            deviceActivityManager.commitSelectionWhileLocking()
+                            deviceActivityManager.commitAdditionalApps()
                         } else {
-                            deviceActivityManager.save()
+                            deviceActivityManager.saveSelection()
                         }
                         
                         isAppLockPickerSheetPresented = false
