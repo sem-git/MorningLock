@@ -22,8 +22,10 @@ final class DeviceActivityManager: ObservableObject {
     private let center = DeviceActivityCenter()
     private let store = ManagedSettingsStore()
     
-    /// 기본 앱 잠금 시간
-    private let appLockDurationMinutes = 15
+
+    var lockDuration: TimeInterval {
+        .minutes(15)
+    }
     
     // MARK: - Properties
     
@@ -123,7 +125,7 @@ final class DeviceActivityManager: ObservableObject {
     /// 모니터링 시작
     func startMonitoring(startAt date: Date) {
         center.stopMonitoring([.testName])
-        let end = Calendar.current.date(byAdding: .minute, value: appLockDurationMinutes, to: date)!
+        let end = date.addingTimeInterval(lockDuration)
         
         let startComponents = fullDateComponents(from: date)
         let endComponents = fullDateComponents(from: end)
@@ -229,7 +231,7 @@ final class DeviceActivityManager: ObservableObject {
     func startLockTimer() {
         stopLockTimer()
         
-        let totalTime = TimeInterval(minutes: appLockDurationMinutes)
+        let totalTime = lockDuration
         
         timer = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
