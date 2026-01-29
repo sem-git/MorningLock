@@ -95,7 +95,7 @@ class MainViewModel: ObservableObject {
     }
     
     func updateAlarm(_ alarm: AlarmEntity) {
-        if alarm.isActive, deviceActivityManager.selectedApp == nil {
+        if alarm.isActive, !deviceActivityManager.hasSelectedApps {
             showLockSuggestionSheet = true
         }
         alarmManager.updateAlarm(alarm)
@@ -107,7 +107,7 @@ class MainViewModel: ObservableObject {
     
     func deactiveAlarm() {
         alarmManager.deactiveAlarm()
-        if deviceActivityManager.selectedApp != nil {
+        if deviceActivityManager.hasSelectedApps {
             deviceActivityManager.startMonitoring(startAt: .now)
             notificationManager.postDelayNotification(
                 after: .minutes(15),

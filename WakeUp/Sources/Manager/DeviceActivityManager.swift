@@ -56,8 +56,14 @@ final class DeviceActivityManager: ObservableObject {
     
     // MARK: - State
     
-    /// 잠금 앱(아이콘 표시)
-    @Published var selectedApp: [ApplicationToken]? = nil
+    var selectedApps: [ApplicationToken] {
+        Array(selection.applicationTokens)
+    }
+
+    var hasSelectedApps: Bool {
+        !selection.applicationTokens.isEmpty
+    }
+
     /// 사용자가 선택한 앱
     @Published var selection = FamilyActivitySelection(includeEntireCategory: true)
     /// 앱 잠금 남은 시간
@@ -110,7 +116,6 @@ final class DeviceActivityManager: ObservableObject {
                 .map { Array($0.selection.applicationTokens) }
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { _ in }, receiveValue: { value in
-                    self.selectedApp = value.isEmpty ? nil : value
                     self.selection.applicationTokens = Set(value)
                 })
                 .store(in: &cancellables)
