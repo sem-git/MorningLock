@@ -150,12 +150,12 @@
 			);
 			target = 00CD949E2E9D3FD4001C47CD /* WakeUp */;
 		};
-		76E681CA2ED75FFD00E94EEF /* Exceptions for "DeviceMonitor" folder in "WakeUp" target */ = {
+		76C7AE812F2BCE33008E0A6A /* Exceptions for "WakeUp" folder in "DeviceMonitor" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				AppModel.swift,
+				Sources/Model/AppLockState.swift,
 			);
-			target = 00CD949E2E9D3FD4001C47CD /* WakeUp */;
+			target = 7699EF8D2ED0677C003BCA19 /* DeviceMonitor */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -172,6 +172,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				009CE6402EAB8549005B0F5A /* Exceptions for "WakeUp" folder in "WakeUp" target */,
+				76C7AE812F2BCE33008E0A6A /* Exceptions for "WakeUp" folder in "DeviceMonitor" target */,
 			);
 			path = WakeUp;
 			sourceTree = "<group>";
@@ -201,7 +202,6 @@
 		7699EF922ED0677C003BCA19 /* DeviceMonitor */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				76E681CA2ED75FFD00E94EEF /* Exceptions for "DeviceMonitor" folder in "WakeUp" target */,
 				7699EF9D2ED0677C003BCA19 /* Exceptions for "DeviceMonitor" folder in "DeviceMonitor" target */,
 			);
 			path = DeviceMonitor;

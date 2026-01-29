@@ -55,12 +55,15 @@ final class DeviceActivityManager: ObservableObject {
     // MARK: - State
     
     var selectedApps: [ApplicationToken] {
-        Array(selection.applicationTokens)
+        Array(committedSelection.applicationTokens)
+    }
+
+    var hasSelectedApps: Bool {
+        !committedSelection.applicationTokens.isEmpty
     }
     
-    var hasSelectedApps: Bool {
-        !selection.applicationTokens.isEmpty
-    }
+    @Published private(set) var committedSelection = FamilyActivitySelection()
+
     
     /// 사용자가 선택한 앱
     @Published var selection = FamilyActivitySelection(includeEntireCategory: true)
@@ -80,10 +83,11 @@ final class DeviceActivityManager: ObservableObject {
     
     /// 앱그룹 저장소에 잠금 앱 저장
     func save() {
-        let model = AppModel(selection: selection)
+        let model = AppSelection(selection: selection)
         do {
             let data = try JSONEncoder().encode(model)
             sharedContainer?.set(data, forKey: StringLiteral.UserDefaultKeys.appGroupStorageKey)
+            committedSelection = selection
             print("앱 잠금 선택 저장 완료")
         } catch {
             print("선택 저장 실패:", error)
@@ -102,7 +106,7 @@ final class DeviceActivityManager: ObservableObject {
         if let container = sharedContainer {
             if container.value(forKey: StringLiteral.UserDefaultKeys.appGroupStorageKey) == nil {
                 // 처음에 저장소가 존재하지 않는 경우 초기화
-                let defaultAppModel = AppModel(selection: .init())
+                let defaultAppModel = AppSelection(selection: .init())
                 if let data = try? JSONEncoder().encode(defaultAppModel) {
                     container.set(data, forKey: StringLiteral.UserDefaultKeys.appGroupStorageKey)
                 }
@@ -110,12 +114,14 @@ final class DeviceActivityManager: ObservableObject {
             
             container
                 .publisher(for: \.appGroupStorageKey)
-                .decode(type: AppModel.self, decoder: JSONDecoder())
-                .map { Array($0.selection.applicationTokens) }
+                .decode(type: AppSelection.self, decoder: JSONDecoder())
                 .receive(on: RunLoop.main)
-                .sink(receiveCompletion: { _ in }, receiveValue: { value in
-                    self.selection.applicationTokens = Set(value)
-                })
+                .sink(
+                    receiveCompletion: { _ in },
+                    receiveValue: { model in
+                        self.committedSelection = model.selection
+                    }
+                )
                 .store(in: &cancellables)
         }
     }
@@ -198,7 +204,7 @@ final class DeviceActivityManager: ObservableObject {
     
     /// 잠금 상태를 앱그룹에 저장
     private func persistLockState() {
-        let state = LockState(
+        let state = AppLockState(
             endTime: endTime,
             selection: selection
         )
@@ -212,7 +218,7 @@ final class DeviceActivityManager: ObservableObject {
     private func restoreLockState() {
         guard
             let data = sharedContainer?.data(forKey: StringLiteral.UserDefaultKeys.appLockStateKey),
-            let state = try? JSONDecoder().decode(LockState.self, from: data)
+            let state = try? JSONDecoder().decode(AppLockState.self, from: data)
         else { return }
         
         guard state.endTime > Date() else {

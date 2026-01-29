@@ -50,7 +50,7 @@ struct MainView: View {
                             }
                             
                             AppLockItems(
-                                selectedApps: deviceActivityManager.selectedApps.isEmpty ? nil : deviceActivityManager.selectedApps,
+                                selectedApps: deviceActivityManager.hasSelectedApps ? deviceActivityManager.selectedApps : nil,
                                 onTap: {
                                     Task {
                                         await viewModel.handleAppLockTap(
