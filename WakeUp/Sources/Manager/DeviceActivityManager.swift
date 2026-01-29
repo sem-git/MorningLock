@@ -1,10 +1,15 @@
+//
+//  DeviceActivityManager.swift
+//  WakeUp
+//
+//  Created by 이세민 on 1/30/26.
+//
+
 import Combine
 import DeviceActivity
 import FamilyControls
 import Foundation
 import ManagedSettings
-
-// TODO: UserDefaultManager로 만들기
 
 final class DeviceActivityManager: ObservableObject {
     static let shared = DeviceActivityManager()
@@ -218,23 +223,30 @@ final class DeviceActivityManager: ObservableObject {
     }
     
     // MARK: - 타이머 및 UI 표시
-    // TODO: ViewModel에서 처리
+    
     /// 남은 잠금 시간 계산
     func startLockTimer() {
+        stopLockTimer()
+        
         let totalTime = TimeInterval(minutes: appLockDurationMinutes)
-        remainingTime = endTime.timeIntervalSince(.now)
-        percent = (remainingTime / totalTime) * 100
         
         timer = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
-            .sink(receiveValue: { _ in
-                self.remainingTime -= 1
+            .sink { [weak self] _ in
+                guard let self else { return }
+                
+                self.remainingTime = max(self.endTime.timeIntervalSinceNow, 0)
                 self.percent = (self.remainingTime / totalTime) * 100
-            })
+                
+                if self.remainingTime <= 0 {
+                    self.stopLockTimer()
+                }
+            }
     }
     
     /// 타이머 종료
     func stopLockTimer() {
+        timer?.cancel()
         timer = nil
     }
     
