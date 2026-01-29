@@ -53,6 +53,7 @@ struct MainView: View {
                                 selectedApps: deviceActivityManager.hasSelectedApps ? deviceActivityManager.selectedApps : nil,
                                 onTap: {
                                     Task {
+                                        deviceActivityManager.selection = deviceActivityManager.committedSelection
                                         await viewModel.handleAppLockTap(
                                             permissionManager: permissionManager
                                         ) {
