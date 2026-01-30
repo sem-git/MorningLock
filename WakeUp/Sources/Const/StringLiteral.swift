@@ -22,5 +22,6 @@ enum StringLiteral {
         static let contactForm = "https://docs.google.com/forms/d/e/1FAIpQLSduOHAV4hz962dKI66QEk8KmBkxgmQaT7hFD8xJQgCX4TQr8w/viewform?usp=dialog"
         static let termsOfUse = "https://www.notion.so/2db236ba320180e58611c0e508826405?source=copy_link"
         static let privacyPolicy = "https://www.notion.so/2d2236ba320180c8a09ef58dce97639b?source=copy_link"
+        static let appStore = "https://apps.apple.com/app/id/6755328423"
     }
 }

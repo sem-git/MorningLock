@@ -81,7 +81,7 @@ struct WakeUpApp: App {
     
     // 앱스토어 이동
     private func openAppStore() {
-        if let url = URL(string: "https://apps.apple.com/app/id/6755328423") {
+        if let url = URL(string: StringLiteral.AppLinks.appStore) {
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
