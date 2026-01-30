@@ -243,7 +243,7 @@ struct MainView: View {
             // Sheet 7: 일정 시간 경과로 잠금 스킵
             .sheet(isPresented: $viewModel.isLockSkipSheetPresented) {
                 LockSkipSheetView(
-                    onConfirm: {
+                    onClose: {
                         viewModel.isLockSkipSheetPresented = false
                     }
                 )

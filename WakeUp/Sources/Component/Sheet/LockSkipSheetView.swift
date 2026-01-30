@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LockSkipSheetView: View {
-    let onConfirm: () -> Void
+    let onClose: () -> Void
     
     var body: some View {
         VStack(spacing: 0) {
@@ -27,8 +27,8 @@ struct LockSkipSheetView: View {
                 .padding(.top, 16)
                 .padding(.bottom, 28)
             
-            MainButton(title: String(localized: "확인하기")) {
-                onConfirm()
+            MainButton(title: String(localized: "닫기")) {
+                onClose()
             }
         }
         .padding(.horizontal, 16)
