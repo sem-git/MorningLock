@@ -39,22 +39,17 @@ struct AppLockSelectionView: View {
                     title: String(localized: "건너뛰기"),
                     buttonStyle: .text
                 ) {
-                    addDefaultAlarm()
+                    Task {
+                        await viewModel.completeOnboardingWithDefaultAlarm()
+                    }
                 }
                 
                 MainButton(title: String(localized: "추가하기")) {
                     Task {
-                        switch permissionManager.screenTimeStatus {
-                            
-                        case .authorized:
+                        if await viewModel.requestScreenTimeIfNeeded(
+                            permissionManager: permissionManager
+                        ) {
                             isPickerPresented = true
-                            
-                        case .unknown, .denied:
-                            await permissionManager.requestScreenTime()
-                            
-                            if permissionManager.screenTimeStatus == .authorized {
-                                isPickerPresented = true
-                            }
                         }
                     }
                 }
@@ -67,46 +62,20 @@ struct AppLockSelectionView: View {
         .sheet(isPresented: $isPickerPresented) {
             NavigationStack {
                 AppLockPickerSheetView(selection: $deviceActivityManager.selection, canSave: $canSave) {
-                    withAnimation {
-                        deviceActivityManager.saveSelection()
-                        addDefaultAlarm()
-                        isPickerPresented = false
+                    Task {
+                        withAnimation {
+                            deviceActivityManager.saveSelection()
+                            isPickerPresented = false
+                        }
+                        
+                        await viewModel.completeOnboardingWithDefaultAlarm()
                     }
                 }
                 .onChange(of: deviceActivityManager.selection.applicationTokens) {
                     let count = deviceActivityManager.selection.applicationTokens.count
-                    
-                    if count > 20 {
-                        canSave = false
-                    }
-                    else {
-                        canSave = true
-                    }
+                    canSave = count <= 20
                 }
             }
-        }
-    }
-    
-    func addDefaultAlarm() {
-        Task {
-            let calendar = Calendar.current
-            let now = Date()
-            
-            let fireDate = calendar.date(
-                bySettingHour: 7,
-                minute: 30,
-                second: 0,
-                of: now
-            )!
-            
-            let alarm = AlarmEntity(
-                fireDate: fireDate,
-                isActive: false,
-                repeatDay: [.mon, .thu, .wed, .tue, .fri]
-            )
-            
-            await AlarmManager.shared.addAlarm(alarm)
-            viewModel.isOnboarding = false
         }
     }
 }

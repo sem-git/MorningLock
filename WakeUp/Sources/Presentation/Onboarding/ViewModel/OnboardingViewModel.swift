@@ -32,4 +32,40 @@ class OnboardingViewModel: ObservableObject {
     func pop() {
         navigationPath.popLast()
     }
+    
+    @MainActor
+    func completeOnboardingWithDefaultAlarm() async {
+        let calendar = Calendar.current
+        let now = Date()
+        
+        let fireDate = calendar.date(
+            bySettingHour: 7,
+            minute: 30,
+            second: 0,
+            of: now
+        )!
+        
+        let alarm = AlarmEntity(
+            fireDate: fireDate,
+            isActive: false,
+            repeatDay: [.mon, .thu, .wed, .tue, .fri]
+        )
+        
+        await AlarmManager.shared.addAlarm(alarm)
+        isOnboarding = false
+    }
+    
+    @MainActor
+    func requestScreenTimeIfNeeded(
+        permissionManager: PermissionManager
+    ) async -> Bool {
+        switch permissionManager.screenTimeStatus {
+        case .authorized:
+            return true
+            
+        case .unknown, .denied:
+            await permissionManager.requestScreenTime()
+            return permissionManager.screenTimeStatus == .authorized
+        }
+    }
 }
