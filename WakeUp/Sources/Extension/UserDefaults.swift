@@ -11,9 +11,7 @@ extension UserDefaults {
     
     // MARK: - App Group 접근
     
-    private static let suite = "group.com.awayke"
-    
-    static var sharedAppGroup: UserDefaults? { UserDefaults(suiteName: suite) }
+    static var sharedAppGroup: UserDefaults? { UserDefaults(suiteName: StringLiteral.UserDefaultKeys.suite) }
 
     // MARK: - 선택 앱 목록 저장 및 불러오기
     

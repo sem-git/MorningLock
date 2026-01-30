@@ -13,16 +13,12 @@ import ManagedSettings
 
 final class DeviceActivityManager: ObservableObject {
     static let shared = DeviceActivityManager()
-    
-    // MARK: - DeviceActivity & ManagedSettings
-    
+
     private let center = DeviceActivityCenter()
     private let store = ManagedSettingsStore()
     
     var lockDuration: TimeInterval { .minutes(15) }
-    
-    // MARK: - Published State
-    
+
     // 사용자가 선택 중인 상태
     @Published var selection = FamilyActivitySelection(includeEntireCategory: true)
     // 사용자 선택 확정 상태
@@ -31,8 +27,6 @@ final class DeviceActivityManager: ObservableObject {
     @Published var remainingTime: TimeInterval = .zero
     @Published var percent: Double = 0
     
-    // MARK: - Private State
-    
     // 잠금 종료 시간
     private var endTime = Date()
     // 잠금 기준 스냅샷
@@ -40,8 +34,6 @@ final class DeviceActivityManager: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     private var timer: AnyCancellable?
-    
-    // MARK: - Computed Properties
     
     /// 잠금 여부
     var isLockingNow: Bool { Date() < endTime }
@@ -79,8 +71,6 @@ final class DeviceActivityManager: ObservableObject {
         if applyImmediately {
             applyShield()
         }
-        
-        print("앱 잠금 선택 저장 완료, 잠금 중 추가: \(applyImmediately)")
     }
     
     /// 잠금 앱 초기화

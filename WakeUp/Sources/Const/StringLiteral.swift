@@ -9,6 +9,7 @@ import Foundation
 
 enum StringLiteral {
     enum UserDefaultKeys {
+        static let suite = "group.com.awayke"
         /// 사용자가 선택한 잠금 앱 목록
         static let appGroupStorageKey = "appGroupStorageKey"
         /// 잠금이 진행 중인 앱 목록
