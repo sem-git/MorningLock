@@ -17,19 +17,30 @@ enum MainRoute: Hashable {
 
 @MainActor
 class MainViewModel: ObservableObject {
+    
+    // MARK: - Published Properties
+    
+    // Navigation
+    @Published var path: [MainRoute] = []
+    
+    // 알람 목록
     @Published var alarmList: [AlarmEntity] = []
+    // 알람 Sheet 상태
     @Published var isAlarmSheetPresented = false
+    // 스누즈 관련
     @Published var snoozeCount = 1
     @Published var snoozeTime: TimeInterval = .minutes(5)
     @Published var snoozeDisabled: Bool = false
     
-    @Published var path: [MainRoute] = []
-    
+    // Sheet 표시 상태
     @Published var isContactFormPresented: Bool = false
     @Published var showLockSuggestionSheet: Bool = false
     @Published var isLockSkipSheetPresented: Bool = false
     
+    // 잠금 중 selection 변경 시 완료 버튼 활성화 여부
     @Published var canSave: Bool = true
+    
+    // MARK: - Dependencies
     
     private let coreDataManager: CoreDataManager
     private let alarmManager: AlarmManager
@@ -39,6 +50,7 @@ class MainViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
+    // 알람 자동 종료 Task
     private var alarmTimeoutTask: Task<Void, Never>?
     private let alarmMaxWaitingTime: TimeInterval = .minutes(20) // 1시간으로 변경 예정
     
@@ -124,12 +136,35 @@ class MainViewModel: ObservableObject {
         alarmManager.snoozeAlarm(by: snoozeTime)
     }
     
+    private func startAlarmTimeout() {
+        cancelAlarmTimeout()
+        
+        alarmTimeoutTask = Task { [weak self] in
+            guard let self else { return }
+            
+            try? await Task.sleep(nanoseconds: UInt64(alarmMaxWaitingTime * 1_000_000_000))
+            
+            if self.isAlarmSheetPresented {
+                self.alarmManager.deactiveAlarm()
+                self.isAlarmSheetPresented = false
+                self.isLockSkipSheetPresented = true
+            }
+        }
+    }
+    
+    private func cancelAlarmTimeout() {
+        alarmTimeoutTask?.cancel()
+        alarmTimeoutTask = nil
+    }
+    
     // MARK: - 그 외
     
+    /// 알람 설정 뷰로 이동
     func navigateToAlarmSetting(_ alarm: AlarmEntity? = nil) {
         path.append(.alarmSetting(alarm))
     }
     
+    /// ATT 권한 요청
     func requestTrackingAuthorization() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             ATTrackingManager.requestTrackingAuthorization { status in
@@ -149,6 +184,7 @@ class MainViewModel: ObservableObject {
         }
     }
     
+    /// 앱 잠금 권한 요청
     @MainActor
     func handleAppLockTap(permissionManager: PermissionManager, onAuthorized: @escaping () -> Void) async {
         switch permissionManager.screenTimeStatus {
@@ -163,6 +199,20 @@ class MainViewModel: ObservableObject {
         }
     }
     
+    /// 잠금 중 selection 변경 시 완료 버튼 활성화 여부 업데이트
+    func updateCanSave() {
+        let count = deviceActivityManager.selection.applicationTokens.count
+        
+        if count > 20 {
+            canSave = false
+        } else if deviceActivityManager.isLockingNow {
+            canSave = deviceActivityManager.canSaveSelectionWhileLocking
+        } else {
+            canSave = true
+        }
+    }
+    
+    /// 구독
     @MainActor
     func purchaseSubscription(type: SubscriptionType?) async {
         guard let type else { return }
@@ -175,45 +225,5 @@ class MainViewModel: ObservableObject {
         }
         
         await storeKitManager.purchase(product)
-    }
-    
-    private func startAlarmTimeout() {
-        cancelAlarmTimeout()
-        
-        alarmTimeoutTask = Task { [weak self] in
-            guard let self else { return }
-            
-            try? await Task.sleep(
-                nanoseconds: UInt64(alarmMaxWaitingTime * 1_000_000_000)
-            )
-            
-            if self.isAlarmSheetPresented {
-                self.deactiveAlarmWithoutLock()
-            }
-        }
-    }
-    
-    private func cancelAlarmTimeout() {
-        alarmTimeoutTask?.cancel()
-        alarmTimeoutTask = nil
-    }
-    
-    private func deactiveAlarmWithoutLock() {
-        alarmManager.deactiveAlarm()
-        
-        isAlarmSheetPresented = false
-        isLockSkipSheetPresented = true
-    }
-    
-    func updateCanSave() {
-        let count = deviceActivityManager.selection.applicationTokens.count
-        
-        if count > 20 {
-            canSave = false
-        } else if deviceActivityManager.isLockingNow {
-            canSave = deviceActivityManager.canSaveSelectionWhileLocking
-        } else {
-            canSave = true
-        }
     }
 }
