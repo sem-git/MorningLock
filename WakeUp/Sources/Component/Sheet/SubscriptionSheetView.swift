@@ -102,7 +102,7 @@ struct SubscriptionSheetView: View {
                         }
                         
                         Button {
-                            if let url = URL(string: "https://www.notion.so/2db236ba320180e58611c0e508826405?source=copy_link") {
+                            if let url = URL(string: StringLiteral.AppLinks.termsOfUse) {
                                 openURL(url)
                             }
                         } label: {
@@ -111,7 +111,7 @@ struct SubscriptionSheetView: View {
                         }
                         
                         Button {
-                            if let url = URL(string: "https://www.notion.so/2d2236ba320180c8a09ef58dce97639b?source=copy_link") {
+                            if let url = URL(string: StringLiteral.AppLinks.privacyPolicy) {
                                 openURL(url)
                             }
                         } label: {

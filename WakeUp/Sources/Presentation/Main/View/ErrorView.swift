@@ -30,9 +30,7 @@ struct ErrorView: View {
             .padding(.horizontal, 16)
             .navigationBarItems(trailing: contactButton)
             .sheet(isPresented: $isContactFormPresented) {
-                WebView(
-                    url: "https://docs.google.com/forms/d/e/1FAIpQLSduOHAV4hz962dKI66QEk8KmBkxgmQaT7hFD8xJQgCX4TQr8w/viewform?usp=dialog"
-                )
+                WebView(url: StringLiteral.AppLinks.contactForm)
             }
         }
     }

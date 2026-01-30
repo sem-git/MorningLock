@@ -91,7 +91,7 @@ struct MainView: View {
             
             // Sheet 1: 문의
             .sheet(isPresented: $viewModel.isContactFormPresented, content: {
-                WebView(url: "https://docs.google.com/forms/d/e/1FAIpQLSduOHAV4hz962dKI66QEk8KmBkxgmQaT7hFD8xJQgCX4TQr8w/viewform?usp=dialog")
+                WebView(url: StringLiteral.AppLinks.contactForm)
             })
             
             // Sheet 2: 잠금 앱 설정 안 한 상태로 알람을 켰을 때
