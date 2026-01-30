@@ -8,6 +8,7 @@
 import Combine
 import SwiftUI
 import AppTrackingTransparency
+import FamilyControls
 import StoreKit
 
 enum MainRoute: Hashable {
@@ -27,6 +28,8 @@ class MainViewModel: ObservableObject {
     @Published var isContactFormPresented: Bool = false
     @Published var showLockSuggestionSheet: Bool = false
     @Published var isLockSkipSheetPresented: Bool = false
+    
+    @Published var canSave: Bool = true
     
     private let coreDataManager: CoreDataManager
     private let alarmManager: AlarmManager
@@ -200,5 +203,17 @@ class MainViewModel: ObservableObject {
         
         isAlarmSheetPresented = false
         isLockSkipSheetPresented = true
+    }
+    
+    func updateCanSave() {
+        let count = deviceActivityManager.selection.applicationTokens.count
+        
+        if count > 20 {
+            canSave = false
+        } else if deviceActivityManager.isLockingNow {
+            canSave = deviceActivityManager.canSaveSelectionWhileLocking
+        } else {
+            canSave = true
+        }
     }
 }

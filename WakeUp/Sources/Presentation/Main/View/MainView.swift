@@ -110,7 +110,7 @@ struct MainView: View {
             // Sheet 3: 잠금 앱 선택
             .sheet(isPresented: $isAppLockPickerSheetPresented) {
                 NavigationStack {
-                    AppLockPickerSheetView(selection: $deviceActivityManager.selection, canSave: $canSave) {
+                    AppLockPickerSheetView(selection: $deviceActivityManager.selection, canSave: $viewModel.canSave) {
                         if deviceActivityManager.isLockingNow {
                             deviceActivityManager.commitAdditionalApps()
                         } else {
@@ -120,26 +120,10 @@ struct MainView: View {
                         isAppLockPickerSheetPresented = false
                     }
                     .onAppear {
-                        let count = deviceActivityManager.selection.applicationTokens.count
-                        
-                        if count > 20 {
-                            canSave = false
-                        } else if deviceActivityManager.isLockingNow {
-                            canSave = deviceActivityManager.canSaveSelectionWhileLocking
-                        } else {
-                            canSave = true
-                        }
+                        viewModel.updateCanSave()
                     }
                     .onChange(of: deviceActivityManager.selection.applicationTokens) { _, _ in
-                        let count = deviceActivityManager.selection.applicationTokens.count
-                        
-                        if count > 20 {
-                            canSave = false
-                        } else if deviceActivityManager.isLockingNow {
-                            canSave = deviceActivityManager.canSaveSelectionWhileLocking
-                        } else {
-                            canSave = true
-                        }
+                        viewModel.updateCanSave()
                     }
                     
                 }
