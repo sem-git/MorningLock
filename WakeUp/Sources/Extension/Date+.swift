@@ -39,4 +39,8 @@ extension Date {
             return today
         }
     }
+    
+    var fullComponents: DateComponents {
+        Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: self)
+    }
 }

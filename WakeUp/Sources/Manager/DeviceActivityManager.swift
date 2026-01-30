@@ -121,8 +121,8 @@ final class DeviceActivityManager: ObservableObject {
         center.stopMonitoring([.appLockActivity])
         
         let end = date.addingTimeInterval(lockDuration)
-        let startComponents = fullDateComponents(from: date)
-        let endComponents = fullDateComponents(from: end)
+        let startComponents = date.fullComponents
+        let endComponents = end.fullComponents
         
         endTime = end
         saveSelection()
@@ -211,15 +211,6 @@ final class DeviceActivityManager: ObservableObject {
     func stopLockTimer() {
         timer?.cancel()
         timer = nil
-    }
-    
-    // MARK: - Helpers
-    
-    private func fullDateComponents(from date: Date) -> DateComponents {
-        Calendar.current.dateComponents(
-            [.year, .month, .day, .hour, .minute, .second],
-            from: date
-        )
     }
 }
 
