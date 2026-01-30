@@ -14,9 +14,8 @@ import ManagedSettings
 final class DeviceActivityManager: ObservableObject {
     static let shared = DeviceActivityManager()
     
-    // MARK: - App Gruop & Device Activity
+    // MARK: - DeviceActivity & ManagedSettings
     
-    private let sharedContainer = UserDefaults(suiteName: "group.com.awayke")
     private let center = DeviceActivityCenter()
     private let store = ManagedSettingsStore()
     
@@ -73,9 +72,8 @@ final class DeviceActivityManager: ObservableObject {
         committedSelection = selection
         currentLockedSnapshot = selection.applicationTokens
         
-        let state = AppLockState(endTime: endTime, selection: selection)
-        if let data = try? JSONEncoder().encode(state) {
-            sharedContainer?.set(data, forKey: StringLiteral.UserDefaultKeys.appLockStateKey)
+        if let container = UserDefaults.sharedAppGroup {
+            container.appLockState = AppLockState(endTime: endTime, selection: selection)
         }
         
         if applyImmediately {
@@ -88,21 +86,21 @@ final class DeviceActivityManager: ObservableObject {
     /// 잠금 앱 초기화
     func clearSelection() {
         stopMonitoring()
-        sharedContainer?.removeObject(forKey: StringLiteral.UserDefaultKeys.appGroupStorageKey)
+        if let container = UserDefaults.sharedAppGroup {
+            container.saveAppLockSelection(AppSelection(selection: .init()))
+        }
         selection = .init()
     }
     
     /// 잠금 앱 불러오기
     private func bindAppGroupStorage() {
-        guard let container = sharedContainer else { return }
+        guard let container = UserDefaults.sharedAppGroup else { return }
         
-        if container.value(forKey: StringLiteral.UserDefaultKeys.appGroupStorageKey) == nil {
-            if let data = try? JSONEncoder().encode(AppSelection(selection: .init())) {
-                container.set(data, forKey: StringLiteral.UserDefaultKeys.appGroupStorageKey)
-            }
+        if container.loadAppLockSelection() == nil {
+            container.saveAppLockSelection(AppSelection(selection: .init()))
         }
         
-        container.publisher(for: \.appGroupStorageKey)
+        container.publisher(for: \.appLockSelectionData)
             .decode(type: AppSelection.self, decoder: JSONDecoder())
             .receive(on: RunLoop.main)
             .sink(
@@ -147,36 +145,32 @@ final class DeviceActivityManager: ObservableObject {
     func stopMonitoring() {
         center.stopMonitoring([.appLockActivity])
         stopLockTimer()
-        sharedContainer?.removeObject(forKey: StringLiteral.UserDefaultKeys.appLockStateKey)
+        if let container = UserDefaults.sharedAppGroup {
+            container.appLockState = nil
+        }
         currentLockedSnapshot = []
         print("DeviceActivity 모니터링 중단")
     }
     
-    /// 앱 잠금 적용
-    func applyShield() {
+    // 앱 잠금 적용
+    private func applyShield() {
         store.shield.applications = selection.applicationTokens.isEmpty ? nil : selection.applicationTokens
         store.shield.applicationCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
         store.shield.webDomains = selection.webDomainTokens.isEmpty ? nil : selection.webDomainTokens
     }
     
-    /// 잠금 상태 지속
+    // 잠금 상태 지속
     private func persistLockState() {
-        let state = AppLockState(endTime: endTime, selection: selection)
-        
-        if let data = try? JSONEncoder().encode(state) {
-            sharedContainer?.set(data, forKey: StringLiteral.UserDefaultKeys.appLockStateKey)
+        if let container = UserDefaults.sharedAppGroup {
+            container.appLockState = AppLockState(endTime: endTime, selection: selection)
         }
     }
     
-    /// 잠금 상태 복구
+    // 잠금 상태 복구
     private func restoreLockState() {
-        guard
-            let data = sharedContainer?.data(forKey: StringLiteral.UserDefaultKeys.appLockStateKey),
-            let state = try? JSONDecoder().decode(AppLockState.self, from: data)
-        else { return }
-        
+        guard let container = UserDefaults.sharedAppGroup, let state = container.appLockState else { return }
         guard state.endTime > Date() else {
-            sharedContainer?.removeObject(forKey: StringLiteral.UserDefaultKeys.appLockStateKey)
+            container.appLockState = nil
             return
         }
         
@@ -216,15 +210,4 @@ final class DeviceActivityManager: ObservableObject {
 
 extension DeviceActivityName {
     static let appLockActivity = Self("appLockActivity")
-}
-
-extension UserDefaults {
-    @objc var appGroupStorageKey: Data {
-        get {
-            return data(forKey: StringLiteral.UserDefaultKeys.appGroupStorageKey) ?? Data()
-        }
-        set {
-            set(newValue, forKey: StringLiteral.UserDefaultKeys.appGroupStorageKey)
-        }
-    }
 }
