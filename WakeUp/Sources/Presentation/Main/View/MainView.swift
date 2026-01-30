@@ -67,7 +67,7 @@ struct MainView: View {
                 }
                 .padding(16)
                 
-                if storeKitManager.subscriptionStatus == .notSubscribed {
+                if viewModel.showSubscriptionButton {
                     Button(action: {
                         isSubscriptionSheetPresented = true
                     }) {
@@ -119,13 +119,6 @@ struct MainView: View {
                         
                         isAppLockPickerSheetPresented = false
                     }
-                    .onAppear {
-                        viewModel.updateCanSave()
-                    }
-                    .onChange(of: deviceActivityManager.selection.applicationTokens) { _, _ in
-                        viewModel.updateCanSave()
-                    }
-                    
                 }
             }
             

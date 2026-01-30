@@ -976,7 +976,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Please select up to 20 apps ( %lld / 20)"
+            "value" : "Please select up to 20 apps ( %lld / 20 )"
           }
         },
         "ja" : {
@@ -987,7 +987,7 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "앱을 20개 이하로 선택해주세요 ( %lld / 20 )"
           }
         }

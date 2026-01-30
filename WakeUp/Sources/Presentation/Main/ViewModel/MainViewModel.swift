@@ -39,6 +39,7 @@ class MainViewModel: ObservableObject {
     
     // 잠금 중 selection 변경 시 완료 버튼 활성화 여부
     @Published var canSave: Bool = true
+    @Published var showSubscriptionButton: Bool = false
     
     // MARK: - Dependencies
     
@@ -99,6 +100,28 @@ class MainViewModel: ObservableObject {
         }
         .assign(to: \.snoozeDisabled, on: self)
         .store(in: &cancellables)
+        
+        // 잠금 중 selection 변경 시 완료 버튼 활성화 여부 업데이트
+        deviceActivityManager.$selection
+            .map { [weak self] selection in
+                guard let self else { return false }
+                let count = selection.applicationTokens.count
+                if count > 20 { return false }
+                if self.deviceActivityManager.isLockingNow {
+                    return self.deviceActivityManager.canSaveSelectionWhileLocking
+                }
+                return true
+            }
+            .receive(on: RunLoop.main)
+            .assign(to: \.canSave, on: self)
+            .store(in: &cancellables)
+        
+        // 구독 버튼 표시
+        storeKitManager.$subscriptionStatus
+            .map { $0 == .notSubscribed }
+            .receive(on: RunLoop.main)
+            .assign(to: \.showSubscriptionButton, on: self)
+            .store(in: &cancellables)
     }
     
     /// 데이터를 가져왔을 때 isActive 상태에 따라서 초기 값 바인딩
@@ -198,20 +221,7 @@ class MainViewModel: ObservableObject {
             }
         }
     }
-    
-    /// 잠금 중 selection 변경 시 완료 버튼 활성화 여부 업데이트
-    func updateCanSave() {
-        let count = deviceActivityManager.selection.applicationTokens.count
-        
-        if count > 20 {
-            canSave = false
-        } else if deviceActivityManager.isLockingNow {
-            canSave = deviceActivityManager.canSaveSelectionWhileLocking
-        } else {
-            canSave = true
-        }
-    }
-    
+
     /// 구독
     @MainActor
     func purchaseSubscription(type: SubscriptionType?) async {
