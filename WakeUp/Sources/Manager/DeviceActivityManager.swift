@@ -48,14 +48,10 @@ final class DeviceActivityManager: ObservableObject {
     var isLockingNow: Bool { Date() < endTime }
     
     /// 확정 상태의 선택된 앱
-    var selectedApps: [ApplicationToken] {
-        Array(committedSelection.applicationTokens)
-    }
+    var selectedApps: [ApplicationToken] { Array(committedSelection.applicationTokens) }
     
     /// 확정 상태의 선택된 앱 존재 여부
-    var hasSelectedApps: Bool {
-        !committedSelection.applicationTokens.isEmpty
-    }
+    var hasSelectedApps: Bool { !committedSelection.applicationTokens.isEmpty }
     
     /// 잠금 중 selection 변경 시 완료 버튼 활성화 여부
     var canSaveSelectionWhileLocking: Bool {
@@ -72,17 +68,21 @@ final class DeviceActivityManager: ObservableObject {
     
     // MARK: - 앱 선택 관리
     
-    /// 사용자 선택 완료 시 잠금 앱 저장
-    func saveSelection() {
-        let model = AppSelection(selection: selection)
-        do {
-            let data = try JSONEncoder().encode(model)
-            sharedContainer?.set(data, forKey: StringLiteral.UserDefaultKeys.appGroupStorageKey)
-            committedSelection = selection
-            print("앱 잠금 선택 저장 완료")
-        } catch {
-            print("선택 저장 실패:", error)
+    /// 사용자 선택 완료 시 잠금 앱 저장, 잠금 중 여부에 따라 즉시 적용
+    func saveSelection(applyImmediately: Bool = false) {
+        committedSelection = selection
+        currentLockedSnapshot = selection.applicationTokens
+        
+        let state = AppLockState(endTime: endTime, selection: selection)
+        if let data = try? JSONEncoder().encode(state) {
+            sharedContainer?.set(data, forKey: StringLiteral.UserDefaultKeys.appLockStateKey)
         }
+        
+        if applyImmediately {
+            applyShield()
+        }
+        
+        print("앱 잠금 선택 저장 완료, 잠금 중 추가: \(applyImmediately)")
     }
     
     /// 잠금 앱 초기화
@@ -94,27 +94,24 @@ final class DeviceActivityManager: ObservableObject {
     
     /// 잠금 앱 불러오기
     private func bindAppGroupStorage() {
-        if let container = sharedContainer {
-            if container.value(forKey: StringLiteral.UserDefaultKeys.appGroupStorageKey) == nil {
-                // 처음에 저장소가 존재하지 않는 경우 초기화
-                let defaultAppModel = AppSelection(selection: .init())
-                if let data = try? JSONEncoder().encode(defaultAppModel) {
-                    container.set(data, forKey: StringLiteral.UserDefaultKeys.appGroupStorageKey)
-                }
+        guard let container = sharedContainer else { return }
+        
+        if container.value(forKey: StringLiteral.UserDefaultKeys.appGroupStorageKey) == nil {
+            if let data = try? JSONEncoder().encode(AppSelection(selection: .init())) {
+                container.set(data, forKey: StringLiteral.UserDefaultKeys.appGroupStorageKey)
             }
-            
-            container
-                .publisher(for: \.appGroupStorageKey)
-                .decode(type: AppSelection.self, decoder: JSONDecoder())
-                .receive(on: RunLoop.main)
-                .sink(
-                    receiveCompletion: { _ in },
-                    receiveValue: { model in
-                        self.committedSelection = model.selection
-                    }
-                )
-                .store(in: &cancellables)
         }
+        
+        container.publisher(for: \.appGroupStorageKey)
+            .decode(type: AppSelection.self, decoder: JSONDecoder())
+            .receive(on: RunLoop.main)
+            .sink(
+                receiveCompletion: { _ in },
+                receiveValue: { model in
+                    self.committedSelection = model.selection
+                }
+            )
+            .store(in: &cancellables)
     }
     
     // MARK: - 잠금 관리
@@ -127,8 +124,8 @@ final class DeviceActivityManager: ObservableObject {
         let startComponents = fullDateComponents(from: date)
         let endComponents = fullDateComponents(from: end)
         
-        currentLockedSnapshot = selection.applicationTokens
         endTime = end
+        saveSelection()
         persistLockState()
         
         do {
@@ -141,7 +138,6 @@ final class DeviceActivityManager: ObservableObject {
                 ),
                 events: [:]
             )
-            endTime = end
         } catch {
             print("DeviceActivity 모니터링 실패:", error)
         }
@@ -156,16 +152,8 @@ final class DeviceActivityManager: ObservableObject {
         print("DeviceActivity 모니터링 중단")
     }
     
-    /// 잠금 중 앱 추가
-    func commitAdditionalApps() {
-        saveSelection()
-        applyShieldImmediately()
-        currentLockedSnapshot = selection.applicationTokens
-        persistLockState()
-    }
-    
-    /// 앱 잠금 즉시 적용
-    func applyShieldImmediately() {
+    /// 앱 잠금 적용
+    func applyShield() {
         store.shield.applications = selection.applicationTokens.isEmpty ? nil : selection.applicationTokens
         store.shield.applicationCategories = selection.categoryTokens.isEmpty ? nil : .specific(selection.categoryTokens)
         store.shield.webDomains = selection.webDomainTokens.isEmpty ? nil : selection.webDomainTokens
@@ -173,10 +161,7 @@ final class DeviceActivityManager: ObservableObject {
     
     /// 잠금 상태 지속
     private func persistLockState() {
-        let state = AppLockState(
-            endTime: endTime,
-            selection: selection
-        )
+        let state = AppLockState(endTime: endTime, selection: selection)
         
         if let data = try? JSONEncoder().encode(state) {
             sharedContainer?.set(data, forKey: StringLiteral.UserDefaultKeys.appLockStateKey)
