@@ -20,11 +20,6 @@ struct MainView: View {
     @EnvironmentObject var permissionManager: PermissionManager
     
     @State private var sheetHeight: CGFloat = .zero
-    @State private var isAppLockPickerSheetPresented = false
-    @State private var isSubscriptionSheetPresented = false
-    @State private var isUpdateSheetPresented = false
-    @State private var canSave: Bool = false
-    
     @State private var selectedSubscriptionType: SubscriptionType? = nil
     
     var body: some View {
@@ -57,7 +52,7 @@ struct MainView: View {
                                         await viewModel.handleAppLockTap(
                                             permissionManager: permissionManager
                                         ) {
-                                            isAppLockPickerSheetPresented = true
+                                            viewModel.isAppLockPickerSheetPresented = true
                                         }
                                     }
                                 }
@@ -69,7 +64,7 @@ struct MainView: View {
                 
                 if viewModel.showSubscriptionButton {
                     Button(action: {
-                        isSubscriptionSheetPresented = true
+                        viewModel.isSubscriptionSheetPresented = true
                     }) {
                         Text("광고 없이 사용하기")
                             .semiBold16(color: .gray300)
@@ -88,6 +83,25 @@ struct MainView: View {
                     .padding(.horizontal, 16)
             })
             .animation(.default, value: viewModel.alarmList.count)
+            .background(.gray800)
+            .onAppear {
+                viewModel.fetchAlarm()
+                viewModel.requestTrackingAuthorization()
+            }
+            .onReceive(storeKitManager.$subscriptionStatus, perform: { subscriptionStatus in
+                if subscriptionStatus == .notSubscribed {
+                    nativeAdViewModel.loadAd()
+                }
+            })
+            .navigationBarItems(trailing: contactButton)
+            .navigationDestination(for: MainRoute.self, destination: { destination in
+                switch destination {
+                case .alarmSetting(let alarm):
+                    AlarmSettingView(viewModel: AlarmSettingViewModel(alarm: alarm))
+                }
+            })
+            
+            // MARK: - Sheet
             
             // Sheet 1: 문의
             .sheet(isPresented: $viewModel.isContactFormPresented, content: {
@@ -95,12 +109,12 @@ struct MainView: View {
             })
             
             // Sheet 2: 잠금 앱 설정 안 한 상태로 알람을 켰을 때
-            .sheet(isPresented: $viewModel.showLockSuggestionSheet) {
+            .sheet(isPresented: $viewModel.isLockSuggestionSheetPresented) {
                 LockSuggestionSheetView(
-                    onSkip: { viewModel.showLockSuggestionSheet.toggle() },
+                    onSkip: { viewModel.isLockSuggestionSheetPresented.toggle() },
                     onConfigure: {
-                        viewModel.showLockSuggestionSheet.toggle()
-                        isAppLockPickerSheetPresented = true
+                        viewModel.isLockSuggestionSheetPresented.toggle()
+                        viewModel.isAppLockPickerSheetPresented = true
                     }
                 )
                 .presentationDetents([.height(sheetHeight)])
@@ -108,7 +122,7 @@ struct MainView: View {
             }
             
             // Sheet 3: 잠금 앱 선택
-            .sheet(isPresented: $isAppLockPickerSheetPresented) {
+            .sheet(isPresented: $viewModel.isAppLockPickerSheetPresented) {
                 NavigationStack {
                     AppLockPickerSheetView(selection: $deviceActivityManager.selection, canSave: $viewModel.canSave) {
                         if deviceActivityManager.isLockingNow {
@@ -117,7 +131,7 @@ struct MainView: View {
                             deviceActivityManager.saveSelection()
                         }
                         
-                        isAppLockPickerSheetPresented = false
+                        viewModel.isAppLockPickerSheetPresented = false
                     }
                 }
             }
@@ -140,9 +154,9 @@ struct MainView: View {
             }
             
             // Sheet 5: 구독
-            .sheet(isPresented: $isSubscriptionSheetPresented, content: {
+            .sheet(isPresented: $viewModel.isSubscriptionSheetPresented, content: {
                 SubscriptionSheetView(
-                    isPresented: $isSubscriptionSheetPresented,
+                    isPresented: $viewModel.isSubscriptionSheetPresented,
                     isSelected: $selectedSubscriptionType,
                     onSubscribe: {
                         await viewModel.purchaseSubscription(
@@ -155,32 +169,15 @@ struct MainView: View {
                 )
                 .presentationDetents([.large])
             })
-            .background(.gray800)
-            .onAppear {
-                viewModel.fetchAlarm()
-                viewModel.requestTrackingAuthorization()
-            }
-            .onReceive(storeKitManager.$subscriptionStatus, perform: { subscriptionStatus in
-                if subscriptionStatus == .notSubscribed {
-                    nativeAdViewModel.loadAd()
-                }
-            })
-            .navigationBarItems(trailing: contactButton)
-            .navigationDestination(for: MainRoute.self, destination: { destination in
-                switch destination {
-                case .alarmSetting(let alarm):
-                    AlarmSettingView(viewModel: AlarmSettingViewModel(alarm: alarm))
-                }
-            })
             
             // Sheet 6: 업데이트 안내
-            .sheet(isPresented: $isUpdateSheetPresented) {
+            .sheet(isPresented: $viewModel.isUpdateSheetPresented) {
                 UpdateSheetView(
                     onSkip: {
-                        isUpdateSheetPresented = false
+                        viewModel.isUpdateSheetPresented = false
                     },
                     onUpdate: {
-                        isUpdateSheetPresented = false
+                        viewModel.isUpdateSheetPresented = false
                     }
                 )
                 .presentationDetents([.height(sheetHeight)])
@@ -197,7 +194,6 @@ struct MainView: View {
                 .presentationDetents([.height(sheetHeight)])
                 .trackSheetHeight($sheetHeight)
             }
-            
         }
     }
 }

@@ -33,12 +33,16 @@ class MainViewModel: ObservableObject {
     @Published var snoozeDisabled: Bool = false
     
     // Sheet 표시 상태
-    @Published var isContactFormPresented: Bool = false
-    @Published var showLockSuggestionSheet: Bool = false
-    @Published var isLockSkipSheetPresented: Bool = false
+    @Published var isContactFormPresented = false
+    @Published var isLockSuggestionSheetPresented = false
+    @Published var isAppLockPickerSheetPresented = false
+    @Published var isSubscriptionSheetPresented = false
+    @Published var isUpdateSheetPresented = false
+    @Published var isLockSkipSheetPresented = false
     
     // 잠금 중 selection 변경 시 완료 버튼 활성화 여부
     @Published var canSave: Bool = true
+    // 구독 버튼 표시 여부
     @Published var showSubscriptionButton: Bool = false
     
     // MARK: - Dependencies
@@ -51,7 +55,7 @@ class MainViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
-    // 알람 자동 종료 Task
+    // 알람 자동 종료 및 잠금 무효화 Task
     private var alarmTimeoutTask: Task<Void, Never>?
     private let alarmMaxWaitingTime: TimeInterval = .minutes(20) // 1시간으로 변경 예정
     
@@ -64,8 +68,6 @@ class MainViewModel: ObservableObject {
         
         bind()
     }
-    
-    // MARK: - 알람
     
     func bind() {
         // 알람이 재생 중이면서 isOpenSheet 보임 여부에 따라서 Sheet 열기
@@ -124,6 +126,8 @@ class MainViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    // MARK: - 알람
+    
     /// 데이터를 가져왔을 때 isActive 상태에 따라서 초기 값 바인딩
     func fetchAlarm() {
         alarmList = coreDataManager
@@ -134,7 +138,7 @@ class MainViewModel: ObservableObject {
     
     func updateAlarm(_ alarm: AlarmEntity) {
         if alarm.isActive, !deviceActivityManager.hasSelectedApps {
-            showLockSuggestionSheet = true
+            isLockSuggestionSheetPresented = true
         }
         alarmManager.updateAlarm(alarm)
     }
@@ -221,7 +225,7 @@ class MainViewModel: ObservableObject {
             }
         }
     }
-
+    
     /// 구독
     @MainActor
     func purchaseSubscription(type: SubscriptionType?) async {
