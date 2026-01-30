@@ -62,3 +62,10 @@ struct AppLockItems: View {
         }
     }
 }
+
+struct AppIconLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.icon
+            .scaleEffect(2.5)
+    }
+}

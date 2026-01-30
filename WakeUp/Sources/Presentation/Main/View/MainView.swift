@@ -104,17 +104,7 @@ struct MainView: View {
                     }
                 )
                 .presentationDetents([.height(sheetHeight)])
-                .overlay {
-                    GeometryReader { geometry in
-                        Color.clear.preference(
-                            key: InnerHeightPreferenceKey.self,
-                            value: geometry.size.height
-                        )
-                    }
-                }
-                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-                    sheetHeight = newHeight
-                }
+                .trackSheetHeight($sheetHeight)
             }
             
             // Sheet 3: 잠금 앱 선택
@@ -168,18 +158,8 @@ struct MainView: View {
                     onDeactivate: { viewModel.deactiveAlarm() }
                 )
                 .presentationDetents([.height(sheetHeight)])
+                .trackSheetHeight($sheetHeight)
                 .interactiveDismissDisabled(true)
-                .overlay {
-                    GeometryReader { geometry in
-                        Color.clear.preference(
-                            key: InnerHeightPreferenceKey.self,
-                            value: geometry.size.height
-                        )
-                    }
-                }
-                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-                    sheetHeight = newHeight
-                }
             }
             
             // Sheet 5: 구독
@@ -227,17 +207,7 @@ struct MainView: View {
                     }
                 )
                 .presentationDetents([.height(sheetHeight)])
-                .overlay {
-                    GeometryReader { geometry in
-                        Color.clear.preference(
-                            key: InnerHeightPreferenceKey.self,
-                            value: geometry.size.height
-                        )
-                    }
-                }
-                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-                    sheetHeight = newHeight
-                }
+                .trackSheetHeight($sheetHeight)
             }
             
             // Sheet 7: 일정 시간 경과로 잠금 스킵
@@ -248,18 +218,10 @@ struct MainView: View {
                     }
                 )
                 .presentationDetents([.height(sheetHeight)])
+                .trackSheetHeight($sheetHeight)
             }
             
         }
-    }
-}
-
-// MARK: - Preference Key
-
-struct InnerHeightPreferenceKey: PreferenceKey {
-    static let defaultValue: CGFloat = .zero
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = nextValue()
     }
 }
 
@@ -273,12 +235,5 @@ extension MainView {
             Text("문의")
                 .regular15()
         })
-    }
-}
-
-struct AppIconLabelStyle: LabelStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.icon
-            .scaleEffect(2.5)
     }
 }
