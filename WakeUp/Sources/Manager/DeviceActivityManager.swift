@@ -60,17 +60,7 @@ final class DeviceActivityManager: ObservableObject {
     /// 잠금 중 selection 변경 시 완료 버튼 활성화 여부
     var canSaveSelectionWhileLocking: Bool {
         let current = selection.applicationTokens
-        let base = currentLockedSnapshot
-        
-        guard base.isSubset(of: current) else {
-            return false
-        }
-        
-        guard current != base else {
-            return false
-        }
-        
-        return true
+        return currentLockedSnapshot.isSubset(of: current) && current != currentLockedSnapshot
     }
     
     // MARK: - Initializer
