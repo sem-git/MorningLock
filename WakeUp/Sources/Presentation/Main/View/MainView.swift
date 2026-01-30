@@ -165,21 +165,7 @@ struct MainView: View {
                 .presentationDetents([.large])
             })
             
-            // Sheet 6: 업데이트 안내
-            .sheet(isPresented: $viewModel.isUpdateSheetPresented) {
-                UpdateSheetView(
-                    onSkip: {
-                        viewModel.isUpdateSheetPresented = false
-                    },
-                    onUpdate: {
-                        viewModel.isUpdateSheetPresented = false
-                    }
-                )
-                .presentationDetents([.height(sheetHeight)])
-                .trackSheetHeight($sheetHeight)
-            }
-            
-            // Sheet 7: 일정 시간 경과로 잠금 스킵
+            // Sheet 6: 일정 시간 경과로 잠금 스킵
             .sheet(isPresented: $viewModel.isLockSkipSheetPresented) {
                 LockSkipSheetView(
                     onClose: {
